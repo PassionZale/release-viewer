@@ -1,0 +1,17 @@
+model RobotDingDing {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  webhook String
+  secret  String?
+}
+
+model RobotWorkWeixin {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  webhook String
+  secret  String?
+}

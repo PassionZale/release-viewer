@@ -4,19 +4,23 @@ model App {
   updatedAt DateTime @updatedAt
 
   /// 应用名称
-  name       String
+  name                  String
   /// 应用描述
-  desc       String?
+  desc                  String?
   /// 订阅者
-  subscriber String?
+  subscribers           String?
+  /// 钉钉机器人启用状态
+  robotDingDingStatus   Int        @default(1)
+  /// 企微机器人启用状态
+  robotWorkWeixinStatus Int        @default(1)
   /// 所属系统
-  System     System     @relation(fields: [systemId], references: [id])
-  systemId   Int
+  System                System     @relation(fields: [systemId], references: [id])
+  systemId              Int
   /// 所属平台
-  Platform   Platform?  @relation(fields: [platformId], references: [id])
-  platformId Int
+  Platform              Platform?  @relation(fields: [platformId], references: [id])
+  platformId            Int
   /// 流水线
-  pipelines  Pipeline[]
+  pipelines             Pipeline[]
   // 发布记录
-  releases   Release[]
+  releases              Release[]
 }

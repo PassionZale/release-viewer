@@ -14,7 +14,7 @@ model User {
   /// 角色
   role     Int       @default(3)
   /// 状态
-  status   Int       @default(1)
+  status   Int       @default(2)
   /// 发布记录
   releases Release[]
 

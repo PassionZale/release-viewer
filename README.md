@@ -27,9 +27,9 @@ enum Role {
 }
 
 enum Status {
-  /// 活跃的
-  ACTIVED = 1,
   /// 禁用的
-  FORZEN,
+  OFF = 1,
+  /// 活跃的
+  ON,
 }
 ```
