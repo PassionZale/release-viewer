@@ -6,9 +6,9 @@ model Pipeline {
   /// 流水线名称
   name          String
   /// 访问地址
-  previewWebUri String?
+  previewWebUrl String?
   /// 图片地址
-  previewImgUir String?
+  previewImgUrl String?
   /// 所属应用
   app           App       @relation(fields: [appId], references: [id])
   appId         Int

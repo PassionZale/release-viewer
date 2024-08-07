@@ -3,16 +3,21 @@ model Release {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  /// 流水线名称
-  name          String
-  /// 访问地址
-  previewWebUri String?
-  /// 图片地址
-  previewImgUir String?
   /// 所属应用
-  app           App      @relation(fields: [appId], references: [id])
-  appId         Int
+  app        App      @relation(fields: [appId], references: [id])
+  appId      Int
   /// 所属流水线
-  pipeline      Pipeline @relation(fields: [pipelineId], references: [id])
-  pipelineId    Int
+  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
+  pipelineId Int
+  /// 发布人
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  /// 版本号
+  version    String
+  /// 构建号
+  buildId    Int?
+  /// 更新说明
+  desc       String
+  /// 附件地址
+  attachment String?
 }

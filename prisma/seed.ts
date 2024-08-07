@@ -36,8 +36,18 @@ const platforms = [
   },
 ];
 
+const api = {
+  nickname: "API",
+  username: "API",
+  password: "Special API user and can never be logged in :)",
+  role: 2,
+};
+
 async function main() {
   console.log(`Start seeding ...`);
+
+  await prisma.user.create({ data: api });
+	console.log(`Created api user`);
 
   for (const s of systems) {
     const system = await prisma.system.create({
