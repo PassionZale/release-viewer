@@ -1,7 +1,7 @@
 model App {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @ignore
+  updatedAt DateTime @updatedAt @ignore
 
   /// 应用名称
   name                  String
@@ -14,11 +14,11 @@ model App {
   /// 企微机器人启用状态
   robotWorkWeixinStatus Int        @default(1)
   /// 所属系统
-  System                System     @relation(fields: [systemId], references: [id])
-  systemId              Int
+  System                System     @relation(fields: [systemValue], references: [value])
+  systemValue           String
   /// 所属平台
-  Platform              Platform?  @relation(fields: [platformId], references: [id])
-  platformId            Int
+  Platform              Platform   @relation(fields: [platformValue], references: [value])
+  platformValue         String
   /// 流水线
   pipelines             Pipeline[]
   // 发布记录

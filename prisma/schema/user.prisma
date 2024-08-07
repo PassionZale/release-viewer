@@ -10,7 +10,7 @@ model User {
   /// 用户名
   username String    @unique
   /// 密码
-  password String
+  password String    @ignore
   /// 角色
   role     Int       @default(3)
   /// 状态

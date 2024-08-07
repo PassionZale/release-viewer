@@ -1,23 +1,23 @@
 model System {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @ignore @default(now())
+  updatedAt DateTime @ignore @updatedAt
 
-  label String
-  value String
+  label String @unique
+  value String @unique
   apps  App[]
 
-  @@unique([label, value])
+	@@index([label, value])
 }
 
 model Platform {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @ignore @default(now())
+  updatedAt DateTime @ignore @updatedAt
 
-  label String
-  value String
+  label String @unique
+  value String @unique
   apps  App[]
 
-  @@unique([label, value])
+  @@index([label, value])
 }
