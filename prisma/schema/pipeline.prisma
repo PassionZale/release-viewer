@@ -1,0 +1,17 @@
+model Pipeline {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// 流水线名称
+  name          String
+  /// 访问地址
+  previewWebUri String?
+  /// 图片地址
+  previewImgUir String?
+  /// 所属应用
+  app           App       @relation(fields: [appId], references: [id])
+  appId         Int
+  /// 流水线
+  releases      Release[]
+}

@@ -1,0 +1,22 @@
+model App {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// 应用名称
+  name       String
+  /// 应用描述
+  desc       String?
+  /// 订阅者
+  subscriber String?
+  /// 所属系统
+  System     System     @relation(fields: [systemId], references: [id])
+  systemId   Int
+  /// 所属平台
+  Platform   Platform?  @relation(fields: [platformId], references: [id])
+  platformId Int
+  /// 流水线
+  pipelines  Pipeline[]
+  // 发布记录
+  releases   Release[]
+}

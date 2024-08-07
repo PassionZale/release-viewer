@@ -1,0 +1,23 @@
+model System {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  label String
+  value String
+  apps  App[]
+
+  @@unique([label, value])
+}
+
+model Platform {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  label String
+  value String
+  apps  App[]
+
+  @@unique([label, value])
+}
