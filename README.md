@@ -16,6 +16,8 @@ yarn prisma:setup
 yarn dev
 ```
 
+`openssl rand -base64 32`
+
 ```ts
 enum Role {
   /// 管理员

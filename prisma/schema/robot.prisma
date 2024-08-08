@@ -1,7 +1,7 @@
 model RobotDingDing {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @ignore
+  updatedAt DateTime @updatedAt @ignore
 
   webhook String
   secret  String?
