@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>login page</div>;
+  return <div>logout page</div>;
 }

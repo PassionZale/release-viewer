@@ -5,6 +5,7 @@ import prisma from "@/libs/prisma";
 import { verify } from "@/libs/bcrypt";
 import { ApiException, ApiResponse } from "@/libs/utils";
 import { Status } from "@/types/enum";
+import { COOKIE_JWT_KEY } from "@/types/constant";
 
 export async function POST(request: Request) {
   try {
@@ -40,15 +41,15 @@ export async function POST(request: Request) {
       };
 
       // 写入 cookie
-      res.cookies.set("token", token, cookieOptions);
+      res.cookies.set(COOKIE_JWT_KEY, token, cookieOptions);
 
       return res;
     }
 
-    throw new ApiException("账号或密码错误");
+    return NextResponse.json(new ApiException("账号或密码错误"));
   } catch (error) {
     return NextResponse.json(new ApiException((error as Error).message), {
-      status: 500,
+      status: 400,
     });
   }
 }

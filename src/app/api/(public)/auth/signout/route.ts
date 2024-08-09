@@ -1,15 +1,10 @@
+import { COOKIE_JWT_KEY } from "@/types/constant";
 import { NextResponse } from "next/server";
-import { ApiResponse } from "@/libs/utils";
 
-export async function POST() {
-  const res = NextResponse.json(new ApiResponse());
+export async function GET(request: Request) {
+  const response = NextResponse.redirect(new URL(`/logout`, request.url));
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: true,
-  };
+  response.cookies.delete(COOKIE_JWT_KEY);
 
-  res.cookies.set("token", "", cookieOptions);
-
-  return res;
+  return response;
 }

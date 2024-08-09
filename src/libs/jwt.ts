@@ -1,5 +1,20 @@
 import { jwtVerify } from "jose";
 
+import type { Prisma, PrismaClient } from "@prisma/client";
+
+type ModelNames = Prisma.ModelName; // "User" | "Post"
+
+export type PrismaModels = {
+  [M in ModelNames]: Exclude<
+    Awaited<ReturnType<PrismaClient[Uncapitalize<M>]["findUnique"]>>,
+    null
+  >;
+};
+
+type PayloadType = Omit<PrismaModels["User"], "hashedPassword"> & {
+  token: string;
+};
+
 export function getJwtSecretKey() {
   const secret = process.env.DASHBOARD_JWT_SECRET;
 
@@ -12,7 +27,7 @@ export function getJwtSecretKey() {
 
 export async function verifyJwtToken(token: string) {
   try {
-    const { payload } = await jwtVerify(token, getJwtSecretKey());
+    const { payload } = await jwtVerify<PayloadType>(token, getJwtSecretKey());
 
     return payload;
   } catch (error) {

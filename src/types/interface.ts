@@ -1,5 +1,7 @@
+import { ApiCode } from "./enum";
+
 export interface BaseResponse<T = any> {
-  code: number;
+  code: ApiCode;
   data: T;
   message: string;
   timestamp: number;
