@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
-import { getJwtSecretKey } from "@/lib/jwt";
-import prisma from "@/lib/prisma";
-import { verify } from "@/lib/bcrypt";
-import { ApiException, ApiResponse } from "@/lib/utils";
+import { getJwtSecretKey } from "@/libs/jwt";
+import prisma from "@/libs/prisma";
+import { verify } from "@/libs/bcrypt";
+import { ApiException, ApiResponse } from "@/libs/utils";
 import { Status } from "@/types/enum";
 
 export async function POST(request: Request) {

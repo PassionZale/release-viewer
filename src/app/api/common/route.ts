@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/libs/prisma";
 
 export async function GET(request: Request) {
   const systems = await prisma.system.findMany();

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ApiResponse } from "@/lib/utils";
+import { ApiResponse } from "@/libs/utils";
 
 export async function POST() {
   const res = NextResponse.json(new ApiResponse());
