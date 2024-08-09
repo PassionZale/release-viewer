@@ -7,13 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-		"prisma:setup": "prisma db push && prisma db seed",
-		"prisma:migrate": "prisma migrate dev"
+    "prisma:setup": "prisma db push && prisma db seed",
+    "prisma:migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "jose": "^5.6.3",
     "lucide-react": "^0.424.0",
     "next": "14.2.5",
     "react": "^18",
@@ -23,6 +25,7 @@
     "tailwindcss-line-clamp": "^1.0.5"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

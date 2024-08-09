@@ -1,3 +1,4 @@
+import { encrypt } from "../src/lib/bcrypt";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -36,18 +37,28 @@ const platforms = [
   },
 ];
 
-const api = {
+const AdminUser = {
+  nickname: "admin",
+  username: process.env.DASHBOARD_ADMIN_USERNAME || "admin",
+  hashedPassword: encrypt(process.env.DASHBOARD_ADMIN_PASSWORD || "admin"),
+  role: 1,
+};
+
+const ApiUser = {
   nickname: "API",
   username: "API",
-  password: "Special API user and can never be logged in :)",
+  hashedPassword: "Special API user and can never be logged in :)",
   role: 2,
 };
 
 async function main() {
   console.log(`Start seeding ...`);
 
-  await prisma.user.create({ data: api });
-	console.log(`Created api user`);
+  await prisma.user.create({ data: AdminUser });
+  console.log(`Created admin user`);
+
+  await prisma.user.create({ data: ApiUser });
+  console.log(`Created api user`);
 
   for (const s of systems) {
     const system = await prisma.system.create({
