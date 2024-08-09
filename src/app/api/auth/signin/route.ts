@@ -1,9 +1,9 @@
-import prisma from "@/lib/prisma";
-import { verify } from "@/lib/bcrypt";
-import { ApiException, ApiResponse } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import { getJwtSecretKey } from "@/lib/jwt";
+import prisma from "@/lib/prisma";
+import { verify } from "@/lib/bcrypt";
+import { ApiException, ApiResponse } from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
@@ -26,15 +26,15 @@ export async function POST(request: Request) {
         .setExpirationTime("30d")
         .sign(getJwtSecretKey());
 
-			// 组装 user
+      // 组装 user
       const res = NextResponse.json(new ApiResponse({ ...rest, token }));
 
       const cookieOptions = {
         httpOnly: true,
         secure: true,
       };
-			
-			// 写入 cookie
+
+      // 写入 cookie
       res.cookies.set("token", token, cookieOptions);
 
       return res;
