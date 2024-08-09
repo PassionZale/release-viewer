@@ -4,6 +4,7 @@ import { getJwtSecretKey } from "@/lib/jwt";
 import prisma from "@/lib/prisma";
 import { verify } from "@/lib/bcrypt";
 import { ApiException, ApiResponse } from "@/lib/utils";
+import { Status } from "@/types/enum";
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +17,11 @@ export async function POST(request: Request) {
     });
 
     // 用户存在、非禁用、密码正确
-    if (user && user.status !== 1 && verify(password, user.hashedPassword)) {
+    if (
+      user &&
+      user.status !== Status.OFF &&
+      verify(password, user.hashedPassword)
+    ) {
       const { hashedPassword, ...rest } = user;
 
       // 颁发 jwt

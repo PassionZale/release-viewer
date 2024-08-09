@@ -1,5 +1,6 @@
-import { encrypt } from "../src/lib/bcrypt";
 import { PrismaClient } from "@prisma/client";
+import { Role } from "../src/types/enum";
+import { encrypt } from "../src/lib/bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -41,14 +42,14 @@ const AdminUser = {
   nickname: "admin",
   username: process.env.DASHBOARD_ADMIN_USERNAME || "admin",
   hashedPassword: encrypt(process.env.DASHBOARD_ADMIN_PASSWORD || "admin"),
-  role: 1,
+  role: Role.ADMIN,
 };
 
 const ApiUser = {
   nickname: "API",
   username: "API",
   hashedPassword: "Special API user and can never be logged in :)",
-  role: 2,
+  role: Role.DEVELOPER,
 };
 
 async function main() {

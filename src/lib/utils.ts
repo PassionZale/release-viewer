@@ -1,6 +1,6 @@
-import { BaseResponse } from "@/interfaces";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { BaseResponse } from "@/types/interface";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
