@@ -1,15 +1,5 @@
 import { jwtVerify } from "jose";
-
-import type { Prisma, PrismaClient } from "@prisma/client";
-
-type ModelNames = Prisma.ModelName; // "User" | "Post"
-
-export type PrismaModels = {
-  [M in ModelNames]: Exclude<
-    Awaited<ReturnType<PrismaClient[Uncapitalize<M>]["findUnique"]>>,
-    null
-  >;
-};
+import { PrismaModels } from "@/types/interface";
 
 type PayloadType = Omit<PrismaModels["User"], "hashedPassword"> & {
   token: string;
