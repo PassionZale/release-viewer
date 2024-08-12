@@ -141,16 +141,13 @@ const Navbar = () => {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <IconRocket className="mr-2 h-5 w-5" />
-              <Link
-                href={process.env.NEXT_PUBLIC_LOWCODE_RELEASE_URL!}
-                target="_blank"
-              >
+              <Link href={"/admin/release/create"} target="_blank">
                 发布应用
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <IconBug className="mr-2 h-5 w-5" />
-              <Link href="dingtalk://dingtalkclient/action/sendmsg?dingtalk_id=skv_jbul4o042">
+              <Link href="https://github.com/PassionZale/release-viewer/issues/new">
                 报告问题
               </Link>
             </DropdownMenuItem>
