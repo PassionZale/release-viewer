@@ -38,28 +38,36 @@ const platforms = [
   },
 ];
 
-const AdminUser = {
-  nickname: "admin",
-  username: process.env.DASHBOARD_ADMIN_USERNAME || "admin",
-  hashedPassword: encrypt(process.env.DASHBOARD_ADMIN_PASSWORD || "admin"),
-  role: Role.ADMIN,
-};
-
-const ApiUser = {
-  nickname: "API",
-  username: "API",
-  hashedPassword: "Special API user and can never be logged in :)",
-  role: Role.DEVELOPER,
-};
+const users = [
+  // admin user
+  {
+    nickname: "admin",
+    username: process.env.DASHBOARD_ADMIN_USERNAME || "admin",
+    hashedPassword: encrypt(process.env.DASHBOARD_ADMIN_PASSWORD || "admin"),
+    role: Role.ADMIN,
+  },
+  // api user
+  {
+    nickname: "API",
+    username: "API",
+    hashedPassword: "Special API user and can never be logged in :)",
+    role: Role.DEVELOPER,
+  },
+  {
+    nickname: "visitor",
+    username: "visitor",
+    hashedPassword: encrypt("visitor"),
+    role: Role.VISITOR,
+  },
+];
 
 async function main() {
   console.log(`Start seeding ...`);
 
-  await prisma.user.create({ data: AdminUser });
-  console.log(`Created admin user`);
-
-  await prisma.user.create({ data: ApiUser });
-  console.log(`Created api user`);
+  for (const u of users) {
+    const user = await prisma.user.create({ data: u });
+    console.log(`Created user with id: ${user.id}`);
+  }
 
   for (const s of systems) {
     const system = await prisma.system.create({
