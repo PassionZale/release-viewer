@@ -1,3 +1,5 @@
+import LayoutAdmin from "@/components/layouts/LayoutAdmin";
+
 export default function AdminPage() {
-  return <div>admin page</div>;
+  return <LayoutAdmin>123</LayoutAdmin>;
 }
