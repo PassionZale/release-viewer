@@ -53,6 +53,7 @@ const users = [
     hashedPassword: "Special API user and can never be logged in :)",
     role: Role.DEVELOPER,
   },
+	// visitor user
   {
     nickname: "visitor",
     username: "visitor",

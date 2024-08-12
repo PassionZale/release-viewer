@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { COOKIE_JWT_KEY } from "@/types/constant";
-import { getVerifiedToken } from "@/libs/guards";
+import { parseJwtPayload } from "./libs/jwt";
 
 const AUTH_PAGES = ["/login"];
 
@@ -10,7 +10,7 @@ const isAuthPages = (url: string) =>
 export async function middleware(request: NextRequest) {
   const { url, nextUrl } = request;
 
-  const hasVerifiedToken = await getVerifiedToken();
+  const hasVerifiedToken = await parseJwtPayload();
 
   const isAuthPageRequested = isAuthPages(nextUrl.pathname);
 
@@ -41,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/dashboard/:path*"],
+  matcher: ["/login", "/admin/:path*"],
 };

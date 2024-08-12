@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { SignJWT } from "jose";
-import { getJwtSecretKey } from "@/libs/jwt";
+import { signJwtToken } from "@/libs/jwt";
 import prisma from "@/libs/prisma";
 import { verify } from "@/libs/bcrypt";
 import { ApiException, ApiResponse } from "@/libs/utils";
@@ -23,19 +22,12 @@ export async function POST(request: Request) {
       user.status !== Status.OFF &&
       verify(password, user.hashedPassword)
     ) {
-      const { hashedPassword, ...payload } = user;
+      const { hashedPassword, ...rest } = user;
 
       // 颁发 jwt
-      const token = await new SignJWT({
-        user: payload,
-      })
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("30d")
-        .sign(getJwtSecretKey());
+      const token = await signJwtToken({ userId: rest.id });
 
-      // 组装 user
-      const res = NextResponse.json(new ApiResponse({ user: payload, token }));
+      const res = NextResponse.json(new ApiResponse({ token, user: rest }));
 
       const cookieOptions = {
         httpOnly: true,

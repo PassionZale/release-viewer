@@ -35,10 +35,12 @@ export enum ApiCode {
    * jwt 解析异常：过期、不合法、未到使用时间等
    */
   JWT_INVALID = 4001,
+  /** 账号禁用 */
+  ACCOUNT_DISABLED = 4002,
   /**
    * 权限不足
    */
-  PERMISSION_DENIED = 4002,
+  PERMISSION_DENIED = 4003,
   /**
    * 上传文件类型不合法
    */
