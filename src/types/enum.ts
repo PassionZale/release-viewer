@@ -18,7 +18,7 @@ export enum Status {
 
 /**
  * API 业务编码
- * 
+ *
  * 鉴权相关以 4 开头
  * 上传相关以 5 开头
  * 业务相关以 6 开头
@@ -28,19 +28,19 @@ export enum ApiCode {
   /** 成功 */
   SUCCESS = 200,
   /**
-   * 默认错误码
+   * 失败（默认错误码）
    */
   FAIL = 4000,
   /**
    * jwt 解析异常：过期、不合法、未到使用时间等
    */
-  JWT_INVALID = 40001,
+  JWT_INVALID = 4001,
   /**
    * 权限不足
    */
-  PERMISSION_DENIED = 40002,
+  PERMISSION_DENIED = 4002,
   /**
    * 上传文件类型不合法
    */
-  FILE_MIMETYPE_INVALID = 50003,
+  FILE_MIMETYPE_INVALID = 5003,
 }

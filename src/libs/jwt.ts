@@ -1,8 +1,8 @@
 import { jwtVerify } from "jose";
 import { PrismaModels } from "@/types/interface";
 
-type PayloadType = Omit<PrismaModels["User"], "hashedPassword"> & {
-  token: string;
+export type SessionData = {
+  user: Omit<PrismaModels["User"], "hashedPassword">;
 };
 
 export function getJwtSecretKey() {
@@ -17,7 +17,7 @@ export function getJwtSecretKey() {
 
 export async function verifyJwtToken(token: string) {
   try {
-    const { payload } = await jwtVerify<PayloadType>(token, getJwtSecretKey());
+    const { payload } = await jwtVerify<SessionData>(token, getJwtSecretKey());
 
     return payload;
   } catch (error) {

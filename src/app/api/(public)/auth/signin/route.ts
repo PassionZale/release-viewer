@@ -23,17 +23,19 @@ export async function POST(request: Request) {
       user.status !== Status.OFF &&
       verify(password, user.hashedPassword)
     ) {
-      const { hashedPassword, ...rest } = user;
+      const { hashedPassword, ...payload } = user;
 
       // 颁发 jwt
-      const token = await new SignJWT(rest)
+      const token = await new SignJWT({
+        user: payload,
+      })
         .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
         .setExpirationTime("30d")
         .sign(getJwtSecretKey());
 
       // 组装 user
-      const res = NextResponse.json(new ApiResponse({ ...rest, token }));
+      const res = NextResponse.json(new ApiResponse({ user: payload, token }));
 
       const cookieOptions = {
         httpOnly: true,

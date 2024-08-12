@@ -1,4 +1,6 @@
+import { NextRequest } from "next/server";
 import type { Prisma, PrismaClient } from "@prisma/client";
+import { SessionData } from "@/libs/jwt";
 import { ApiCode } from "./enum";
 
 type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
@@ -15,4 +17,10 @@ export interface BaseResponse<T = any> {
   data: T;
   message: string;
   timestamp: number;
+}
+
+export interface ContextRequest extends NextRequest {
+  auth?: {
+    user?: SessionData["user"];
+  };
 }
