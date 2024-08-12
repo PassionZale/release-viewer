@@ -1,3 +1,5 @@
+"use client";
+
 import Link, { LinkProps } from "next/link";
 import React, { PropsWithChildren, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
