@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -33,24 +33,11 @@ const NavSkeleton = () => (
   </div>
 );
 
-const Navbar = () => {
-  const [loading, setLoading] = useState(false);
+interface NavbarProps {
+  items?: { label: string; value: string }[];
+}
 
-  const [navs, setNavs] = useState([
-    {
-      title: "111",
-      link: "/system/1",
-    },
-    {
-      title: "222",
-      link: "/system/2",
-    },
-    {
-      title: "3333",
-      link: "/system/3",
-    },
-  ]);
-
+const Navbar = ({ items = [] }: NavbarProps) => {
   return (
     <header className="sticky z-50 top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       {/* desktop nav */}
@@ -63,21 +50,21 @@ const Navbar = () => {
           <span className="sr-only">Omost</span>
         </Link>
 
-        {loading ? (
-          <NavSkeleton />
-        ) : (
+        {items?.length ? (
           <>
-            {navs.map((nav, index) => (
+            {items.map((item) => (
               <ActiveLink
-                key={index}
-                href={nav.link}
+                key={item.value}
+                href={`/system/${item.value}`}
                 className="text-nowrap text-muted-foreground transition-colors hover:text-foreground"
                 activeClassName="!text-foreground"
               >
-                {nav.title}
+                {item.label}
               </ActiveLink>
             ))}
           </>
+        ) : (
+          <NavSkeleton />
         )}
       </nav>
 
@@ -105,14 +92,14 @@ const Navbar = () => {
               <span className="sr-only">Omost</span>
             </Link>
 
-            {navs.map((nav, index) => (
+            {items.map((item) => (
               <ActiveLink
-                key={index}
-                href={nav.link}
+                key={item.value}
+                href={`/system/${item.value}`}
                 className="text-nowrap text-muted-foreground transition-colors hover:text-foreground"
                 activeClassName="!text-foreground"
               >
-                {nav.title}
+                {item.label}
               </ActiveLink>
             ))}
           </nav>

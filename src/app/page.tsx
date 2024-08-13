@@ -3,6 +3,7 @@
 import LayoutHome from "@/components/layouts/LayoutHome";
 import { Button } from "@/components/ui/button";
 import { FlipWords } from "@/components/ui/flip-words";
+import useDicStore from "@/stores/dict";
 import {
   IconBrandGithub,
   IconBrandNextjs,
@@ -13,7 +14,9 @@ import {
 } from "@tabler/icons-react";
 
 export default function Home() {
-  const words = ["Web", "IOS", "Android", "Miniprogram"];
+  const platforms = useDicStore((state) => state.platforms);
+
+  const words = platforms.map(({ label }) => label);
 
   return (
     <LayoutHome>
@@ -29,8 +32,14 @@ export default function Home() {
             <div className="mt-7 sm:mt-12 mx-auto max-w-xl relative">
               <div className="relative z-10 p-6 border bg-background rounded-lg shadow-lg">
                 <div className="flex-[1_0_0%] text-xl">
-                  Release <FlipWords words={words} duration={2000} /> is Omost
-                  there!
+                  {words.length ? (
+                    <>
+                      Release <FlipWords words={words} duration={2000} /> is
+                      Omost there!
+                    </>
+                  ) : (
+                    "Wating..."
+                  )}
                 </div>
               </div>
 
