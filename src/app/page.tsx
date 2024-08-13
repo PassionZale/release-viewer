@@ -3,6 +3,7 @@
 import LayoutHome from "@/components/layouts/LayoutHome";
 import { Button } from "@/components/ui/button";
 import { FlipWords } from "@/components/ui/flip-words";
+import { Skeleton } from "@/components/ui/skeleton";
 import useDicStore from "@/stores/dict";
 import {
   IconBrandGithub,
@@ -24,22 +25,21 @@ export default function Home() {
         <div className="container py-20 lg:py-24">
           <div className="text-center">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Omost
+              Release Viewer
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
-              Micro platform to preview all apps.
+              micro platform to preview all release logs.
             </p>
             <div className="mt-7 sm:mt-12 mx-auto max-w-xl relative">
               <div className="relative z-10 p-6 border bg-background rounded-lg shadow-lg">
-                <div className="flex-[1_0_0%] text-xl">
-                  {words.length ? (
-                    <>
-                      Release <FlipWords words={words} duration={2000} /> is
-                      Omost there!
-                    </>
+                <div className="flex-[1_0_0%] text-xl flex items-center justify-center">
+                  Release logs of
+                  {words?.length ? (
+                    <FlipWords words={words} duration={2400} />
                   ) : (
-                    "Wating..."
+                    <Skeleton className="w-[100px] h-[1.25rem] mx-4 inline-block" />
                   )}
+                  is Omost there!
                 </div>
               </div>
 

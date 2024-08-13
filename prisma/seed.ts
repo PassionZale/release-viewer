@@ -33,7 +33,11 @@ const platforms = [
     value: "android",
   },
   {
-    label: "Others",
+    label: "Miniprogram",
+    value: "miniprogram",
+  },
+  {
+    label: "OTHERS",
     value: "others",
   },
 ];
@@ -53,7 +57,7 @@ const users = [
     hashedPassword: "Special API user and can never be logged in :)",
     role: Role.DEVELOPER,
   },
-	// visitor user
+  // visitor user
   {
     nickname: "visitor",
     username: "visitor",
