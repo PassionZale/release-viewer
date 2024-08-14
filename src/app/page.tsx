@@ -43,7 +43,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="hidden md:block absolute top-0 end-0 -translate-y-12 translate-x-20">
+              <div className="absolute top-0 end-0 -translate-y-12 translate-x-20">
                 <svg
                   className="w-16 h-auto text-orange-500"
                   width={121}
@@ -73,7 +73,7 @@ export default function Home() {
                 </svg>
               </div>
 
-              <div className="hidden md:block absolute bottom-0 start-0 translate-y-10 -translate-x-32">
+              <div className="absolute bottom-0 start-0 translate-y-10 -translate-x-32">
                 <svg
                   className="w-40 h-auto text-cyan-500"
                   width={347}
