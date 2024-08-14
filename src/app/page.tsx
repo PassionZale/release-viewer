@@ -30,7 +30,7 @@ export default function Home() {
             <p className="mt-3 text-xl text-muted-foreground">
               micro platform to preview all release logs.
             </p>
-            <div className="mt-7 sm:mt-12 mx-auto max-w-xl relative">
+            <div className="hidden md:block mt-7 mx-auto max-w-xl relative">
               <div className="relative z-10 p-6 border bg-background rounded-lg shadow-lg">
                 <div className="flex-[1_0_0%] text-xl flex items-center justify-center">
                   Release logs of
