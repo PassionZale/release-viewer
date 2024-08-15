@@ -4,14 +4,14 @@ model Release {
   updatedAt DateTime @updatedAt @ignore
 
   /// 所属应用
-  app        App      @relation(fields: [appId], references: [id])
+  app        App?      @relation(fields: [appId], references: [id])
   appId      Int
   /// 所属流水线
-  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
-  pipelineId Int
+  pipeline   Pipeline? @relation(fields: [pipelineId], references: [id])
+  pipelineId Int?
   /// 发布人
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
   /// 版本号
   version    String
   /// 构建号

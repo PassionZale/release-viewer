@@ -9,9 +9,9 @@ export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
   async () => {
-    const apps = await prisma.system.findMany();
+    const systems = await prisma.system.findMany();
 
-    return NextResponse.json(new ApiResponse(apps));
+    return NextResponse.json(new ApiResponse(systems));
   },
   {
     role: Role.VISITOR,
@@ -25,6 +25,23 @@ export const POST = withAuthGuard(
     const { success, error, data } = SystemInputSchema.safeParse(schema);
 
     if (success) {
+      const exist = await prisma.system.findFirst({
+        where: {
+          OR: [
+            {
+              label: { equals: data.label },
+            },
+            {
+              value: { equals: data.value },
+            },
+          ],
+        },
+      });
+
+      if (exist) {
+        return NextResponse.json(new ApiException("系统名称或编码不能重复"));
+      }
+
       const system = await prisma.system.create({ data });
 
       return NextResponse.json(new ApiResponse(system));

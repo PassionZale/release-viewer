@@ -12,13 +12,13 @@ export const GET = withAuthGuard<{ id: string }>(
     const { success, data } = SystemIdSchema.safeParse(params.id);
 
     if (success) {
-      const apps = await prisma.system.findUnique({
+      const system = await prisma.system.findUnique({
         where: {
           id: data,
         },
       });
 
-      return NextResponse.json(new ApiResponse(apps));
+      return NextResponse.json(new ApiResponse(system));
     }
 
     return NextResponse.json(new ApiResponse());
@@ -32,26 +32,58 @@ export const PUT = withAuthGuard<{ id: string }>(
   async (request, { params }) => {
     const paramsResult = SystemIdSchema.safeParse(params.id);
 
-    if (!paramsResult.success) return NextResponse.json(new ApiException());
+    if (!paramsResult.success)
+      return NextResponse.json(new ApiException("资源不存在"));
 
     try {
       const schema = await request.json();
 
-      const bodyResult = SystemInputSchema.safeParse(schema);
+      const bodyResult = SystemInputSchema.partial().safeParse(schema);
 
       if (!bodyResult.success) {
         return NextResponse.json(new ApiException(bodyResult.error.issues));
       }
 
-      const system = await prisma.system.update({
+      const system = await prisma.system.findUnique({
         where: { id: paramsResult.data },
-        data: bodyResult.data,
       });
 
-      return NextResponse.json(system);
+      if (!system) {
+        return NextResponse.json(new ApiException("资源不存在"));
+      }
+
+      const exist = await prisma.system.findFirst({
+        where: {
+          OR: [
+            {
+              label: { equals: bodyResult.data.label },
+            },
+            {
+              value: { equals: bodyResult.data.value },
+            },
+          ],
+        },
+      });
+
+      if (exist) {
+        return NextResponse.json(new ApiException("系统名称或编码不能重复"));
+      }
+
+      const nextSystem = await prisma.system.update({
+        where: { id: paramsResult.data },
+        data: {
+          ...system,
+          ...bodyResult.data,
+        },
+      });
+
+      return NextResponse.json(nextSystem);
     } catch (error) {
       return NextResponse.json(new ApiException((error as Error).message));
     }
+  },
+  {
+    role: Role.ADMIN,
   }
 );
 
@@ -62,11 +94,17 @@ export const DELETE = withAuthGuard<{ id: string }>(
     if (!success) return NextResponse.json(new ApiException("资源不存在"));
 
     try {
+      const system = await prisma.system.findUnique({
+        where: { id: data },
+      });
+
+      if (!system) return NextResponse.json(new ApiException("资源不存在"));
+
       await prisma.system.delete({ where: { id: data } });
 
-      return NextResponse.json(new ApiResponse());
+      return NextResponse.json(new ApiResponse(system));
     } catch (error) {
-      return NextResponse.json(new ApiException());
+      return NextResponse.json(new ApiException((error as Error).message));
     }
   },
   {
