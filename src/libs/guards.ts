@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { ApiCode, Role, Status } from "@/types/enum";
-import { ContextRequest } from "@/types/interface";
+import { ContextRequest, ContextResponse, Params } from "@/types/interface";
 import { parseJwtPayload } from "./jwt";
 import { ApiException } from "./utils";
 import prisma from "./prisma";
@@ -10,11 +10,11 @@ type AuthGuardOptions = {
 };
 
 // 守卫逻辑: jwt 合法 -> 用户存在 -> 非禁用 -> 角色正确
-export function withAuthGuard(
-  handler: (req: ContextRequest, res: NextResponse) => Promise<Response>,
+export function withAuthGuard<P extends Params = Params>(
+  handler: (req: ContextRequest, res: ContextResponse<P>) => Promise<Response>,
   options?: AuthGuardOptions
 ) {
-  return async (req: ContextRequest, res: NextResponse) => {
+  return async (req: ContextRequest, res: ContextResponse<P>) => {
     // jwt 是否合法
     const jwtPayload = await parseJwtPayload();
 

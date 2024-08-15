@@ -9,9 +9,9 @@ export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
   async () => {
-    const apps = prisma.app.findMany();
+    const apps = await prisma.app.findMany();
 
-    return NextResponse.json(new ApiResponse({ apps }));
+    return NextResponse.json(new ApiResponse(apps));
   },
   {
     role: Role.VISITOR,
@@ -25,7 +25,7 @@ export const POST = withAuthGuard(
     const { success, error, data } = AppCreateSchema.safeParse(schema);
 
     if (success) {
-      const app = prisma.app.create({ data });
+      const app = await prisma.app.create({ data });
 
       return NextResponse.json(new ApiResponse(app));
     }

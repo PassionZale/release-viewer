@@ -29,6 +29,8 @@ micro platform to preview all release logs.
 
 [`dynamic = 'force-dynamic'`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic)
 
+- [segment-config-options](https://nextjs.org/docs/app/building-your-application/routing/route-handlers#segment-config-options)
+
 ## Quick Start
 
 > Recommand to use `openssl rand -base64 32` to generate secret key!
