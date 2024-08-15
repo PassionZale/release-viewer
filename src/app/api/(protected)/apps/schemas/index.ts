@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export const AppCreateSchema = z.object({
+export const AppIdSchema = z.coerce.number();
+
+export const AppInputSchema = z.object({
   name: z.string({ required_error: "应用名称不能为空" }),
   desc: z.string().optional(),
   subscribers: z.string().optional(),
