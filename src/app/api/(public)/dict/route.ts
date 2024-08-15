@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/libs/prisma";
 import { ApiResponse } from "@/libs/utils";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const systems = await prisma.system.findMany();
   const platforms = await prisma.platform.findMany();

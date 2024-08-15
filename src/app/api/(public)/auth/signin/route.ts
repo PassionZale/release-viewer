@@ -6,6 +6,8 @@ import { ApiException, ApiResponse } from "@/libs/utils";
 import { Status } from "@/types/enum";
 import { COOKIE_JWT_KEY } from "@/types/constant";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request: Request) {
   try {
     const { username, password } = await request.json();

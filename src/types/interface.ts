@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { ZodIssue } from "zod"
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { ApiCode } from "./enum";
 
@@ -15,6 +16,8 @@ export interface BaseResponse<T = any> {
   code: ApiCode;
   data: T;
   message: string;
+	error?: ZodIssue[]
+	meta?: any // TODO pagination
   timestamp: number;
 }
 
