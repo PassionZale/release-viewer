@@ -38,7 +38,7 @@ export const PUT = withAuthGuard<{ id: string }>(
     try {
       const schema = await request.json();
 
-      const bodyResult = PlatformInputSchema.partial().safeParse(schema);
+      const bodyResult = PlatformInputSchema.safeParse(schema);
 
       if (!bodyResult.success) {
         return NextResponse.json(new ApiException(bodyResult.error.issues));
@@ -62,6 +62,7 @@ export const PUT = withAuthGuard<{ id: string }>(
               value: { equals: bodyResult.data.value },
             },
           ],
+          AND: [{ id: { not: paramsResult.data } }],
         },
       });
 

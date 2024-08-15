@@ -62,6 +62,7 @@ export const PUT = withAuthGuard<{ id: string }>(
               value: { equals: bodyResult.data.value },
             },
           ],
+          AND: [{ id: { not: paramsResult.data } }],
         },
       });
 
