@@ -27,8 +27,8 @@ export class ApiResponse implements BaseResponse {
   ) {
     this.code = code || ApiCode.SUCCESS;
     this.data = data || null;
-    this.error = error;
     this.message = message || "操作成功";
+    this.error = error;
     this.timestamp = +new Date();
   }
 }

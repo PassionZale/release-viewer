@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { ZodIssue } from "zod";
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { ApiCode } from "./enum";
-import { useParams } from "next/navigation";
 
 type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
 
