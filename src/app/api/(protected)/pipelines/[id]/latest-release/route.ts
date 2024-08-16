@@ -17,18 +17,17 @@ export const GET = withAuthGuard<{ id: string }>(
           where: {
             id: data,
           },
+          include: {
+            releases: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              take: 1,
+            },
+          },
         });
 
-        const latestRelease = await prisma.release.findFirst({
-          where: {
-            pipelineId: pipeline?.id,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-        });
-
-        return NextResponse.json(new ApiResponse(latestRelease));
+        return NextResponse.json(new ApiResponse(pipeline));
       }
 
       throw new ApiResponse();
