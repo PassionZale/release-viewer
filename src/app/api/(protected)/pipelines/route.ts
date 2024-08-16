@@ -27,7 +27,7 @@ export const POST = withAuthGuard(
     if (success) {
       const app = await prisma.app.findUnique({ where: { id: data.appId } });
 
-      if (!app) return NextResponse.json(new ApiException("应用不存在"));
+      if (!app) return NextResponse.json(new ApiException("所属应用不存在"));
 
       const pipeline = await prisma.pipeline.create({ data });
 

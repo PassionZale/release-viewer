@@ -18,6 +18,6 @@ model Release {
   buildId    Int?
   /// 更新说明
   desc       String
-  /// 附件地址
-  attachment String?
+  /// 预览地址
+  previewUrl String?
 }
