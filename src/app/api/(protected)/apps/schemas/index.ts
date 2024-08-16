@@ -4,7 +4,7 @@ import { z } from "zod";
 export const AppIdSchema = z.coerce.number();
 
 export const AppInputSchema = z.object({
-  name: z
+  name: z.coerce
     .string({ required_error: "应用名称不能为空" })
     .min(1, "应用名称不能为空"),
   desc: z.string().optional(),
