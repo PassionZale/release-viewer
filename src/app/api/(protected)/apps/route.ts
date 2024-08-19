@@ -4,12 +4,17 @@ import { ApiException, ApiResponse } from "@/libs/utils";
 import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { AppInputSchema } from "./schemas";
+import paginate from "@/libs/paginate";
 
 export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
-  async () => {
-    const apps = await prisma.app.findMany();
+  async (request) => {
+    const searchParams = request.nextUrl.searchParams;
+
+    const apps = await paginate(prisma.app, {
+      searchParams,
+    });
 
     return NextResponse.json(new ApiResponse(apps));
   },

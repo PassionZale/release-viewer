@@ -5,12 +5,16 @@ import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { UserInputSchema } from "./schemas";
 import { encrypt } from "@/libs/bcrypt";
+import paginate from "@/libs/paginate";
 
 export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
-  async () => {
-    const users = await prisma.user.findMany({
+  async (request) => {
+    const searchParams = request.nextUrl.searchParams;
+
+    const users = await paginate(prisma.user, {
+      searchParams,
       omit: {
         hashedPassword: true,
       },

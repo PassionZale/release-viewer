@@ -4,12 +4,15 @@ import { ApiException, ApiResponse } from "@/libs/utils";
 import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { ReleaseInputSchema } from "./schemas";
+import paginate from "@/libs/paginate";
 
 export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
-  async () => {
-    const releases = await prisma.release.findMany();
+  async (request) => {
+    const searchParams = request.nextUrl.searchParams;
+
+    const releases = await paginate(prisma.pipeline, { searchParams });
 
     return NextResponse.json(new ApiResponse(releases));
   },
