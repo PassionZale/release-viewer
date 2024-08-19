@@ -16,7 +16,7 @@ type SidebarProps = {
   className?: string;
 };
 
-const NavItems = [
+export const NavItems = [
   {
     label: "首页",
     value: "admin",
