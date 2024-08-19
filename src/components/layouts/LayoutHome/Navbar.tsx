@@ -34,8 +34,8 @@ const NavSkeleton = () => (
   </div>
 );
 
-interface NavbarProps {
-  items?: { label: string; value: string }[];
+export interface NavbarProps {
+  items?: { label: string; value: string; href: string }[];
 }
 
 const Navbar = ({ items = [] }: NavbarProps) => {
@@ -58,7 +58,7 @@ const Navbar = ({ items = [] }: NavbarProps) => {
             {items.map((item) => (
               <ActiveLink
                 key={item.value}
-                href={`/system/${item.value}`}
+                href={item.href}
                 className="text-nowrap text-muted-foreground transition-colors hover:text-foreground"
                 activeClassName="!text-foreground"
               >
@@ -98,7 +98,7 @@ const Navbar = ({ items = [] }: NavbarProps) => {
             {items.map((item) => (
               <ActiveLink
                 key={item.value}
-                href={`/system/${item.value}`}
+                href={item.href}
                 className="text-nowrap text-muted-foreground transition-colors hover:text-foreground"
                 activeClassName="!text-foreground"
               >

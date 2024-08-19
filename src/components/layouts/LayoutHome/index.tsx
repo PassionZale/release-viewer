@@ -9,6 +9,11 @@ const LayoutHome = ({ children }: React.PropsWithChildren) => {
   const initDict = useDicStore((state) => state.init);
   const systems = useDicStore((state) => state.systems);
 
+  const items = systems.map((system) => ({
+    href: `/system/${system.value}`,
+    ...system,
+  }));
+
   useEffect(() => {
     loadDict();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -24,7 +29,7 @@ const LayoutHome = ({ children }: React.PropsWithChildren) => {
 
   return (
     <>
-      <Navbar items={systems} />
+      <Navbar items={items} />
 
       <Content>{children}</Content>
     </>
