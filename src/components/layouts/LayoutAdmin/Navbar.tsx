@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IconProps } from "@tabler/icons-react";
+import ActiveLink from "@/components/ActiveLink";
 
 interface NavItem {
   label: string;
@@ -47,12 +48,12 @@ export function Navbar({ items, setOpen, isMobileNav = false }: NavbarProps) {
           return (
             <Tooltip key={item.value}>
               <TooltipTrigger asChild>
-                <Link
+                <ActiveLink
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                    path === item.href ? "bg-accent" : "transparent"
+                    "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transparent"
                   )}
+                  activeClassName="bg-accent"
                   onClick={() => {
                     if (setOpen) setOpen(false);
                   }}
@@ -66,7 +67,7 @@ export function Navbar({ items, setOpen, isMobileNav = false }: NavbarProps) {
                   ) : (
                     ""
                   )}
-                </Link>
+                </ActiveLink>
               </TooltipTrigger>
               <TooltipContent
                 align="center"
