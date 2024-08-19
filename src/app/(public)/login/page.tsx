@@ -29,7 +29,7 @@ export default function Page() {
     if (code === 200) {
       const nextUrl = searchParams.get("next");
       // @see: https://github.com/vercel/next.js/discussions/44149
-      router.push(nextUrl ?? "/dashboard");
+      router.push(nextUrl ?? "/admin");
       router.refresh();
     } else {
       alert(message);
