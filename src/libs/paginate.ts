@@ -18,8 +18,10 @@ async function paginate<ModelName extends ModelNames>(
 ) {
   const { searchParams, ...args } = options;
 
+	// 默认第 1 页
   const page = Number(searchParams.get("page")) || 1;
-  const pageSize = Number(searchParams.get("pageSize")) || 10;
+	// 默认每页 20 条
+  const pageSize = Number(searchParams.get("pageSize")) || 20;
 
   const skip = (page - 1) * pageSize;
 
