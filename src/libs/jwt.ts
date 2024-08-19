@@ -39,16 +39,24 @@ export async function verifyJwtToken(token: string) {
 export async function parseJwtPayload() {
   const authorization = headers().get("authorization");
 
+  console.log("header", authorization);
+
   const { value: jwtValue } = cookies().get(COOKIE_JWT_KEY) ?? {
     value: null,
   };
 
+  console.log("cookie", jwtValue);
+
   // 解析 JWT，header 优先，cookie 其次
   const token = authorization ? authorization.split(" ")[1] : jwtValue;
+
+  console.log("token", token);
 
   if (!token) return null;
 
   const payload = token && (await verifyJwtToken(token));
+
+  console.log("payload", payload);
 
   return payload;
 }
