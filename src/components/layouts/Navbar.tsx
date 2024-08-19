@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   IconBug,
   IconMenu2,
   IconRocket,
   IconBrandGithub,
   IconMessageChatbot,
+  IconDashboard,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +39,8 @@ interface NavbarProps {
 }
 
 const Navbar = ({ items = [] }: NavbarProps) => {
+  const router = useRouter();
+
   return (
     <header className="sticky z-50 top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       {/* desktop nav */}
@@ -110,14 +113,19 @@ const Navbar = ({ items = [] }: NavbarProps) => {
       <div className="flex w-full justify-end items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <ThemeToggle />
 
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.push("/admin")}
+        >
+          <IconDashboard />
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
               <Avatar className="w-8 h-8">
-                <AvatarImage
-                  src="/lowcode/omost/lei-zhang.jpg"
-                  alt="Lei Zhang"
-                />
+                <AvatarImage src="/images/lei-zhang.jpg" alt="Lei Zhang" />
                 <AvatarFallback>Lei</AvatarFallback>
               </Avatar>
               <span className="sr-only">Toggle user menu</span>
