@@ -3,7 +3,9 @@ import { ZodIssue } from "zod";
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { ApiCode } from "./enum";
 
-type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
+export type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
+// export type ModelNames =
+//   (typeof Prisma.ModelName)[keyof typeof Prisma.ModelName];
 
 export type PrismaModels = {
   [M in ModelNames]: Exclude<
@@ -12,12 +14,21 @@ export type PrismaModels = {
   >;
 };
 
+export interface Pagination {
+  page: number;
+  pageSize: number;
+  pageCount: number;
+  total: number;
+}
+
 export interface BaseResponse<T = any> {
   code: ApiCode;
   data: T;
   message: string;
   error?: ZodIssue[];
-  meta?: any; // TODO pagination
+  meta?: {
+    pagination: Pagination;
+  };
   timestamp: number;
 }
 

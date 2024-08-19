@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodIssue } from "zod";
-import { BaseResponse } from "@/types/interface";
+import { BaseResponse, Pagination } from "@/types/interface";
 import { ApiCode } from "@/types/enum";
 
 export function cn(...inputs: ClassValue[]) {
@@ -19,14 +19,27 @@ export class ApiResponse implements BaseResponse {
 
   error?: ZodIssue[];
 
+  meta?: {
+    pagination: Pagination;
+  };
+
   constructor(
-    data: unknown = null,
+    data: any = null,
     message?: string,
     code?: ApiCode,
     error?: ZodIssue[]
   ) {
     this.code = code || ApiCode.SUCCESS;
-    this.data = data || null;
+
+    if (data?.meta) {
+      const { records, meta } = data;
+
+      this.data = records;
+      this.meta = meta;
+    } else {
+      this.data = data || null;
+    }
+
     this.message = message || "操作成功";
     this.error = error;
     this.timestamp = +new Date();
