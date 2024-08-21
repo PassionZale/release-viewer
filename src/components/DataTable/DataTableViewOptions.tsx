@@ -33,7 +33,7 @@ export function DataTableViewOptions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        {<DropdownMenuLabel>自定义列</DropdownMenuLabel>}
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
@@ -49,7 +49,9 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {typeof column.columnDef.header === "string"
+                  ? column.columnDef.header
+                  : column.id}
               </DropdownMenuCheckboxItem>
             );
           })}

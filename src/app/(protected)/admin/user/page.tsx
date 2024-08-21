@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { IconPlus } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
+import { Role, Status } from "@/types/enum";
 
 const breadcrumbs = [
   { title: "首页", link: "/admin" },
@@ -45,6 +46,45 @@ const columns: ColumnDef<PrismaModels["User"]>[] = [
   },
 ];
 
+const filterColumns = [
+  {
+    accessorKey: "username",
+    placeholder: "用户名...",
+  },
+  {
+    accessorKey: "role",
+    placeholder: "角色",
+    options: [
+      {
+        label: "管理员",
+        value: Role.ADMIN,
+      },
+      {
+        label: "开发者",
+        value: Role.DEVELOPER,
+      },
+      {
+        label: "访客",
+        value: Role.VISITOR,
+      },
+    ],
+  },
+  {
+    accessorKey: "status",
+    placeholder: "状态",
+    options: [
+      {
+        label: "正常",
+        value: Status.ON,
+      },
+      {
+        label: "禁用",
+        value: Status.OFF,
+      },
+    ],
+  },
+];
+
 export default function Page() {
   const router = useRouter();
 
@@ -71,6 +111,7 @@ export default function Page() {
 
         <DataTable<PrismaModels["User"]>
           columns={columns}
+          filterColumns={filterColumns}
           request={(searchParams) => {
             const { pageIndex, ...rest } = searchParams;
 

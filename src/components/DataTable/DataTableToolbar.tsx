@@ -15,6 +15,13 @@ import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { DataTableViewOptions } from "./DataTableViewOptions";
 
 import { DataTableFacetedFilter } from "./DataTableFacetedFilter";
@@ -65,40 +72,97 @@ export const priorities = [
   },
 ];
 
-interface DataTableToolbarProps<TData> {
+interface FilterColumn {
+  accessorKey: string;
+  placeholder?: string;
+  options?: { label: string; value: string | number }[];
+}
+
+export interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  filterColumns?: FilterColumn[];
 }
 
 export function DataTableToolbar<TData>({
   table,
+  filterColumns = [],
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  const renderFilterColumn = (column: FilterColumn) => {
+    if (column.options?.length) {
+      return (
+        <Select
+          key={column.accessorKey}
+          value={
+            (table.getColumn(column.accessorKey)?.getFilterValue() as string) ??
+            ""
+          }
+          onValueChange={(value) => {
+            table.getColumn(column.accessorKey)?.setFilterValue(value);
+          }}
+        >
+          <SelectTrigger className="h-8 w-[100px]">
+            <SelectValue placeholder={column.placeholder} />
+          </SelectTrigger>
+          <SelectContent>
+            {column.options.map((option) => (
+              <SelectItem key={option.value} value={`${option.value}`}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      );
+    }
+
+    return (
+      <Input
+        key={column.accessorKey}
+        placeholder={column.placeholder}
+        value={
+          (table.getColumn(column.accessorKey)?.getFilterValue() as string) ??
+          ""
+        }
+        onChange={(event) =>
+          table
+            .getColumn(column.accessorKey)
+            ?.setFilterValue(event.target.value)
+        }
+        className="h-8 w-[150px] lg:w-[250px]"
+      />
+    );
+  };
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <Input
+        {filterColumns.length &&
+          filterColumns.map((column) => renderFilterColumn(column))}
+        {/* <Input
           placeholder="Filter tasks..."
-          value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("username")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("username")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
-        />
-        {table.getColumn("status") && (
+        /> */}
+        {/* {table.getColumn("status") && (
           <DataTableFacetedFilter
             column={table.getColumn("status")}
             title="Status"
             options={statuses}
           />
-        )}
-        {table.getColumn("role") && (
+        )} */}
+        {/* {table.getColumn("role") && (
           <DataTableFacetedFilter
             column={table.getColumn("role")}
             title="Role"
             options={priorities}
           />
-        )}
+        )} */}
         {isFiltered && (
           <Button
             variant="ghost"

@@ -29,7 +29,7 @@ import {
 
 import { BaseResponse } from "@/types/interface";
 
-import { DataTableToolbar } from "./DataTableToolbar";
+import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import DataTablePaginator from "./DataTablePaginator";
 
 type SearchParams = PaginationState & Record<string, any>;
@@ -38,10 +38,11 @@ type SearchParams = PaginationState & Record<string, any>;
 
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
+  filterColumns?: DataTableToolbarProps<TData>["filterColumns"];
   request: (searchParams: SearchParams) => Promise<BaseResponse<TData[]>>;
 }
 
-export function DataTable<TData>({ columns, request }: DataTableProps<TData>) {
+export function DataTable<TData>({ columns, filterColumns, request }: DataTableProps<TData>) {
   const [sourceData, setSourceData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pageCount, setPageCount] = useState<number>();
@@ -79,11 +80,11 @@ export function DataTable<TData>({ columns, request }: DataTableProps<TData>) {
       setPageCount(res.meta?.pagination.pageCount);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination, columnFilters]);
+  }, [pagination]);
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} filterColumns={filterColumns}/>
 
       <div className="flex text-sm items-center justify-between">
         <div>共 {table.getPageCount()} 条数据</div>
@@ -159,7 +160,6 @@ export function DataTable<TData>({ columns, request }: DataTableProps<TData>) {
         </Table>
       </div>
 
-      {/* <div className="flex justify-end"> */}
       <DataTablePaginator
         currentPage={table.getState().pagination.pageIndex + 1}
         totalPages={table.getPageCount()}
@@ -168,7 +168,6 @@ export function DataTable<TData>({ columns, request }: DataTableProps<TData>) {
         }
         showPreviousNext
       />
-      {/* </div> */}
     </div>
   );
 }
