@@ -9,7 +9,7 @@ import request from "@/libs/request";
 import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPencilPlus } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
 import { Role, Status } from "@/types/enum";
@@ -49,7 +49,7 @@ const columns: ColumnDef<PrismaModels["User"]>[] = [
 const filterColumns = [
   {
     accessorKey: "username",
-    placeholder: "用户名...",
+    placeholder: "用户名",
   },
   {
     accessorKey: "role",
@@ -100,10 +100,11 @@ export default function Page() {
           />
 
           <Button
-            className="text-xs md:text-sm"
+            size={"sm"}
+            className="h8"
             onClick={() => router.push(`/admin/user/create`)}
           >
-            <IconPlus className="mr-2 h-4 w-4" /> 新增
+            <IconPencilPlus className="h-4 w-4 mr-2" /> 新增
           </Button>
         </div>
 

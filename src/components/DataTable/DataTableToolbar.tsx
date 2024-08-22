@@ -1,20 +1,9 @@
 "use client";
 
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  CircleIcon,
-  Cross2Icon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons";
+import { IconPencilPlus, IconPlus, IconRestore } from "@tabler/icons-react";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -22,55 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SearchInput from "@/components/SearchInput";
 import { DataTableViewOptions } from "./DataTableViewOptions";
-
-import { DataTableFacetedFilter } from "./DataTableFacetedFilter";
-
-export const statuses = [
-  {
-    value: "backlog",
-    label: "Backlog",
-    icon: QuestionMarkCircledIcon,
-  },
-  {
-    value: "todo",
-    label: "Todo",
-    icon: CircleIcon,
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-    icon: StopwatchIcon,
-  },
-  {
-    value: "done",
-    label: "Done",
-    icon: CheckCircledIcon,
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-    icon: CrossCircledIcon,
-  },
-];
-
-export const priorities = [
-  {
-    label: "Low",
-    value: "low",
-    icon: ArrowDownIcon,
-  },
-  {
-    label: "Medium",
-    value: "medium",
-    icon: ArrowRightIcon,
-  },
-  {
-    label: "High",
-    value: "high",
-    icon: ArrowUpIcon,
-  },
-];
 
 interface FilterColumn {
   accessorKey: string;
@@ -102,7 +44,7 @@ export function DataTableToolbar<TData>({
             table.getColumn(column.accessorKey)?.setFilterValue(value);
           }}
         >
-          <SelectTrigger className="h-8 w-[100px]">
+          <SelectTrigger className="h-8 w-[80px] lg:w-[120px]">
             <SelectValue placeholder={column.placeholder} />
           </SelectTrigger>
           <SelectContent>
@@ -117,7 +59,7 @@ export function DataTableToolbar<TData>({
     }
 
     return (
-      <Input
+      <SearchInput
         key={column.accessorKey}
         placeholder={column.placeholder}
         value={
@@ -136,44 +78,22 @@ export function DataTableToolbar<TData>({
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
+      <div className="flex flex-wrap flex-1 items-center gap-2">
         {filterColumns.length &&
           filterColumns.map((column) => renderFilterColumn(column))}
-        {/* <Input
-          placeholder="Filter tasks..."
-          value={
-            (table.getColumn("username")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("username")?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[150px] lg:w-[250px]"
-        /> */}
-        {/* {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={statuses}
-          />
-        )} */}
-        {/* {table.getColumn("role") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("role")}
-            title="Role"
-            options={priorities}
-          />
-        )} */}
+
         {isFiltered && (
           <Button
             variant="ghost"
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
-            <Cross2Icon className="ml-2 h-4 w-4" />
+            重置
+            <IconRestore className="ml-2 h-4 w-4" />
           </Button>
         )}
       </div>
+
       <DataTableViewOptions table={table} />
     </div>
   );

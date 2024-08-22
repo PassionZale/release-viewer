@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,6 +9,7 @@ import {
   PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
+import { debounce } from "radash";
 
 import {
   Select,
@@ -31,6 +32,7 @@ import { BaseResponse } from "@/types/interface";
 
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import DataTablePaginator from "./DataTablePaginator";
+import { ScrollArea } from "../ui/scroll-area";
 
 type SearchParams = PaginationState & Record<string, any>;
 
@@ -42,9 +44,14 @@ export interface DataTableProps<TData> {
   request: (searchParams: SearchParams) => Promise<BaseResponse<TData[]>>;
 }
 
-export function DataTable<TData>({ columns, filterColumns, request }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  columns,
+  filterColumns,
+  request,
+}: DataTableProps<TData>) {
   const [sourceData, setSourceData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const [pageCount, setPageCount] = useState<number>();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -64,30 +71,44 @@ export function DataTable<TData>({ columns, filterColumns, request }: DataTableP
     onColumnFiltersChange: setColumnFilters,
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const loadData = useCallback(
+    debounce({ delay: 200 }, (searchParams) =>
+      request(searchParams).then((res) => {
+        setSourceData(res.data);
+        setPageCount(res.meta?.pagination.pageCount);
+      })
+    ),
+    [request]
+  );
+
   useEffect(() => {
     table.setPageIndex(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnFilters]);
 
   useEffect(() => {
-    console.log(columnFilters);
+    const filters: Record<string, any> = {};
+
+    columnFilters.map(({ id, value }) => {
+      filters[id] = value;
+    });
+
     const searchParams = {
       ...pagination,
+      ...filters,
     };
 
-    request(searchParams).then((res) => {
-      setSourceData(res.data);
-      setPageCount(res.meta?.pagination.pageCount);
-    });
+    loadData(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination]);
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} filterColumns={filterColumns}/>
+      <DataTableToolbar table={table} filterColumns={filterColumns} />
 
       <div className="flex text-sm items-center justify-between">
-        <div>共 {table.getPageCount()} 条数据</div>
+        <div>共 {table.getPageCount()} 页</div>
 
         <Select
           value={`${table.getState().pagination.pageSize}`}
@@ -109,8 +130,8 @@ export function DataTable<TData>({ columns, filterColumns, request }: DataTableP
         </Select>
       </div>
 
-      <div className="rounded-md border">
-        <Table>
+      <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
+        <Table className="relative">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -158,7 +179,7 @@ export function DataTable<TData>({ columns, filterColumns, request }: DataTableP
             )}
           </TableBody>
         </Table>
-      </div>
+      </ScrollArea>
 
       <DataTablePaginator
         currentPage={table.getState().pagination.pageIndex + 1}

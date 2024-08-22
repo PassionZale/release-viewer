@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { UserInputSchema } from "./schemas";
 import { encrypt } from "@/libs/bcrypt";
 import paginate from "@/libs/paginate";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +14,29 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
+    const where: Prisma.UserWhereInput = {};
+
+    const username = searchParams.get("username");
+
+    if (username) {
+      where.username = { contains: username };
+    }
+
+    const role = searchParams.get("role");
+
+    if (role) {
+      where.role = Number(role);
+    }
+
+    const status = searchParams.get("status");
+
+    if (status) {
+      where.status = Number(status);
+    }
+
     const users = await paginate(prisma.user, {
       searchParams,
+      where,
       omit: {
         hashedPassword: true,
       },
