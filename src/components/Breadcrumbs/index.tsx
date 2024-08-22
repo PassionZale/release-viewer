@@ -9,12 +9,11 @@ import {
 import { IconSlash } from "@tabler/icons-react";
 import { Fragment } from "react";
 
-type BreadcrumbItemProps = {
-  title: string;
-  link: string;
-};
+export interface BreadcrumbsProps {
+  items: { title: string; link: string }[];
+}
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItemProps[] }) {
+export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>

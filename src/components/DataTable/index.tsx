@@ -32,7 +32,7 @@ import { BaseResponse } from "@/types/interface";
 
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import DataTablePaginator from "./DataTablePaginator";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 type SearchParams = PaginationState & Record<string, any>;
 
@@ -137,7 +137,7 @@ export function DataTable<TData>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
+                    <TableHead key={header.id} colSpan={header.colSpan} className="break-keep">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -179,6 +179,8 @@ export function DataTable<TData>({
             )}
           </TableBody>
         </Table>
+
+				<ScrollBar orientation="horizontal" />
       </ScrollArea>
 
       <DataTablePaginator

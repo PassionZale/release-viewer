@@ -7,83 +7,12 @@ import { DataTable } from "@/components/DataTable";
 import { Heading } from "@/components/ui/heading";
 import request from "@/libs/request";
 import { PrismaModels } from "@/types/interface";
-import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { IconPencilPlus } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
-import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
-import { Role, Status } from "@/types/enum";
-
-const breadcrumbs = [
-  { title: "首页", link: "/admin" },
-  { title: "用户", link: "/admin/user" },
-];
-
-const columns: ColumnDef<PrismaModels["User"]>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "username",
-    header: "用户名",
-  },
-  {
-    accessorKey: "nickname",
-    header: "昵称",
-  },
-  {
-    accessorKey: "role",
-    header: "角色",
-  },
-  {
-    accessorKey: "status",
-    header: "状态",
-  },
-];
-
-const filterColumns = [
-  {
-    accessorKey: "username",
-    placeholder: "用户名",
-  },
-  {
-    accessorKey: "role",
-    placeholder: "角色",
-    options: [
-      {
-        label: "管理员",
-        value: Role.ADMIN,
-      },
-      {
-        label: "开发者",
-        value: Role.DEVELOPER,
-      },
-      {
-        label: "访客",
-        value: Role.VISITOR,
-      },
-    ],
-  },
-  {
-    accessorKey: "status",
-    placeholder: "状态",
-    options: [
-      {
-        label: "正常",
-        value: Status.ON,
-      },
-      {
-        label: "禁用",
-        value: Status.OFF,
-      },
-    ],
-  },
-];
+import { breadcrumbs } from "./breadcrumbs";
+import { columns } from "./columns";
+import { filterColumns } from "./filterColumns";
 
 export default function Page() {
   const router = useRouter();
