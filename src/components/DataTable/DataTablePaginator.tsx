@@ -73,19 +73,19 @@ export const generatePaginationLinks = (
   return pages;
 };
 
-type PaginatorProps = {
+export type DataTablePaginatorProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (pageNumber: number) => void;
   showPreviousNext: boolean;
 };
 
-export default function Paginator({
+export function DataTablePaginator({
   currentPage,
   totalPages,
   onPageChange,
   showPreviousNext,
-}: PaginatorProps) {
+}: DataTablePaginatorProps) {
   const isMobile = useTailwindBreakpoint("sm");
 
   return (

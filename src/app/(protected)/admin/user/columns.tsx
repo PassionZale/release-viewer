@@ -1,8 +1,8 @@
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
-import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 import { Role, Status } from "@/types/enum";
 import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
+import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 
 export const columns: ColumnDef<PrismaModels["User"]>[] = [
   {
@@ -58,6 +58,11 @@ export const columns: ColumnDef<PrismaModels["User"]>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions />,
+    cell: ({ row }) => (
+      <DataTableRowActions
+        editPagePath={`/admin/user/edit/${row.original.id}`}
+        deleteApiPath={`/api/users/${row.original.id}`}
+      />
+    ),
   },
 ];

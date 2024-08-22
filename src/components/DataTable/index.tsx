@@ -28,13 +28,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+
 import { BaseResponse } from "@/types/interface";
 
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
-import DataTablePaginator from "./DataTablePaginator";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { DataTablePaginator } from "./DataTablePaginator";
+import DataTableContext from "./context";
 
-type SearchParams = PaginationState & Record<string, any>;
+export type SearchParams = PaginationState & Record<string, any>;
 
 // TODO LOADING
 
@@ -55,7 +57,7 @@ export function DataTable<TData>({
   const [pageCount, setPageCount] = useState<number>();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 1,
+    pageSize: 10,
   });
 
   const table = useReactTable({
@@ -82,12 +84,7 @@ export function DataTable<TData>({
     [request]
   );
 
-  useEffect(() => {
-    table.setPageIndex(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columnFilters]);
-
-  useEffect(() => {
+  const getSearchParams = (): SearchParams => {
     const filters: Record<string, any> = {};
 
     columnFilters.map(({ id, value }) => {
@@ -99,98 +96,115 @@ export function DataTable<TData>({
       ...filters,
     };
 
+    return searchParams;
+  };
+
+  useEffect(() => {
+    table.setPageIndex(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnFilters]);
+
+  useEffect(() => {
+    const searchParams = getSearchParams();
+
     loadData(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination]);
 
   return (
-    <div className="space-y-4">
-      <DataTableToolbar table={table} filterColumns={filterColumns} />
+    <DataTableContext.Provider value={{ loadData, getSearchParams }}>
+      <div className="space-y-4">
+        <DataTableToolbar table={table} filterColumns={filterColumns} />
 
-      <div className="flex text-sm items-center justify-between">
-        <div>共 {table.getPageCount()} 页</div>
+        <div className="flex text-sm items-center justify-between">
+          <div>共 {table.getPageCount()} 页</div>
 
-        <Select
-          value={`${table.getState().pagination.pageSize}`}
-          onValueChange={(value) => {
-            table.setPageIndex(0);
-            table.setPageSize(Number(value));
-          }}
-        >
-          <SelectTrigger className="h-8 w-[100px]">
-            <SelectValue placeholder={table.getState().pagination.pageSize} />
-          </SelectTrigger>
-          <SelectContent side="top">
-            {[1, 2, 3, 4, 10, 20, 30, 40, 50].map((pageSize) => (
-              <SelectItem key={pageSize} value={`${pageSize}`}>
-                {pageSize} 条/页
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <Select
+            value={`${table.getState().pagination.pageSize}`}
+            onValueChange={(value) => {
+              table.setPageIndex(0);
+              table.setPageSize(Number(value));
+            }}
+          >
+            <SelectTrigger className="h-8 w-[100px]">
+              <SelectValue placeholder={table.getState().pagination.pageSize} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <SelectItem key={pageSize} value={`${pageSize}`}>
+                  {pageSize} 条/页
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
-        <Table className="relative">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="break-keep">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+        <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
+          <Table className="relative">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className="break-keep"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  暂无数据
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    暂无数据
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
 
-				<ScrollBar orientation="horizontal" />
-      </ScrollArea>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
 
-      <DataTablePaginator
-        currentPage={table.getState().pagination.pageIndex + 1}
-        totalPages={table.getPageCount()}
-        onPageChange={(pageNumber: number) =>
-          table.setPageIndex(pageNumber - 1)
-        }
-        showPreviousNext
-      />
-    </div>
+        <DataTablePaginator
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(pageNumber: number) =>
+            table.setPageIndex(pageNumber - 1)
+          }
+          showPreviousNext
+        />
+      </div>
+    </DataTableContext.Provider>
   );
 }
