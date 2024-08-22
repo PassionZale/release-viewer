@@ -10,7 +10,7 @@ import { IconSlash } from "@tabler/icons-react";
 import { Fragment } from "react";
 
 export interface BreadcrumbsProps {
-  items: { title: string; link: string }[];
+  items: { title: string; link?: string }[];
 }
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
