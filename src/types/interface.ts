@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodIssue } from "zod";
 import type { Prisma, PrismaClient } from "@prisma/client";
-import { ApiCode } from "./enum";
+import { Actions, ApiCode } from "./enum";
 
 export type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
 // export type ModelNames =
@@ -45,3 +45,5 @@ export interface ContextRequest extends NextRequest {
 export interface ContextResponse<P> extends NextResponse {
   params: P;
 }
+
+export type DetailPageSlug = [Actions.CREATE] | [Actions.EDIT, string];

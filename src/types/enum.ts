@@ -46,3 +46,8 @@ export enum ApiCode {
    */
   FILE_MIMETYPE_INVALID = 5003,
 }
+
+export enum Actions {
+  CREATE = "create",
+  EDIT = "edit",
+}
