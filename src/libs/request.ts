@@ -75,10 +75,18 @@ export class Request {
       if (res.ok) {
         const result: BaseResponse<T> = await res.json();
 
-        if (result.code === ApiCode.SUCCESS) {
-          resolve(result);
-        } else {
-          reject(result);
+        switch (result.code) {
+          case ApiCode.SUCCESS:
+            resolve(result);
+            break;
+
+          case ApiCode.JWT_INVALID:
+						window.location.replace("/login")
+						break;
+
+          default:
+            reject(result);
+            break;
         }
       } else {
         res
