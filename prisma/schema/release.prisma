@@ -5,7 +5,7 @@ model Release {
 
   /// 所属应用
   app        App?      @relation(fields: [appId], references: [id])
-  appId      Int
+  appId      Int?
   /// 所属流水线
   pipeline   Pipeline? @relation(fields: [pipelineId], references: [id])
   pipelineId Int?

@@ -1,3 +1,5 @@
+"use client";
+
 import { ApiCode } from "@/types/enum";
 import { BaseResponse } from "@/types/interface";
 import qs from "qs";
@@ -81,8 +83,8 @@ export class Request {
             break;
 
           case ApiCode.JWT_INVALID:
-						window.location.replace("/login")
-						break;
+            window?.location.replace("/login");
+            break;
 
           default:
             reject(result);

@@ -10,7 +10,7 @@ model Pipeline {
   /// 图片地址
   previewImgUrl String?
   /// 所属应用
-  app           App?       @relation(fields: [appId], references: [id])
+  app           App?      @relation(fields: [appId], references: [id])
   appId         Int?
   /// 流水线
   releases      Release[]

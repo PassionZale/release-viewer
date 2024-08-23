@@ -12,7 +12,14 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
-    const releases = await paginate(prisma.pipeline, { searchParams });
+    const releases = await paginate(prisma.pipeline, {
+      searchParams,
+      include: {
+        app: true,
+        pipeline: true,
+        user: true,
+      },
+    });
 
     return NextResponse.json(new ApiResponse(releases));
   },
@@ -53,7 +60,9 @@ export const POST = withAuthGuard(
         return NextResponse.json(new ApiException("流水线不属于所属应用"));
       }
 
-      const release = await prisma.release.create({ data });
+      const release = await prisma.release.create({
+        data: { ...data, userId: request.auth?.user?.id },
+      });
 
       return NextResponse.json(new ApiResponse(release));
     }

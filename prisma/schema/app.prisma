@@ -14,10 +14,10 @@ model App {
   /// 企微机器人启用状态
   robotWorkWeixinStatus Int        @default(1)
   /// 所属系统
-  system                System?     @relation(fields: [systemValue], references: [value])
+  system                System?    @relation(fields: [systemValue], references: [value])
   systemValue           String?
   /// 所属平台
-  platform              Platform?   @relation(fields: [platformValue], references: [value])
+  platform              Platform?  @relation(fields: [platformValue], references: [value])
   platformValue         String?
   /// 流水线
   pipelines             Pipeline[]
