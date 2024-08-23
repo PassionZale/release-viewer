@@ -37,7 +37,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <Button disabled={loading} variant="outline" onClick={onClose}>
           取消
         </Button>
-        <Button disabled={loading} variant="destructive" onClick={onConfirm}>
+        <Button loading={loading} variant="destructive" onClick={onConfirm}>
           确定
         </Button>
       </div>

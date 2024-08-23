@@ -58,7 +58,7 @@ export const PUT = withAuthGuard<{ id: string }>(
         },
       });
 
-      return NextResponse.json(nextApp);
+      return NextResponse.json(new ApiResponse(nextApp));
     } catch (error) {
       return NextResponse.json(new ApiException((error as Error).message));
     }

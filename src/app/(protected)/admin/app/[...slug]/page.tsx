@@ -10,12 +10,13 @@ import { useEffect, useState } from "react";
 import { breadcrumbs } from "./breadcrumbs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import UserForm from "./form";
+import AppForm from "./form";
+import { App } from "../columns";
 
 export default function Page() {
   const { slug } = useParams<{ slug: DetailPageSlug }>();
 
-  const [initialData, setInitialData] = useState<PrismaModels["User"]>();
+  const [initialData, setInitialData] = useState<App>();
   const [loading, setLoading] = useState(true);
 
   const [action, id] = slug;
@@ -24,13 +25,13 @@ export default function Page() {
     notFound();
   }
 
-  const title = action === Actions.CREATE ? "新增用户" : "编辑用户";
+  const title = action === Actions.CREATE ? "新增应用" : "编辑应用";
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       request
-        .get<PrismaModels["User"]>(`/api/users/${id}`)
+        .get<App>(`/api/apps/${id}`)
         .then(({ data }) => {
           setInitialData(data);
         })
@@ -51,7 +52,7 @@ export default function Page() {
 
         <Separator />
 
-        <UserForm initialData={initialData} />
+        <AppForm initialData={initialData} />
       </div>
     </PageContainer>
   );

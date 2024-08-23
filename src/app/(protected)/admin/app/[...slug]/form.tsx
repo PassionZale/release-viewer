@@ -1,6 +1,5 @@
 "use client";
 
-import { PrismaModels } from "@/types/interface";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -19,8 +18,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { Textarea } from "@/components/ui/textarea";
+
 import { z } from "zod";
-import { Role, Status } from "@/types/enum";
+import { Status } from "@/types/enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -28,36 +29,36 @@ import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
+import { App } from "../columns";
+import useDicStore from "@/stores/dict";
 
-interface UserFormProps {
-  initialData?: PrismaModels["User"];
+interface AppFormProps {
+  initialData?: App;
 }
 
-const formSchema = z
-  .object({
-    id: z.number().or(z.literal("")),
-    nickname: z.string({ required_error: "必填" }).min(1, "必填"),
-    username: z.string({ required_error: "必填" }).min(1, "必填"),
-    password: z.string().or(z.literal("")),
-    role: z.nativeEnum(Role, { message: "角色不存在" }).optional(),
-    status: z.nativeEnum(Status, { message: "状态不存在" }).optional(),
-  })
-  .superRefine((values, ctx) => {
-    if (!values.id && !values.password) {
-      ctx.addIssue({
-        message: "必填",
-        code: z.ZodIssueCode.custom,
-        path: ["password"],
-      });
-    }
-  });
+const formSchema = z.object({
+  id: z.number().or(z.literal("")),
+  name: z.string({ required_error: "必填" }).min(1, "必填"),
+  systemValue: z.string({ required_error: "应用所属系统不能为空" }),
+  platformValue: z.string({ required_error: "应用所属系统不能为空" }),
+  desc: z.string().optional(),
+  subscribers: z.string().optional(),
+  robotDingDingStatus: z
+    .nativeEnum(Status, { message: "状态不存在" })
+    .optional(),
+  robotWorkWeixinStatus: z
+    .nativeEnum(Status, { message: "状态不存在" })
+    .optional(),
+});
 
 type FormValue = z.infer<typeof formSchema>;
 
-export default function UserForm({ initialData }: UserFormProps) {
+export default function AppForm({ initialData }: AppFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+
+  const { systems, platforms } = useDicStore();
 
   // TODO 权限
   const readOnly = Boolean(initialData?.id);
@@ -66,24 +67,38 @@ export default function UserForm({ initialData }: UserFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: "",
-      nickname: "",
-      username: "",
-      password: "",
-      role: Role.VISITOR,
-      status: Status.ON,
+      name: "",
+      systemValue: systems[0]?.value ?? "",
+      platformValue: platforms[0]?.value ?? "",
+      desc: "",
+      subscribers: "",
+      robotDingDingStatus: Status.OFF,
+      robotWorkWeixinStatus: Status.OFF,
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      const { id, nickname, username, role, status } = initialData;
+      const {
+        id,
+        name,
+        systemValue,
+        platformValue,
+        desc,
+        subscribers,
+        robotDingDingStatus,
+        robotWorkWeixinStatus,
+      } = initialData;
 
       form.reset({
         id,
-        nickname,
-        username,
-        role,
-        status,
+        name,
+        systemValue: systemValue!,
+        platformValue: platformValue!,
+        desc: desc || "",
+        subscribers: subscribers || "",
+        robotDingDingStatus,
+        robotWorkWeixinStatus,
       });
     }
   }, [initialData, form]);
@@ -93,8 +108,8 @@ export default function UserForm({ initialData }: UserFormProps) {
       setLoading(true);
 
       const _request = initialData?.id
-        ? () => request.put(`/api/users/${initialData.id}`, { params: data })
-        : () => request.post(`/api/users`, { params: data });
+        ? () => request.put(`/api/apps/${initialData.id}`, { params: data })
+        : () => request.post(`/api/apps`, { params: data });
 
       const { message } = await _request();
 
@@ -104,6 +119,7 @@ export default function UserForm({ initialData }: UserFormProps) {
 
       router.back();
     } catch (error) {
+			console.log(error)
       setLoading(false);
       toast({
         variant: "destructive",
@@ -131,10 +147,10 @@ export default function UserForm({ initialData }: UserFormProps) {
 
         <FormField
           control={form.control}
-          name="nickname"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>昵称</FormLabel>
+              <FormLabel>应用名称</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -145,51 +161,22 @@ export default function UserForm({ initialData }: UserFormProps) {
 
         <FormField
           control={form.control}
-          name="username"
+          name="systemValue"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>用户名</FormLabel>
-              <FormControl>
-                <Input {...field} disabled={readOnly} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem hidden={readOnly}>
-              <FormLabel>密码</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="role"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>角色</FormLabel>
-              <Select
-                onValueChange={(value) => field.onChange(Number(value))}
-                value={`${field.value}`}
-              >
+              <FormLabel>所属系统</FormLabel>
+              <Select onValueChange={field.onChange} value={`${field.value}`}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="选择角色" />
+                    <SelectValue placeholder="选择系统" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={`${Role.ADMIN}`}>管理员</SelectItem>
-                  <SelectItem value={`${Role.DEVELOPER}`}>开发者</SelectItem>
-                  <SelectItem value={`${Role.VISITOR}`}>访客</SelectItem>
+                  {systems.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -199,10 +186,94 @@ export default function UserForm({ initialData }: UserFormProps) {
 
         <FormField
           control={form.control}
-          name="status"
+          name="platformValue"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>状态</FormLabel>
+              <FormLabel>所属平台</FormLabel>
+							{/* TODO 编辑是否只读？ */}
+              <Select onValueChange={field.onChange} value={`${field.value}`}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择平台" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {platforms.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="desc"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>应用描述</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="subscribers"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>订阅者</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder={
+                    "手机号，一行一个，例如：\n1234567890\n1234567890"
+                  }
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="robotDingDingStatus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>钉钉机器人</FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={`${field.value}`}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择状态" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={`${Status.ON}`}>启用</SelectItem>
+                  <SelectItem value={`${Status.OFF}`}>禁用</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="robotWorkWeixinStatus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>企微机器人</FormLabel>
               <Select
                 onValueChange={(value) => field.onChange(Number(value))}
                 value={`${field.value}`}
