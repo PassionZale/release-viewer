@@ -3,10 +3,14 @@ import React from "react";
 import { cn } from "@/libs/utils";
 import {
   IconApps,
+  IconBrandAlipay,
+  IconBrandWechat,
   IconChevronLeft,
+  IconGhost2,
   IconHome,
   IconRobot,
-  IconUser,
+  IconUsers,
+  IconZeppelin,
 } from "@tabler/icons-react";
 import useSidebarStore from "@/stores/sidebar";
 import Link from "next/link";
@@ -27,7 +31,7 @@ export const NavItems = [
     label: "用户",
     value: "user",
     href: "/admin/user",
-    icon: <IconUser />,
+    icon: <IconUsers />,
   },
   {
     label: "应用",
@@ -39,25 +43,25 @@ export const NavItems = [
     label: "流水线",
     value: "pipeline",
     href: "/admin/pipeline",
-    icon: <IconApps />,
+    icon: <IconGhost2 />,
   },
   {
     label: "发布记录",
     value: "release",
     href: "/admin/release",
-    icon: <IconApps />,
+    icon: <IconZeppelin />,
   },
   {
     label: "钉钉机器人",
     value: "dingding",
     href: "/admin/robot/dingding",
-    icon: <IconRobot />,
+    icon: <IconBrandAlipay />,
   },
   {
     label: "企微机器人",
     value: "workweixin",
     href: "/admin/robot/workweixin",
-    icon: <IconRobot />,
+    icon: <IconBrandWechat />,
   },
 ];
 
