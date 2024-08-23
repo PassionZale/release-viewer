@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 import { cn } from "@/libs/utils";
 import {
   cloneElement,
@@ -34,7 +31,6 @@ export interface NavbarProps {
 }
 
 export function Navbar({ items, setOpen, isMobileNav = false }: NavbarProps) {
-  const path = usePathname();
   const isMinimized = useSidebarStore((state) => state.isMinimized);
 
   if (!items?.length) {

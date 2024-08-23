@@ -6,12 +6,14 @@ import Sidebar from "./Sidebar";
 import type { Metadata } from "next";
 import request from "@/libs/request";
 import { PrismaModels } from "@/types/interface";
+import { useEffect } from "react";
+import useUserStore, { User } from "@/stores/user";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
 };
 
-function initDicts() {
+function initDictStore() {
   let platforms: PrismaModels["Platform"][] = [];
   let systems: PrismaModels["System"][] = [];
 
@@ -39,7 +41,15 @@ function initDicts() {
 }
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
-  initDicts();
+  const { init: initUserStore } = useUserStore();
+
+  initDictStore();
+
+  useEffect(() => {
+    request
+      .get<User>("/api/users/profile")
+      .then(({ data }) => initUserStore(data));
+  }, []);
 
   return (
     <div className="flex">

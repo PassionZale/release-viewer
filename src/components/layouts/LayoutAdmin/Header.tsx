@@ -18,8 +18,11 @@ import {
   IconRocket,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import useUserStore from "@/stores/user";
 
 export default function Header() {
+  const { user } = useUserStore();
+
   return (
     <header className="sticky inset-x-0 top-0 w-full">
       <nav className="flex items-center justify-between px-4 py-2 md:justify-end">
@@ -36,11 +39,11 @@ export default function Header() {
                   <AvatarImage src="/images/lei-zhang.jpg" alt="Lei Zhang" />
                   <AvatarFallback>Lei</AvatarFallback>
                 </Avatar>
-                <span className="sr-only">Toggle user menu</span>
+                <span className="sr-only">展开菜单</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Lei Zhang</DropdownMenuLabel>
+              <DropdownMenuLabel>{user?.nickname}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <IconRocket className="mr-2 h-5 w-5" />

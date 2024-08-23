@@ -45,7 +45,7 @@ export default function Page() {
       <div className="space-y-4">
         <Breadcrumbs items={breadcrumbs} />
 
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <Heading title={title} />
         </div>
 

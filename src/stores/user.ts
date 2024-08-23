@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { PrismaModels } from "@/types/interface";
 
-type User = Omit<PrismaModels["User"], "hashedPassword">;
+export type User = Omit<PrismaModels["User"], "hashedPassword">;
 
-type UserStore = {
+export type UserStore = {
   user?: User;
   init: (payload: User) => void;
   reset: () => void;

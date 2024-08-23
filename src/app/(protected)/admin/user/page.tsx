@@ -22,7 +22,7 @@ export default function Page() {
       <div className="space-y-4">
         <Breadcrumbs items={breadcrumbs} />
 
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <Heading
             title={`用户`}
             description="用户列表（用于登录管理后台操作资源）"
