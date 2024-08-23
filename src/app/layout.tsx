@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/libs/utils";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
+import { Toaster } from "@/components/ui/toaster"
+
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -33,6 +35,8 @@ export default function RootLayout({
         </ThemeProvider>
 
         <TailwindIndicator />
+
+				<Toaster />
       </body>
     </html>
   );

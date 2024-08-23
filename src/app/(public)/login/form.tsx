@@ -8,12 +8,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import request from "@/libs/request";
+import { ApiException } from "@/libs/utils";
 
 const formSchema = z.object({
   username: z.string({ required_error: "必填" }).min(1, "必填"),
@@ -23,6 +26,8 @@ const formSchema = z.object({
 type LoginFormValue = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
+  const { toast } = useToast();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -38,24 +43,25 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormValue) => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const res = await fetch("/api/auth/signin", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+      await request.post("/api/auth/signin", {
+        params: data,
+      });
 
-    const { code, message } = await res.json();
-
-    setLoading(false);
-
-    if (code === 200) {
       const nextUrl = searchParams.get("next");
       // @see: https://github.com/vercel/next.js/discussions/44149
       router.push(nextUrl ?? "/admin");
       router.refresh();
-    } else {
-      alert(message);
+    } catch (error) {
+      setLoading(false);
+
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as ApiException).message,
+      });
     }
   };
 

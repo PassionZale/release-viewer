@@ -25,6 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import request from "@/libs/request";
+import { useToast } from "@/components/ui/use-toast";
+import { ApiException } from "@/libs/utils";
+import { useRouter } from "next/navigation";
 
 interface UserFormProps {
   initialData?: PrismaModels["User"];
@@ -53,6 +56,8 @@ type FormValue = z.infer<typeof formSchema>;
 
 export default function UserForm({ initialData }: UserFormProps) {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
   // TODO 权限
   const readOnly = Boolean(initialData?.id);
@@ -91,12 +96,20 @@ export default function UserForm({ initialData }: UserFormProps) {
         ? () => request.put(`/api/users/${initialData.id}`, { params: data })
         : () => request.post(`/api/users`, { params: data });
 
-      await _request();
+      const { message } = await _request();
 
       setLoading(false);
+
+      toast({ description: message });
+
+      router.back();
     } catch (error) {
-      console.error(error);
       setLoading(false);
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as ApiException).message,
+      });
     }
   };
 

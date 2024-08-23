@@ -29,16 +29,16 @@ import {
 } from "@/components/ui/table";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useToast } from "@/components/ui/use-toast";
 
 import { BaseResponse } from "@/types/interface";
 
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import { DataTablePaginator } from "./DataTablePaginator";
 import DataTableContext from "./context";
+import { ApiException } from "@/libs/utils";
 
 export type SearchParams = PaginationState & Record<string, any>;
-
-// TODO LOADING
 
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
@@ -51,6 +51,7 @@ export function DataTable<TData>({
   filterColumns,
   request,
 }: DataTableProps<TData>) {
+  const { toast } = useToast();
   const [sourceData, setSourceData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
@@ -75,11 +76,20 @@ export function DataTable<TData>({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = useCallback(
+    // TODO LOADING
     debounce({ delay: 200 }, (searchParams) =>
-      request(searchParams).then((res) => {
-        setSourceData(res.data);
-        setPageCount(res.meta?.pagination.pageCount);
-      })
+      request(searchParams)
+        .then((res) => {
+          setSourceData(res.data);
+          setPageCount(res.meta?.pagination.pageCount);
+        })
+        .catch((error) => {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: (error as ApiException).message,
+          });
+        })
     ),
     [request]
   );
