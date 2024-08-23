@@ -11,38 +11,38 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { z } from "zod";
 import { Role, Status } from "@/types/enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import request from "@/libs/request";
 
 interface UserFormProps {
-  id?: string;
   initialData?: PrismaModels["User"];
 }
 
 const formSchema = z
   .object({
-    id: z.number().optional(),
-    nickname: z
-      .string({ required_error: "昵称不能为空" })
-      .min(1, "昵称至少1个字符"),
-    avatar: z.string().optional(),
-    username: z
-      .string({ required_error: "用户名不能为空" })
-      .min(1, "用户名至少1个字符"),
-    password: z
-      .string({ required_error: "用户密码不能为空" })
-      .min(6, "密码至少6个字符")
-      .optional(),
+    id: z.number().or(z.literal("")),
+    nickname: z.string({ required_error: "必填" }).min(1, "必填"),
+    username: z.string({ required_error: "必填" }).min(1, "必填"),
+    password: z.string().or(z.literal("")),
     role: z.nativeEnum(Role, { message: "角色不存在" }).optional(),
     status: z.nativeEnum(Status, { message: "状态不存在" }).optional(),
   })
   .superRefine((values, ctx) => {
-    if (values.id && !values.password) {
+    if (!values.id && !values.password) {
       ctx.addIssue({
-        message: "密码必填",
+        message: "必填",
         code: z.ZodIssueCode.custom,
         path: ["password"],
       });
@@ -51,21 +51,70 @@ const formSchema = z
 
 type FormValue = z.infer<typeof formSchema>;
 
-export default function UserForm({ id, initialData }: UserFormProps) {
+export default function UserForm({ initialData }: UserFormProps) {
+  const [loading, setLoading] = useState(false);
+
+  const readOnly = Boolean(initialData?.id);
+
   const form = useForm<FormValue>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      id: "",
+      nickname: "",
+      username: "",
+      password: "",
       role: Role.VISITOR,
       status: Status.ON,
     },
-    values: initialData as FormValue,
   });
 
-  const onSubmit = () => {};
+  useEffect(() => {
+    if (initialData) {
+      const { id, nickname, username, role, status } = initialData;
+
+      form.reset({
+        id,
+        nickname,
+        username,
+        role,
+        status,
+      });
+    }
+  }, [initialData, form]);
+
+  const onSubmit = async (data: FormValue) => {
+    try {
+      setLoading(true);
+
+      const _request = initialData?.id
+        ? () => request.put(`/api/users/${initialData.id}`, { params: data })
+        : () => request.post(`/api/users`, { params: data });
+
+      await _request();
+
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem hidden>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="nickname"
@@ -87,7 +136,7 @@ export default function UserForm({ id, initialData }: UserFormProps) {
             <FormItem>
               <FormLabel>用户名</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} readOnly={readOnly} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +147,7 @@ export default function UserForm({ id, initialData }: UserFormProps) {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
+            <FormItem hidden={readOnly}>
               <FormLabel>密码</FormLabel>
               <FormControl>
                 <Input {...field} />
@@ -114,9 +163,21 @@ export default function UserForm({ id, initialData }: UserFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>角色</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={`${field.value}`}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择角色" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={`${Role.ADMIN}`}>管理员</SelectItem>
+                  <SelectItem value={`${Role.DEVELOPER}`}>开发者</SelectItem>
+                  <SelectItem value={`${Role.VISITOR}`}>访客</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -128,15 +189,26 @@ export default function UserForm({ id, initialData }: UserFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>状态</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              <Select
+                onValueChange={(value) => field.onChange(Number(value))}
+                value={`${field.value}`}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择状态" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={`${Status.ON}`}>启用</SelectItem>
+                  <SelectItem value={`${Status.OFF}`}>禁用</SelectItem>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit">
+        <Button className="ml-auto w-full" type="submit" loading={loading}>
           保存
         </Button>
       </form>

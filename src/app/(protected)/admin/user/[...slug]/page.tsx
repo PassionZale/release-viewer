@@ -51,7 +51,7 @@ export default function Page() {
 
         <Separator />
 
-        {!loading && <UserForm id={id} initialData={initialData} />}
+        <UserForm initialData={initialData} />
       </div>
     </PageContainer>
   );
