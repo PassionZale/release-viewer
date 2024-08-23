@@ -5,6 +5,7 @@ import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { AppInputSchema } from "./schemas";
 import paginate from "@/libs/paginate";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +13,33 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
+    const where: Prisma.AppWhereInput = {};
+
+    const name = searchParams.get("name");
+
+    if (name) {
+      where.name = { contains: name };
+    }
+
+    const platform = searchParams.get("platform");
+
+    if (platform) {
+      where.platformValue = platform;
+    }
+
+    const system = searchParams.get("system");
+
+    if (system) {
+      where.systemValue = system;
+    }
+
     const apps = await paginate(prisma.app, {
       searchParams,
+      where,
+      include: {
+        system: true,
+        platform: true,
+      },
     });
 
     return NextResponse.json(new ApiResponse(apps));
