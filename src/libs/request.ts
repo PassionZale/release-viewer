@@ -6,7 +6,7 @@ import { ApiException } from "./utils";
 type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface Params {
-  cacheTime?: number; //缓存时间，单位为s。默认强缓存，0为不缓存
+  cacheTime?: number; //缓存时间，单位为s。默认 0 不缓存
   params?: Record<string, any>;
 }
 
