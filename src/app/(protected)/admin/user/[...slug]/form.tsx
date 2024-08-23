@@ -54,6 +54,7 @@ type FormValue = z.infer<typeof formSchema>;
 export default function UserForm({ initialData }: UserFormProps) {
   const [loading, setLoading] = useState(false);
 
+  // TODO
   const readOnly = Boolean(initialData?.id);
 
   const form = useForm<FormValue>({
@@ -136,7 +137,7 @@ export default function UserForm({ initialData }: UserFormProps) {
             <FormItem>
               <FormLabel>用户名</FormLabel>
               <FormControl>
-                <Input {...field} readOnly={readOnly} />
+                <Input {...field} disabled={readOnly} />
               </FormControl>
               <FormMessage />
             </FormItem>

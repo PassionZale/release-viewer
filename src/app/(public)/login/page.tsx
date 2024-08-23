@@ -1,5 +1,5 @@
-import LoginForm from "@/components/forms/LoginForm";
 import { Metadata } from "next";
+import LoginForm from "./form";
 
 export const metadata: Metadata = {
   title: "登录",

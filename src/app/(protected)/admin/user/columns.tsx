@@ -14,12 +14,12 @@ export const columns: ColumnDef<PrismaModels["User"]>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "username",
-    header: "用户名",
-  },
-  {
     accessorKey: "nickname",
     header: "昵称",
+  },
+  {
+    accessorKey: "username",
+    header: "用户名",
   },
   {
     accessorKey: "role",

@@ -27,14 +27,14 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
 
-	const defaultValues = {
-		username: 'visitor',
-		password: 'visitor'
-	}
+  const defaultValues = {
+    username: "visitor",
+    password: "visitor",
+  };
 
   const form = useForm<LoginFormValue>({
     resolver: zodResolver(formSchema),
-		defaultValues
+    defaultValues,
   });
 
   const onSubmit = async (data: LoginFormValue) => {
@@ -73,7 +73,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>用户名</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} {...field} />
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -87,14 +87,14 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>密码</FormLabel>
                 <FormControl>
-                  <Input type="password" disabled={loading} {...field} />
+                  <Input type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button disabled={loading} className="ml-auto w-full" type="submit">
+          <Button loading={loading} className="ml-auto w-full" type="submit">
             登录
           </Button>
         </form>

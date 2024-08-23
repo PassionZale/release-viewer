@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { breadcrumbs } from "./breadcrumbs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import UserForm from "@/components/forms/UserForm";
+import UserForm from "./form";
 
 export default function Page() {
   const { slug } = useParams<{ slug: DetailPageSlug }>();
