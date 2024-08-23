@@ -5,6 +5,7 @@ import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { PipelineInputSchema } from "./schemas";
 import paginate from "@/libs/paginate";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,25 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
-    const pipelines = await paginate(prisma.pipeline, { searchParams });
+    const where: Prisma.PipelineWhereInput = {};
+
+    const name = searchParams.get("name");
+
+    if (name) {
+      where.name = { contains: name };
+    }
+
+    const app = searchParams.get("app");
+
+    if (app) {
+      where.appId = Number(app);
+    }
+
+    const pipelines = await paginate(prisma.pipeline, {
+      searchParams,
+      where,
+      include: { app: true },
+    });
 
     return NextResponse.json(new ApiResponse(pipelines));
   },

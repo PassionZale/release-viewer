@@ -14,7 +14,7 @@ import {
 import SearchInput from "@/components/SearchInput";
 import { DataTableViewOptions } from "./DataTableViewOptions";
 
-interface FilterColumn {
+export interface FilterColumn {
   accessorKey: string;
   placeholder?: string;
   options?: { label: string; value: string | number }[];

@@ -10,6 +10,14 @@ export const PipelineInputSchema = z.object({
   name: z.coerce
     .string({ required_error: "流水线名称不能为空" })
     .min(1, "流水线名称不能为空"),
-  previewWebUrl: z.string().url("previewWebUrl 不合法").optional(),
-  previewImgUrl: z.string().url("previewImgUrl 不合法").optional(),
+  previewWebUrl: z
+    .string()
+    .url("previewWebUrl 不合法")
+    .or(z.literal(""))
+    .optional(),
+  previewImgUrl: z
+    .string()
+    .url("previewImgUrl 不合法")
+    .or(z.literal(""))
+    .optional(),
 });

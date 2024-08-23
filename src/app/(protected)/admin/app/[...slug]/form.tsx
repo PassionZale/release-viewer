@@ -119,7 +119,6 @@ export default function AppForm({ initialData }: AppFormProps) {
 
       router.back();
     } catch (error) {
-			console.log(error)
       setLoading(false);
       toast({
         variant: "destructive",

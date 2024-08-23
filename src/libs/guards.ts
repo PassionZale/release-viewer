@@ -18,8 +18,6 @@ export function withAuthGuard<P extends Params = Params>(
     // jwt 是否合法
     const jwtPayload = await parseJwtPayload();
 
-		console.log('jwtPayload', jwtPayload)
-
     if (!jwtPayload) {
       return NextResponse.json(
         new ApiException("令牌无效", ApiCode.JWT_INVALID)
