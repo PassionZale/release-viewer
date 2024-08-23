@@ -7,8 +7,7 @@ import {
   IconBrandWechat,
   IconChevronLeft,
   IconGhost2,
-  IconHome,
-  IconRobot,
+  IconHomeHand,
   IconUsers,
   IconZeppelin,
 } from "@tabler/icons-react";
@@ -25,7 +24,7 @@ export const NavItems = [
     label: "首页",
     value: "admin",
     href: "/admin",
-    icon: <IconHome />,
+    icon: <IconHomeHand />,
   },
   {
     label: "用户",
