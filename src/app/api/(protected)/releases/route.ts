@@ -12,12 +12,27 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
-    const releases = await paginate(prisma.pipeline, {
+    const releases = await paginate(prisma.release, {
       searchParams,
       include: {
-        app: true,
-        pipeline: true,
-        user: true,
+        app: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        pipeline: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            nickname: true,
+          },
+        },
       },
     });
 
@@ -72,6 +87,6 @@ export const POST = withAuthGuard(
     return NextResponse.json(new ApiException(issues));
   },
   {
-    role: Role.ADMIN,
+    role: Role.DEVELOPER,
   }
 );
