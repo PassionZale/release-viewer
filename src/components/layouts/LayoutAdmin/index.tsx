@@ -13,42 +13,37 @@ export const metadata: Metadata = {
   title: "Admin Dashboard",
 };
 
-function initDictStore() {
-  let platforms: PrismaModels["Platform"][] = [];
-  let systems: PrismaModels["System"][] = [];
-
-  const init = useDicStore((state) => state.init);
-
-  const platformsLoader = () =>
-    request.get<PrismaModels["Platform"][]>("/api/platforms");
-
-  const systemsLoader = () =>
-    request.get<PrismaModels["System"][]>("/api/systems");
-
-  Promise.allSettled([platformsLoader(), systemsLoader()]).then((results) => {
-    const [platformsResult, systemsResult] = results;
-
-    if (platformsResult.status === "fulfilled") {
-      platforms = platformsResult.value.data;
-    }
-
-    if (systemsResult.status === "fulfilled") {
-      systems = systemsResult.value.data;
-    }
-
-    init({ platforms, systems });
-  });
-}
-
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
   const { init: initUserStore } = useUserStore();
-
-  initDictStore();
+  const { init: initDictStore } = useDicStore();
 
   useEffect(() => {
     request
       .get<User>("/api/users/profile")
       .then(({ data }) => initUserStore(data));
+
+    let platforms: PrismaModels["Platform"][] = [];
+    let systems: PrismaModels["System"][] = [];
+
+    const platformsLoader = () =>
+      request.get<PrismaModels["Platform"][]>("/api/platforms");
+
+    const systemsLoader = () =>
+      request.get<PrismaModels["System"][]>("/api/systems");
+
+    Promise.allSettled([platformsLoader(), systemsLoader()]).then((results) => {
+      const [platformsResult, systemsResult] = results;
+
+      if (platformsResult.status === "fulfilled") {
+        platforms = platformsResult.value.data;
+      }
+
+      if (systemsResult.status === "fulfilled") {
+        systems = systemsResult.value.data;
+      }
+
+      initDictStore({ platforms, systems });
+    });
   }, []);
 
   return (
