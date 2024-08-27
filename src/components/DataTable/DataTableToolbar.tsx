@@ -32,7 +32,7 @@ export function DataTableToolbar<TData>({
   const isFiltered = table.getState().columnFilters.length > 0;
 
   const renderFilterColumn = (column: FilterColumn) => {
-    if (column.options?.length) {
+    if (column.options) {
       return (
         <Select
           key={column.accessorKey}
@@ -48,11 +48,17 @@ export function DataTableToolbar<TData>({
             <SelectValue placeholder={column.placeholder} />
           </SelectTrigger>
           <SelectContent>
-            {column.options.map((option) => (
-              <SelectItem key={option.value} value={`${option.value}`}>
-                {option.label}
+            {column.options.length ? (
+              column.options.map((option) => (
+                <SelectItem key={option.value} value={`${option.value}`}>
+                  {option.label}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="-1" disabled>
+                暂无数据
               </SelectItem>
-            ))}
+            )}
           </SelectContent>
         </Select>
       );
