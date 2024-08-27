@@ -59,7 +59,7 @@ export default function Page() {
           <Button
             size={"sm"}
             className="h8"
-            onClick={() => router.push(`/admin/pipeline/create`)}
+            onClick={() => router.push(`/admin/release/create`)}
           >
             <IconPencilPlus className="h-4 w-4 mr-2" /> 新增
           </Button>

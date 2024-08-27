@@ -1,7 +1,6 @@
 import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
 import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 
 export type Release = PrismaModels["Release"] & {
   app?: PrismaModels["App"];
@@ -46,14 +45,5 @@ export const columns: ColumnDef<Release>[] = [
     accessorKey: "createdAt",
     header: "创建时间",
     cell: ({ row }) => row.original.createdAt,
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => (
-      <DataTableRowActions
-        editPagePath={`/admin/release/edit/${row.original.id}`}
-        deleteApiPath={`/api/releases/${row.original.id}`}
-      />
-    ),
   },
 ];

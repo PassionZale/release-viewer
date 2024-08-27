@@ -33,13 +33,29 @@ export const GET = withAuthGuard(
       where.systemValue = system;
     }
 
+    const include: Prisma.AppInclude = {
+      system: { select: { label: true, value: true } },
+      platform: { select: { label: true, value: true } },
+    };
+
+    const populate = searchParams.getAll("populate");
+
+    if (populate.length) {
+      populate.map((item) => {
+        if (item === "pipelines") {
+          include.pipelines = { select: { id: true, name: true } };
+        }
+
+        if (item === "releases") {
+          include.releases = true;
+        }
+      });
+    }
+
     const apps = await paginate(prisma.app, {
       searchParams,
       where,
-      include: {
-        system: true,
-        platform: true,
-      },
+      include,
     });
 
     return NextResponse.json(new ApiResponse(apps));

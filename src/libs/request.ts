@@ -42,7 +42,7 @@ export class Request {
 
     if (method === "GET" || method === "DELETE") {
       if (params) {
-        queryParams = qs.stringify(params, { arrayFormat: "brackets" });
+        queryParams = qs.stringify(params, { arrayFormat: "repeat" });
         url = `${url}?${queryParams}`;
       }
     } else {
@@ -83,7 +83,10 @@ export class Request {
             break;
 
           case ApiCode.JWT_INVALID:
-            window?.location.replace("/login");
+            reject(result);
+            if (typeof window !== "undefined") {
+              window.location.replace("/login");
+            }
             break;
 
           default:
