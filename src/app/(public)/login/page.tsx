@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import LoginForm from "./form";
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: "登录",
@@ -45,7 +46,9 @@ export default function Page() {
             </p>
           </div>
 
-          <LoginForm />
+					<Suspense>
+	          <LoginForm />
+					</Suspense>
 
           <p className="px-8 text-center text-sm text-muted-foreground">
             为了便于演示，自动使用访客账号（只读）填充了用户名和密码，你可以直接使用它登录。
