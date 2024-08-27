@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 
 export type Pipeline = PrismaModels["Pipeline"] & {
-  app: PrismaModels["App"];
+  app?: PrismaModels["App"];
 };
 
 export const columns: ColumnDef<Pipeline>[] = [
@@ -19,7 +19,7 @@ export const columns: ColumnDef<Pipeline>[] = [
   {
     accessorKey: "app",
     header: "所属应用",
-    cell: ({ row }) => row.original.app.name,
+    cell: ({ row }) => row.original.app?.name,
   },
   {
     accessorKey: "name",

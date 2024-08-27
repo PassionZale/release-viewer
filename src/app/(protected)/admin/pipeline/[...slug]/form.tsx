@@ -96,7 +96,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
 
       form.reset({
         id,
-        appId: appId!,
+        appId: appId || "",
         name,
         previewWebUrl: previewWebUrl || "",
         previewImgUrl: previewImgUrl || "",
@@ -151,7 +151,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>应用名称</FormLabel>
+              <FormLabel>流水线名称</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>

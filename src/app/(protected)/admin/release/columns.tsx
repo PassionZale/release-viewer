@@ -4,9 +4,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 
 export type Release = PrismaModels["Release"] & {
-  app: PrismaModels["App"];
-  pipeline: PrismaModels["Pipeline"];
-  user: PrismaModels["User"];
+  app?: PrismaModels["App"];
+  pipeline?: PrismaModels["Pipeline"];
+  user?: PrismaModels["User"];
 };
 
 export const columns: ColumnDef<Release>[] = [
@@ -21,12 +21,12 @@ export const columns: ColumnDef<Release>[] = [
   {
     accessorKey: "app",
     header: "所属应用",
-    cell: ({ row }) => row.original.app.name,
+    cell: ({ row }) => row.original.app?.name,
   },
   {
     accessorKey: "pipeline",
     header: "流水线名称",
-    cell: ({ row }) => row.original.pipeline.name,
+    cell: ({ row }) => row.original.pipeline?.name,
   },
   {
     accessorKey: "version",
@@ -40,7 +40,7 @@ export const columns: ColumnDef<Release>[] = [
   {
     accessorKey: "user",
     header: "创建人",
-    cell: ({ row }) => row.original.user.nickname,
+    cell: ({ row }) => row.original.user?.nickname,
   },
   {
     accessorKey: "createdAt",

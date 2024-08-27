@@ -68,8 +68,8 @@ export default function AppForm({ initialData }: AppFormProps) {
     defaultValues: {
       id: "",
       name: "",
-      systemValue: systems[0]?.value ?? "",
-      platformValue: platforms[0]?.value ?? "",
+      systemValue: "",
+      platformValue: "",
       desc: "",
       subscribers: "",
       robotDingDingStatus: Status.OFF,
@@ -93,8 +93,8 @@ export default function AppForm({ initialData }: AppFormProps) {
       form.reset({
         id,
         name,
-        systemValue: systemValue!,
-        platformValue: platformValue!,
+        systemValue: systemValue || "",
+        platformValue: platformValue || "",
         desc: desc || "",
         subscribers: subscribers || "",
         robotDingDingStatus,
@@ -189,7 +189,7 @@ export default function AppForm({ initialData }: AppFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>所属平台</FormLabel>
-							{/* TODO 编辑是否只读？ */}
+              {/* TODO 编辑是否只读？ */}
               <Select onValueChange={field.onChange} value={`${field.value}`}>
                 <FormControl>
                   <SelectTrigger>

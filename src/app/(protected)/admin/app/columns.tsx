@@ -5,8 +5,8 @@ import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions"
 import { Status } from "@/types/enum";
 
 export type App = PrismaModels["App"] & {
-  system: PrismaModels["System"];
-  platform: PrismaModels["Platform"];
+  system?: PrismaModels["System"];
+  platform?: PrismaModels["Platform"];
 };
 
 export const columns: ColumnDef<App>[] = [
@@ -25,12 +25,12 @@ export const columns: ColumnDef<App>[] = [
   {
     accessorKey: "system",
     header: "所属系统",
-    cell: ({ row }) => row.original.system.label,
+    cell: ({ row }) => row.original.system?.label,
   },
   {
     accessorKey: "platform",
     header: "所属平台",
-    cell: ({ row }) => row.original.platform.label,
+    cell: ({ row }) => row.original.platform?.label,
   },
   {
     accessorKey: "desc",
