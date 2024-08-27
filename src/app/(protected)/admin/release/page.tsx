@@ -23,10 +23,6 @@ export default function Page() {
   const filterColumns: DataTableProps<Release>["filterColumns"] = useMemo(
     () => [
       {
-        accessorKey: "name",
-        placeholder: "流水线名称",
-      },
-      {
         accessorKey: "app",
         placeholder: "应用",
         options: apps,

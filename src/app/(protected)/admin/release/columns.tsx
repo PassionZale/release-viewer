@@ -24,7 +24,7 @@ export const columns: ColumnDef<Release>[] = [
   },
   {
     accessorKey: "pipeline",
-    header: "流水线名称",
+    header: "所属流水线",
     cell: ({ row }) => row.original.pipeline?.name,
   },
   {

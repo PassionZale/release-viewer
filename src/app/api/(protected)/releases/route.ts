@@ -5,6 +5,7 @@ import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { ReleaseInputSchema } from "./schemas";
 import paginate from "@/libs/paginate";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +13,17 @@ export const GET = withAuthGuard(
   async (request) => {
     const searchParams = request.nextUrl.searchParams;
 
+    const where: Prisma.ReleaseWhereInput = {};
+
+    const app = searchParams.get("app");
+
+    if (app) {
+      where.appId = Number(app);
+    }
+
     const releases = await paginate(prisma.release, {
       searchParams,
+			where,
       include: {
         app: {
           select: {
