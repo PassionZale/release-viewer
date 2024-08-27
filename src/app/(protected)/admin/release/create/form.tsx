@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,16 +23,59 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import { z } from "zod";
+import confetti from "canvas-confetti";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
-import { useRouter } from "next/navigation";
 import { PrismaModels } from "@/types/interface";
+import { ToastAction } from "@/components/ui/toast";
+
+const count = 200;
+const defaults = {
+  origin: { y: 0.7 },
+};
+
+function fire(particleRatio: number, opts?: confetti.Options) {
+  return confetti({
+    ...defaults,
+    ...opts,
+    particleCount: Math.floor(count * particleRatio),
+  });
+}
+
+function triggerConfetti() {
+  fire(0.25, {
+    spread: 26,
+    startVelocity: 55,
+  });
+  fire(0.2, {
+    spread: 60,
+  });
+  fire(0.35, {
+    spread: 100,
+    decay: 0.91,
+    scalar: 0.8,
+  });
+  fire(0.1, {
+    spread: 120,
+    startVelocity: 25,
+    decay: 0.92,
+    scalar: 1.2,
+  });
+  return fire(0.1, {
+    spread: 120,
+    startVelocity: 45,
+  });
+}
 
 type App = PrismaModels["App"] & { pipelines?: PrismaModels["Pipeline"][] };
+
+const regUrl = new RegExp(
+  "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"
+);
 
 const formSchema = z.object({
   appPipeline: z.coerce.string({ required_error: "必填" }),
@@ -56,7 +98,15 @@ const formSchema = z.object({
     )
     .optional(),
   desc: z.string({ required_error: "必填" }).min(1, "必填"),
-  previewUrl: z.string().url("预览地址不合法").or(z.literal("")).optional(),
+  previewUrl: z
+    .string()
+    .or(z.literal(""))
+    .refine((previewUrl) => {
+      return !previewUrl || regUrl.test(previewUrl);
+    }, {
+			message: '预览地址不合法'
+		})
+    .optional(),
 });
 
 type FormValue = z.infer<typeof formSchema>;
@@ -67,7 +117,6 @@ export default function ReleaseForm() {
   const [appPipelineName, setAppPipelineName] = useState<string>();
 
   const { toast } = useToast();
-  const router = useRouter();
 
   const form = useForm<FormValue>({
     resolver: zodResolver(formSchema),
@@ -134,15 +183,37 @@ export default function ReleaseForm() {
     try {
       setLoading(true);
 
-      const { message } = await request.post(`/api/releases`, {
-        params: data,
+      const { appPipeline, ...rest } = data;
+
+      const [appId, pipelineId] = appPipeline.split("-");
+
+      await request.post(`/api/releases`, {
+        params: {
+          appId,
+          pipelineId,
+          ...rest,
+        },
       });
 
       setLoading(false);
 
-      toast({ description: message });
+      triggerConfetti();
 
-      router.back();
+      toast({
+        title: "发布成功！",
+        description: "应用版本已更新。",
+        action: (
+          <ToastAction
+            altText="查看"
+            // TODO 前往查看
+            // onClick={() => window.open(defaultDownloadPath, "_blank")}
+          >
+            查看
+          </ToastAction>
+        ),
+      });
+
+      form.reset();
     } catch (error) {
       setLoading(false);
       toast({

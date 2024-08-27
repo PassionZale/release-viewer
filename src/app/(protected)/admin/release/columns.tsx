@@ -36,6 +36,10 @@ export const columns: ColumnDef<Release>[] = [
       return `${row.original.version}${buildId}`;
     },
   },
+	{
+		accessorKey: "desc",
+		header: "更新说明"
+	},
   {
     accessorKey: "user",
     header: "创建人",
