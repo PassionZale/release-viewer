@@ -3,6 +3,7 @@ import fse, { ReadStream, Stats } from "fs-extra";
 import path from "node:path";
 import { NextRequest, NextResponse } from "next/server";
 
+// @see https://github.com/vercel/next.js/discussions/15453
 // this api only for vercel `/tmp` folder
 
 async function* nodeStreamToIterator(stream: ReadStream) {
@@ -25,7 +26,7 @@ function iteratorToStream(iterator: any): ReadableStream {
   });
 }
 
-export function streamFile(path: string): ReadableStream {
+function streamFile(path: string): ReadableStream {
   const downloadStream = fse.createReadStream(path);
   const data: ReadableStream = iteratorToStream(
     nodeStreamToIterator(downloadStream)
