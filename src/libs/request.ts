@@ -28,7 +28,7 @@ export class Request {
    */
   interceptorsRequest({ url, method, params, cacheTime = 0 }: Props) {
     let queryParams = "";
-    let requestPayload = "";
+    let requestPayload: FormData | URLSearchParams | string | undefined = "";
 
     // 默认请求头
     const headers = {};
@@ -46,6 +46,8 @@ export class Request {
         url = `${url}?${queryParams}`;
       }
     } else {
+      console.log(Object.prototype.toString.call(params));
+
       // 非form-data传输JSON数据格式
       if (
         !["[object FormData]", "[object URLSearchParams]"].includes(
@@ -54,6 +56,8 @@ export class Request {
       ) {
         Object.assign(headers, { "Content-Type": "application/json" });
         requestPayload = JSON.stringify(params);
+      } else {
+        requestPayload = params as FormData | URLSearchParams;
       }
     }
     return {
