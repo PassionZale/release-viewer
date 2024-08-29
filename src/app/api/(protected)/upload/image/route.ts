@@ -26,14 +26,17 @@ export const POST = withAuthGuard(
 
         const fileName = `${uuidv4()}~${file!.name}`;
 
-        const UPLOAD_ROOT_FOLDER_PATH =
-          process.env.UPLOAD_ROOT_FOLDER_PATH || "/public";
+        const isDeployeOnVercel = process.env.DEPLOYE_PLATFORM === "vercel";
+
+        const UPLOAD_ROOT_FOLDER_PATH = isDeployeOnVercel
+          ? "/tmp"
+          : process.env.UPLOAD_ROOT_FOLDER_PATH || "/public";
         const UPLOAD_BASE_FOLDER_PATH =
           process.env.UPLOAD_BASE_FOLDER_PATH || "/uploads";
         const UPLOAD_FILE_FOLDER_PATH = `/${dayjs().format("YYYY-MM")}`;
 
         const uploadFinalPath = path.join(
-          process.cwd(),
+          isDeployeOnVercel ? "" : process.cwd(),
           UPLOAD_ROOT_FOLDER_PATH,
           UPLOAD_BASE_FOLDER_PATH,
           UPLOAD_FILE_FOLDER_PATH

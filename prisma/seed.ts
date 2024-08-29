@@ -42,6 +42,7 @@ const platforms = [
   },
 ];
 
+// TODO fix 这里的 process.env 没有生效！！
 const users = [
   // admin user
   {
