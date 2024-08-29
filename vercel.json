@@ -3,5 +3,6 @@
     "deploymentEnabled": {
       "dev": false
     }
-  }
+  },
+	"installCommand": "npm install"
 }
