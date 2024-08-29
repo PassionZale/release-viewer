@@ -41,7 +41,7 @@ export async function GET(
   try {
     const fileName = slug[2];
 
-    const filePath = path.join(process.cwd(), "/tmp", slug.join("/"));
+    const filePath = path.join("/tmp", slug.join("/"));
 
     const mimeType = mime.lookup(fileName);
 
