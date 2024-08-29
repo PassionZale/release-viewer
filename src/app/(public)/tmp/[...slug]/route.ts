@@ -26,7 +26,7 @@ function iteratorToStream(iterator: any): ReadableStream {
   });
 }
 
-export function streamFile(path: string): ReadableStream {
+function streamFile(path: string): ReadableStream {
   const downloadStream = fse.createReadStream(path);
   const data: ReadableStream = iteratorToStream(
     nodeStreamToIterator(downloadStream)
