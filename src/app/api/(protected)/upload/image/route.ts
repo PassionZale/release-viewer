@@ -25,6 +25,7 @@ export const POST = withAuthGuard(
 
         const uuid = uuidv4();
 
+				// TODO 如果部署在 vercel，需要修改成 ./tmp
         const UPLOAD_ROOT_FOLDER_PATH = "./public";
         const UPLOAD_BASE_FOLDER_PATH = "/uploads";
         const UPLOAD_FILE_FOLDER_PATH = `/${dayjs().format("YYYY-MM")}`;
