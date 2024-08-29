@@ -28,6 +28,7 @@ import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
+import { FileUpload } from "@/components/FileUpload";
 
 interface UserFormProps {
   initialData?: PrismaModels["User"];
@@ -37,6 +38,7 @@ const formSchema = z
   .object({
     id: z.number().or(z.literal("")),
     nickname: z.string({ required_error: "必填" }).min(1, "必填"),
+    avatar: z.string().optional(),
     username: z.string({ required_error: "必填" }).min(1, "必填"),
     password: z.string().or(z.literal("")),
     role: z.nativeEnum(Role, { message: "角色不存在" }).optional(),
@@ -67,6 +69,7 @@ export default function UserForm({ initialData }: UserFormProps) {
     defaultValues: {
       id: "",
       nickname: "",
+      avatar: "",
       username: "",
       password: "",
       role: Role.VISITOR,
@@ -139,6 +142,22 @@ export default function UserForm({ initialData }: UserFormProps) {
                 <Input {...field} />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="avatar"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>头像</FormLabel>
+              <FormControl>
+                <FileUpload
+                  onChange={field.onChange}
+                  value={[`${field.value}`]}
+                />
+              </FormControl>
             </FormItem>
           )}
         />

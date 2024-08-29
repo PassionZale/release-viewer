@@ -44,7 +44,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
 
       initDictStore({ platforms, systems });
     });
-  }, []);
+  }, [initUserStore, initDictStore]);
 
   return (
     <div className="flex">
