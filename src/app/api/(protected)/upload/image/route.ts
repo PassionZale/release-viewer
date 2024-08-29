@@ -1,8 +1,10 @@
+import { NextResponse } from "next/server";
+import fse from "fs-extra";
+import dayjs from "dayjs";
+import { v4 as uuidv4 } from "uuid";
 import { withAuthGuard } from "@/libs/guards";
 import { ApiException, ApiResponse } from "@/libs/utils";
 import { Role } from "@/types/enum";
-import { writeFile } from "node:fs/promises";
-import { NextResponse } from "next/server";
 import { UploadImageInputSchema } from "../schemas";
 
 export const dynamic = "force-dynamic";
@@ -21,13 +23,34 @@ export const POST = withAuthGuard(
 
         const buffer = new Uint8Array(arrayBuffer);
 
-        const filePath = `/uploads/${Date.now()}_${file!.name}`;
+        const uuid = uuidv4();
 
-        const uploadPath = "./public" + filePath;
+        const UPLOAD_ROOT_FOLDER_PATH = "./public";
+        const UPLOAD_BASE_FOLDER_PATH = "/uploads";
+        const UPLOAD_FILE_FOLDER_PATH = `/${dayjs().format("YYYY-MM")}`;
 
-        await writeFile(uploadPath, buffer);
+        await fse.ensureDir(
+          UPLOAD_ROOT_FOLDER_PATH +
+            UPLOAD_BASE_FOLDER_PATH +
+            UPLOAD_FILE_FOLDER_PATH,
+          0o2775
+        );
 
-        return NextResponse.json(new ApiResponse(filePath));
+        const fileName = `${uuid}~${file!.name}`;
+
+        await fse.writeFile(
+          UPLOAD_ROOT_FOLDER_PATH +
+            UPLOAD_BASE_FOLDER_PATH +
+            UPLOAD_FILE_FOLDER_PATH +
+            `/${fileName}`,
+          buffer
+        );
+
+        return NextResponse.json(
+          new ApiResponse(
+            UPLOAD_BASE_FOLDER_PATH + UPLOAD_FILE_FOLDER_PATH + `/${fileName}`
+          )
+        );
       } catch (error) {
         return NextResponse.json(new ApiException((error as Error).message));
       }
