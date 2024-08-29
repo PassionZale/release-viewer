@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fse from "fs-extra";
 import dayjs from "dayjs";
+import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import { withAuthGuard } from "@/libs/guards";
 import { ApiException, ApiResponse } from "@/libs/utils";
@@ -23,30 +24,26 @@ export const POST = withAuthGuard(
 
         const buffer = new Uint8Array(arrayBuffer);
 
-        const uuid = uuidv4();
+        const fileName = `${uuidv4()}~${file!.name}`;
 
         const UPLOAD_ROOT_FOLDER_PATH =
-          process.env.UPLOAD_ROOT_FOLDER_PATH || "./public";
+          process.env.UPLOAD_ROOT_FOLDER_PATH || "/public";
         const UPLOAD_BASE_FOLDER_PATH =
           process.env.UPLOAD_BASE_FOLDER_PATH || "/uploads";
         const UPLOAD_FILE_FOLDER_PATH = `/${dayjs().format("YYYY-MM")}`;
 
-        await fse.ensureDir(
-          UPLOAD_ROOT_FOLDER_PATH +
-            UPLOAD_BASE_FOLDER_PATH +
-            UPLOAD_FILE_FOLDER_PATH,
-          0o2775
+        const uploadFinalPath = path.join(
+          process.cwd(),
+          UPLOAD_ROOT_FOLDER_PATH,
+          UPLOAD_BASE_FOLDER_PATH,
+          UPLOAD_FILE_FOLDER_PATH
         );
 
-        const fileName = `${uuid}~${file!.name}`;
+        const fileFinalPath = path.join(uploadFinalPath, fileName);
 
-        await fse.writeFile(
-          UPLOAD_ROOT_FOLDER_PATH +
-            UPLOAD_BASE_FOLDER_PATH +
-            UPLOAD_FILE_FOLDER_PATH +
-            `/${fileName}`,
-          buffer
-        );
+        await fse.ensureDir(uploadFinalPath, 0o2775);
+
+        await fse.writeFile(fileFinalPath, buffer);
 
         return NextResponse.json(
           new ApiResponse(
