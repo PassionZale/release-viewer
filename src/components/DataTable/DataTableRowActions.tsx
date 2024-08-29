@@ -11,11 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import { ConfirmModal } from "../ConfirmModal";
 import request from "@/libs/request";
 import DataTableContext from "./context";
+import { ApiException } from "@/libs/utils";
 
 interface DataTableRowActionsProps {
   editPagePath?: string;
@@ -27,6 +29,7 @@ export function DataTableRowActions({
   deleteApiPath,
 }: DataTableRowActionsProps) {
   const router = useRouter();
+  const { toast } = useToast();
 
   const { loadData, getSearchParams } = useContext(DataTableContext);
 
@@ -48,9 +51,14 @@ export function DataTableRowActions({
 
       loadData?.(getSearchParams?.());
     } catch (error) {
-      console.error(error);
-
       setLoading(false);
+
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as ApiException).message,
+      });
+
     }
   };
 
