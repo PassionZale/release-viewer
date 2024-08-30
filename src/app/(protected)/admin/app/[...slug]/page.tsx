@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import PageContainer from "@/components/layouts/LayoutAdmin/PageContainer";
 import request from "@/libs/request";
 import { Actions } from "@/types/enum";
-import { DetailPageSlug, PrismaModels } from "@/types/interface";
+import { DetailPageSlug } from "@/types/interface";
 import { useParams, notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 import { breadcrumbs } from "./breadcrumbs";
