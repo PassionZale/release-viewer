@@ -30,7 +30,7 @@ export default function Page() {
 
           <Button
             size={"sm"}
-            className="h8"
+            className="h-8"
             onClick={() => router.push(`/admin/user/create`)}
           >
             <IconPencilPlus className="h-4 w-4 mr-2" /> 新增

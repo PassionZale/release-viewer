@@ -11,6 +11,8 @@ import { DataTable } from "@/components/DataTable";
 import { columns, Dict } from "./columns";
 import { filterColumns } from "./filterColumns";
 import request from "@/libs/request";
+import { Button } from "@/components/ui/button";
+import { IconPencilPlus } from "@tabler/icons-react";
 
 export default function Page() {
   const [tabValue, setTabValue] = useState<"system" | "platform">("system");
@@ -21,6 +23,10 @@ export default function Page() {
         <Breadcrumbs items={breadcrumbs} />
         <div className="flex items-center justify-between">
           <Heading title={`字典`} />
+
+          <Button size={"sm"} className="h-8">
+            <IconPencilPlus className="h-4 w-4 mr-2" /> 新增
+          </Button>
         </div>
 
         <Separator />
