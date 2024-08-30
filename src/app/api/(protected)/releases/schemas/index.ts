@@ -31,5 +31,5 @@ export const ReleaseInputSchema = z.object({
   desc: z
     .string({ required_error: "更新说明不能为空" })
     .min(1, "更新说明不能为空"),
-  previewUrl: z.string().url("previewUrl 不合法").optional(),
+  previewUrl: z.string().url("previewUrl 不合法").or(z.literal("")).optional(),
 });

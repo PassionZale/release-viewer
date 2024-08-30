@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import fse from "fs-extra";
-import dayjs from "dayjs";
+import dayjs from "@/libs/dayjs";
 import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import { withAuthGuard } from "@/libs/guards";
