@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
-  const { init: initUserStore } = useUserStore();
+  const { init: initUserStore, user } = useUserStore();
   const { init: initDictStore } = useDicStore();
 
   useEffect(() => {
@@ -50,8 +50,14 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     <div className="flex">
       <Sidebar />
       <main className="w-full flex-1 overflow-hidden">
-        <Header />
-        {children}
+        {user ? (
+          <>
+            <Header />
+            {children}
+          </>
+        ) : (
+          "loading..."
+        )}
       </main>
     </div>
   );

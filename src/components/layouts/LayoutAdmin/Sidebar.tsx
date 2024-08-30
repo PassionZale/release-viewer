@@ -14,6 +14,8 @@ import {
 import useSidebarStore from "@/stores/sidebar";
 import Link from "next/link";
 import { Navbar } from "./Navbar";
+import useUserStore from "@/stores/user";
+import { Role } from "@/types/enum";
 
 type SidebarProps = {
   className?: string;
@@ -31,6 +33,7 @@ export const NavItems = [
     value: "user",
     href: "/admin/user",
     icon: <IconUsers />,
+    role: Role.ADMIN,
   },
   {
     label: "应用",
@@ -65,6 +68,7 @@ export const NavItems = [
 ];
 
 export default function Sidebar({ className }: SidebarProps) {
+  const { user } = useUserStore();
   const { isMinimized, toggle } = useSidebarStore();
 
   const handleToggle = () => {

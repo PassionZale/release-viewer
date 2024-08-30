@@ -16,12 +16,14 @@ import {
 } from "@/components/ui/tooltip";
 import { IconProps } from "@tabler/icons-react";
 import ActiveLink from "@/components/ActiveLink";
+import { Role } from "@/types/enum";
 
 interface NavItem {
   label: string;
   value: string;
   href: string;
   icon: FunctionComponentElement<IconProps>;
+  role?: Role;
 }
 
 export interface NavbarProps {
