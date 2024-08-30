@@ -79,11 +79,12 @@ export default function UserForm({ initialData }: UserFormProps) {
 
   useEffect(() => {
     if (initialData) {
-      const { id, nickname, username, role, status } = initialData;
+      const { id, nickname, avatar, username, role, status } = initialData;
 
       form.reset({
         id,
         nickname,
+        avatar: avatar || "",
         username,
         role,
         status,

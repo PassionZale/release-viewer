@@ -1,11 +1,6 @@
 import Upload, { UploadProps } from "rc-upload";
 import Image from "next/image";
-import {
-  IconEye,
-  IconLoader2,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconEye, IconLoader2, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
 import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
@@ -23,16 +18,19 @@ const UploadButton = ({ loading }: { loading?: boolean }) => {
   return <div>{loading ? <IconLoader2 /> : <IconPlus />}</div>;
 };
 
-const UploadFile: React.FC<{
+const UploadFile = (props: {
   url: string;
   disabled?: boolean;
   onPreview?: (url: string) => void;
   onDelete?: (url: string) => void;
-}> = (props) => {
+}) => {
   const [open, setOpen] = useState(false);
 
   const onPreview = () => props.onPreview?.(props.url);
   const onDelete = () => props.onDelete?.(props.url);
+
+  const arrs = props.url.split("/");
+  const fileName = arrs[arrs.length - 1].replace(/\.[0-9a-zA-Z]+$/, "");
 
   return (
     <div
@@ -64,8 +62,7 @@ const UploadFile: React.FC<{
         </>
       ) : null}
 
-      {/* TODO alt */}
-      <Image fill src={props.url} alt="" />
+      <Image fill src={props.url} priority alt={fileName} />
     </div>
   );
 };
@@ -147,11 +144,22 @@ const FileUpload = ({
     }
   };
 
+  const onPreview = (url: string) => window.open(url, "_blank");
+
+  const onDelete = (url: string) =>
+    onChange?.(value!.filter((item) => item !== url));
+
   return (
     <div className="flex flex-wrap space-x-4">
       {value.length > 0
         ? value.map((url) => (
-            <UploadFile key={url} disabled={disabled} url={url} />
+            <UploadFile
+              key={url}
+              url={url}
+              disabled={disabled}
+              onPreview={onPreview}
+              onDelete={onDelete}
+            />
           ))
         : null}
 

@@ -3,6 +3,7 @@ import { Role, Status } from "@/types/enum";
 import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const columns: ColumnDef<PrismaModels["User"]>[] = [
   {
@@ -16,6 +17,23 @@ export const columns: ColumnDef<PrismaModels["User"]>[] = [
   {
     accessorKey: "nickname",
     header: "昵称",
+  },
+  {
+    accessorKey: "avatar",
+    header: "头像",
+    cell: ({ row }) => (
+      <>
+        {row.original.avatar && (
+          <Avatar className="w-8 h-8">
+            <AvatarImage
+              src={row.original.avatar}
+              alt={row.original.nickname}
+            />
+            <AvatarFallback>{row.original.nickname}</AvatarFallback>
+          </Avatar>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "username",
