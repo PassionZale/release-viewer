@@ -3,6 +3,7 @@ import React from "react";
 import { cn } from "@/libs/utils";
 import {
   IconApps,
+  IconBook,
   IconBrandAlipay,
   IconBrandWechat,
   IconChevronLeft,
@@ -29,6 +30,12 @@ export const NavItems = [
     icon: <IconHomeHand />,
   },
   {
+    label: "字典",
+    value: "dict",
+    href: "/admin/dict",
+    icon: <IconBook />,
+  },
+  {
     label: "用户",
     value: "user",
     href: "/admin/user",
@@ -53,6 +60,7 @@ export const NavItems = [
     href: "/admin/release",
     icon: <IconZeppelin />,
   },
+
   {
     label: "钉钉机器人",
     value: "dingding",

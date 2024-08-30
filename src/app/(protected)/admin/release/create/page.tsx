@@ -5,7 +5,7 @@ import PageContainer from "@/components/layouts/LayoutAdmin/PageContainer";
 import { breadcrumbs } from "./breadcrumbs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import AppForm from "./form";
+import ReleaseForm from "./form";
 
 export default function Page() {
   return (
@@ -19,7 +19,7 @@ export default function Page() {
 
         <Separator />
 
-        <AppForm />
+        <ReleaseForm />
       </div>
     </PageContainer>
   );

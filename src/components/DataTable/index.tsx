@@ -37,16 +37,19 @@ import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import { DataTablePaginator } from "./DataTablePaginator";
 import DataTableContext from "./context";
 import { ApiException } from "@/libs/utils";
+import { IconLoader2 } from "@tabler/icons-react";
 
-export type SearchParams = PaginationState & Record<string, any>;
+export type SearchParams = Partial<PaginationState> & Record<string, any>;
 
 export interface DataTableProps<TData> {
+  paginated?: boolean;
   columns: ColumnDef<TData>[];
   filterColumns?: DataTableToolbarProps<TData>["filterColumns"];
   request: (searchParams: SearchParams) => Promise<BaseResponse<TData[]>>;
 }
 
 export function DataTable<TData>({
+  paginated = true,
   columns,
   filterColumns,
   request,
@@ -55,6 +58,7 @@ export function DataTable<TData>({
   const [sourceData, setSourceData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
+  const [loading, setLoading] = useState(false);
   const [pageCount, setPageCount] = useState<number>();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -76,21 +80,33 @@ export function DataTable<TData>({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = useCallback(
-    // TODO LOADING
-    debounce({ delay: 200 }, (searchParams) =>
+    debounce({ delay: 200 }, (searchParams) => {
+      let isCancelled = false;
+
+      setLoading(true);
+
       request(searchParams)
         .then((res) => {
           setSourceData(res.data);
           setPageCount(res.meta?.pagination.pageCount);
+          setLoading(false);
         })
         .catch((error) => {
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: (error as ApiException).message,
-          });
-        })
-    ),
+          if (!isCancelled) {
+            toast({
+              variant: "destructive",
+              title: "Uh oh! Something went wrong.",
+              description: (error as ApiException).message,
+            });
+            setLoading(false);
+          }
+        });
+
+      return () => {
+        isCancelled = true;
+        setLoading(false);
+      };
+    }),
     [request]
   );
 
@@ -101,10 +117,12 @@ export function DataTable<TData>({
       filters[id] = value;
     });
 
-    const searchParams = {
-      ...pagination,
-      ...filters,
-    };
+    const searchParams = paginated
+      ? {
+          ...pagination,
+          ...filters,
+        }
+      : { ...filters };
 
     return searchParams;
   };
@@ -126,30 +144,34 @@ export function DataTable<TData>({
       <div className="space-y-4">
         <DataTableToolbar table={table} filterColumns={filterColumns} />
 
-        <div className="flex text-sm items-center justify-between">
-          <div>共 {table.getPageCount()} 页</div>
+        {paginated && (
+          <div className="flex text-sm items-center justify-between">
+            <div>共 {table.getPageCount()} 页</div>
 
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageIndex(0);
-              table.setPageSize(Number(value));
-            }}
-          >
-            <SelectTrigger className="h-8 w-[100px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize} 条/页
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value) => {
+                table.setPageIndex(0);
+                table.setPageSize(Number(value));
+              }}
+            >
+              <SelectTrigger className="h-8 w-[100px]">
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
+              </SelectTrigger>
+              <SelectContent side="top">
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {pageSize} 条/页
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
-        <ScrollArea className="h-[calc(80vh-220px)] rounded-md border">
+        <ScrollArea className="relative h-[calc(80vh-220px)] rounded-md border">
           <Table className="relative">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -196,7 +218,11 @@ export function DataTable<TData>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    暂无数据
+                    {loading ? (
+                      <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
+                    ) : (
+                      "暂无数据"
+                    )}
                   </TableCell>
                 </TableRow>
               )}

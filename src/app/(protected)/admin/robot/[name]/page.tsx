@@ -47,7 +47,7 @@ export default function Page() {
   }, [name]);
 
   return (
-    <PageContainer scrollable>
+    <PageContainer scrollable loading={loading}>
       <div className="space-y-4">
         <Breadcrumbs items={breadcrumbs[name]} />
 

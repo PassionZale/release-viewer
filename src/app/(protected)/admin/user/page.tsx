@@ -43,7 +43,7 @@ export default function Page() {
           columns={columns}
           filterColumns={filterColumns}
           request={(searchParams) => {
-            const { pageIndex, ...rest } = searchParams;
+            const { pageIndex = 0, ...rest } = searchParams;
 
             return request.get<PrismaModels["User"][]>("/api/users", {
               params: {
