@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -98,14 +99,23 @@ const formSchema = z.object({
     )
     .optional(),
   desc: z.string({ required_error: "必填" }).min(1, "必填"),
-  previewUrl: z
-    .string()
-    .or(z.literal(""))
-    .refine((previewUrl) => {
-      return !previewUrl || regUrl.test(previewUrl);
-    }, {
-			message: '预览地址不合法'
-		})
+  attachment: z
+    .unknown()
+    .transform((value) => value as File | null | undefined)
+    .refine((file) => file && file.size > 0, "附件不能为空")
+    .refine(
+      (file) =>
+        file &&
+        [
+          "application/zip",
+          "application/vnd.android.package-archive",
+          "application/iphone-package-archive",
+        ].includes(file.type),
+      "附件只支持 apk,ipa,zip 格式"
+    )
+    .refine((file) => file && file.size < 208 * 1024 * 1024, {
+      message: "附件必须小于 208MB.",
+    })
     .optional(),
 });
 
@@ -125,7 +135,6 @@ export default function ReleaseForm() {
       version: "",
       buildId: "",
       desc: "",
-      previewUrl: "",
     },
   });
 
@@ -183,14 +192,26 @@ export default function ReleaseForm() {
     try {
       setLoading(true);
 
-      const { appPipeline, ...rest } = data;
+      const { appPipeline, attachment, ...rest } = data;
 
       const [appId, pipelineId] = appPipeline.split("-");
+
+      const formData = new FormData();
+
+      formData.append("file", attachment as File);
+
+      const { data: previewUrl } = await request.post<string>(
+        `/api/releases/upload`,
+        {
+          params: formData,
+        }
+      );
 
       await request.post(`/api/releases`, {
         params: {
           appId,
           pipelineId,
+          previewUrl,
           ...rest,
         },
       });
@@ -290,10 +311,13 @@ export default function ReleaseForm() {
           name="buildId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>构建号</FormLabel>
+              <FormLabel>构建号（可选）</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
+              <FormDescription>
+                如果发布的应用为 Android 或 IOS，可以通过它自定义构建号。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -315,13 +339,23 @@ export default function ReleaseForm() {
 
         <FormField
           control={form.control}
-          name="previewUrl"
-          render={({ field }) => (
+          name="attachment"
+          render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem>
-              <FormLabel>预览地址</FormLabel>
+              <FormLabel>附件（可选）</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  type="file"
+                  accept=".apk,.ipa,.zip"
+                  onChange={(e) =>
+                    onChange(e.target.files && e.target.files[0])
+                  }
+                  {...fieldProps}
+                />
               </FormControl>
+              <FormDescription>
+                支持 .apk,.ipa,.zip 三种文件格式，最大 208MB。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
