@@ -33,7 +33,7 @@ export default function Page() {
   return (
     <>
       <Head>
-        <title>{found?.value}</title>
+        <title>{found?.label}</title>
       </Head>
 
       <div className="grid gap-4 md:grid-cols-1 md:gap-8 lg:grid-cols-3">
