@@ -28,7 +28,7 @@ import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
-import { FileUpload, FileUploadProps } from "@/components/FileUpload";
+import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
 
 interface UserFormProps {
   initialData?: PrismaModels["User"];
@@ -92,7 +92,7 @@ export default function UserForm({ initialData }: UserFormProps) {
     }
   }, [initialData, form]);
 
-  const onUploadError: FileUploadProps["onError"] = (error) => {
+  const onUploadError: ImageUploadProps["onError"] = (error) => {
     form.setError("avatar", { type: "custom", message: error.message });
   };
 
@@ -158,7 +158,7 @@ export default function UserForm({ initialData }: UserFormProps) {
             <FormItem>
               <FormLabel>头像</FormLabel>
               <FormControl>
-                <FileUpload
+                <ImageUpload
                   onChange={(value) => field.onChange(value?.[0])}
                   onError={onUploadError}
                   value={field.value ? [`${field.value}`] : []}

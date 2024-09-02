@@ -18,8 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Textarea } from "@/components/ui/textarea";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -30,6 +28,7 @@ import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { Pipeline } from "../columns";
 import { PrismaModels } from "@/types/interface";
+import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
 
 interface PipelineFormProps {
   initialData?: Pipeline;
@@ -130,6 +129,10 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
     }
   };
 
+  const onUploadError: ImageUploadProps["onError"] = (error) => {
+    form.setError("previewImgUrl", { type: "custom", message: error.message });
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -192,7 +195,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
             <FormItem>
               <FormLabel>访问地址</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -206,7 +209,11 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
             <FormItem>
               <FormLabel>图片地址</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <ImageUpload
+                  onChange={(value) => field.onChange(value?.[0])}
+                  onError={onUploadError}
+                  value={field.value ? [`${field.value}`] : []}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -6,7 +6,7 @@ import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { RcFile } from "rc-upload/lib/interface";
 
-export interface FileUploadProps extends Omit<UploadProps, "onChange"> {
+export interface ImageUploadProps extends Omit<UploadProps, "onChange"> {
   maxLength?: number;
   maxSize?: number;
   allowedTypes?: string[];
@@ -67,7 +67,7 @@ const UploadFile = (props: {
   );
 };
 
-const FileUpload = ({
+const ImageUpload = ({
   value = [],
   onChange,
   maxLength = 1,
@@ -76,11 +76,11 @@ const FileUpload = ({
   onError,
   disabled,
   ...props
-}: FileUploadProps) => {
+}: ImageUploadProps) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const triggerError: FileUploadProps["onError"] = (error, response, file) => {
+  const triggerError: ImageUploadProps["onError"] = (error, response, file) => {
     onError
       ? onError(error as Error, response, file as RcFile)
       : toast({
@@ -90,7 +90,7 @@ const FileUpload = ({
         });
   };
 
-  const beforeUpload: FileUploadProps["beforeUpload"] = (file) => {
+  const beforeUpload: ImageUploadProps["beforeUpload"] = (file) => {
     if (file.size > maxSize!) {
       const error = new Error(
         `图片不能超过${Math.ceil(maxSize! / 1024 / 1024)}MB`
@@ -119,7 +119,7 @@ const FileUpload = ({
     return true;
   };
 
-  const customRequest: FileUploadProps["customRequest"] = async ({ file }) => {
+  const customRequest: ImageUploadProps["customRequest"] = async ({ file }) => {
     try {
       setLoading(true);
 
@@ -179,4 +179,4 @@ const FileUpload = ({
   );
 };
 
-export { FileUpload };
+export { ImageUpload };
