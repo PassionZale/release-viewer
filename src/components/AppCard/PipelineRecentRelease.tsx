@@ -1,9 +1,8 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { AppCardProps, Pipeline } from ".";
-import { useEffect, useState } from "react";
-import { Badge } from "../ui/badge";
-import dayjs from "@/libs/dayjs";
+import { useParams, useRouter } from "next/navigation";
 import { IconChevronRight } from "@tabler/icons-react";
+import { Badge } from "@/components/ui/badge";
+import dayjs from "@/libs/dayjs";
+import { Pipeline } from ".";
 
 interface PipelineRecentReleaseProps {
   pipelines?: Pipeline[];
@@ -12,7 +11,8 @@ interface PipelineRecentReleaseProps {
 export const PipelineRecentRelease = ({
   pipelines,
 }: PipelineRecentReleaseProps) => {
-  const onClick = () => {};
+  const { value } = useParams();
+  const router = useRouter();
 
   return (
     <>
@@ -20,7 +20,9 @@ export const PipelineRecentRelease = ({
         <div
           key={pipeline.id}
           className="border-b last:border-none py-4 px-2 flex flex-col space-y-2 cursor-pointer hover:bg-muted/50"
-          onClick={onClick}
+          onClick={() =>
+            router.push(`/system/${value}/pipeline/${pipeline.id}`)
+          }
         >
           <div className="flex flex-wrap items-center justify-between space-x-2">
             <div className="flex-1 flex items-center space-x-2">
