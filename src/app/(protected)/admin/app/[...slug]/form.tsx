@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,6 +32,7 @@ import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { App } from "../columns";
 import useDicStore from "@/stores/dict";
+import Link from "next/link";
 
 interface AppFormProps {
   initialData?: App;
@@ -214,7 +216,7 @@ export default function AppForm({ initialData }: AppFormProps) {
           name="desc"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>应用描述</FormLabel>
+              <FormLabel>应用描述（可选）</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -228,7 +230,7 @@ export default function AppForm({ initialData }: AppFormProps) {
           name="subscribers"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>订阅者</FormLabel>
+              <FormLabel>订阅者（可选）</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder={
@@ -237,6 +239,9 @@ export default function AppForm({ initialData }: AppFormProps) {
                   {...field}
                 />
               </FormControl>
+              <FormDescription>
+                应用新版本发布后，机器人会 @ 对应用户进行提示。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -262,6 +267,9 @@ export default function AppForm({ initialData }: AppFormProps) {
                   <SelectItem value={`${Status.OFF}`}>禁用</SelectItem>
                 </SelectContent>
               </Select>
+              <FormDescription>
+                开启机器人前，请确定<Link href="/admin/robot/dingding">钉钉机器人</Link>已配置。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -287,6 +295,9 @@ export default function AppForm({ initialData }: AppFormProps) {
                   <SelectItem value={`${Status.OFF}`}>禁用</SelectItem>
                 </SelectContent>
               </Select>
+							<FormDescription>
+                开启机器人前，请确定<Link href="/admin/robot/workweixin">企微机器人</Link>已配置。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

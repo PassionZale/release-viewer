@@ -45,6 +45,8 @@ export const POST = withAuthGuard(
 
         await fse.writeFile(fileFinalPath, buffer);
 
+				// TODO .ipa auto generate .plist and response .plist path
+
         return NextResponse.json(
           new ApiResponse(
             UPLOAD_BASE_FOLDER_PATH + UPLOAD_FILE_FOLDER_PATH + `/${fileName}`

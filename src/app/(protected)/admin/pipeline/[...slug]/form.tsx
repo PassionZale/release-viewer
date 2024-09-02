@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -109,10 +110,12 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
 
       const _request = initialData?.id
         ? () =>
-            request.put(`/api/pipelines/${initialData.id}`, { params: data })
-        : () => request.post(`/api/pipelines`, { params: data });
+            request.put<Pipeline>(`/api/pipelines/${initialData.id}`, { params: data })
+        : () => request.post<Pipeline>(`/api/pipelines`, { params: data });
 
       const { message } = await _request();
+
+			console.log(1111)
 
       setLoading(false);
 
@@ -183,6 +186,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
+							<FormDescription>用来标识环境，例如填写：开发环境、测试环境等。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -193,10 +197,11 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
           name="previewWebUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>访问地址</FormLabel>
+              <FormLabel>访问地址（可选）</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
+							<FormDescription>提供任意的网址让用户可以访问 WEB 应用或下载文件。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -207,7 +212,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
           name="previewImgUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>图片地址</FormLabel>
+              <FormLabel>图片地址（可选）</FormLabel>
               <FormControl>
                 <ImageUpload
                   onChange={(value) => field.onChange(value?.[0])}
@@ -215,6 +220,7 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
                   value={field.value ? [`${field.value}`] : []}
                 />
               </FormControl>
+							<FormDescription>提供二维码或太阳码让用户可以进行扫码下载 APP 或 Miniprogram。</FormDescription>
               <FormMessage />
             </FormItem>
           )}

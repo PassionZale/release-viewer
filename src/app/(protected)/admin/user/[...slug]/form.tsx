@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -156,7 +157,7 @@ export default function UserForm({ initialData }: UserFormProps) {
           name="avatar"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>头像</FormLabel>
+              <FormLabel>头像（可选）</FormLabel>
               <FormControl>
                 <ImageUpload
                   onChange={(value) => field.onChange(value?.[0])}
@@ -178,6 +179,7 @@ export default function UserForm({ initialData }: UserFormProps) {
               <FormControl>
                 <Input {...field} disabled={readOnly} />
               </FormControl>
+							<FormDescription>用户名一旦创建，则无法更改。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
