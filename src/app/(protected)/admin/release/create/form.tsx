@@ -200,7 +200,7 @@ export default function ReleaseForm() {
 
       formData.append("file", attachment as File);
 
-      const { data: previewUrl } = await request.post<string>(
+      const { data: uploadPath } = await request.post<string>(
         `/api/releases/upload`,
         {
           params: formData,
@@ -211,7 +211,7 @@ export default function ReleaseForm() {
         params: {
           appId,
           pipelineId,
-          previewUrl,
+          attachment: uploadPath,
           ...rest,
         },
       });

@@ -2,6 +2,7 @@ import { DataTableColumnHeader } from "@/components/DataTable/DataTableHeader";
 import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "@/libs/dayjs";
+import Link from "next/link";
 
 export type Release = PrismaModels["Release"] & {
   app?: PrismaModels["App"];
@@ -43,6 +44,16 @@ export const columns: ColumnDef<Release>[] = [
     cell: ({ row }) => (
       <div className="line-clamp-1 max-w-[200px]">{row.original.desc}</div>
     ),
+  },
+  {
+    accessorKey: "attachment",
+    header: "附件",
+    cell: ({ row }) =>
+      row.original.attachment && (
+        <Link href={row.original.attachment} download>
+          下载附件
+        </Link>
+      ),
   },
   {
     accessorKey: "user",
