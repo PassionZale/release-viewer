@@ -3,7 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/libs/utils";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 import "./globals.css";
 
@@ -15,6 +15,7 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "Release Viewer",
   description: "Created by Lei Zhang",
+  icons: "/ghost.svg",
 };
 
 export default function RootLayout({
@@ -36,7 +37,7 @@ export default function RootLayout({
 
         <TailwindIndicator />
 
-				<Toaster />
+        <Toaster />
       </body>
     </html>
   );

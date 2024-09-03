@@ -7,6 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { IconSlash } from "@tabler/icons-react";
+import Link from "next/link";
 import { Fragment } from "react";
 
 export interface BreadcrumbsProps {
@@ -21,7 +22,13 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
           <Fragment key={item.title}>
             {index !== items.length - 1 && (
               <BreadcrumbItem>
-                <BreadcrumbLink href={item.link}>{item.title}</BreadcrumbLink>
+                <BreadcrumbLink asChild>
+                  {item.link ? (
+                    <Link href={item.link}>{item.title}</Link>
+                  ) : (
+                    item.title
+                  )}
+                </BreadcrumbLink>
               </BreadcrumbItem>
             )}
             {index < items.length - 1 && (

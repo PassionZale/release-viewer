@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { breadcrumbs } from "./breadcrumbs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import AppForm from "./form";
+import PipelineForm from "./form";
 import { Pipeline } from "../columns";
 
 export default function Page() {
@@ -42,7 +42,7 @@ export default function Page() {
   }, [id]);
 
   return (
-    <PageContainer scrollable>
+    <PageContainer scrollable loading={loading}>
       <div className="space-y-4">
         <Breadcrumbs items={breadcrumbs} />
 
@@ -52,7 +52,7 @@ export default function Page() {
 
         <Separator />
 
-        <AppForm initialData={initialData} />
+        <PipelineForm initialData={initialData} />
       </div>
     </PageContainer>
   );

@@ -30,7 +30,7 @@ export default function Page() {
 
           <Button
             size={"sm"}
-            className="h8"
+            className="h-8"
             onClick={() => router.push(`/admin/user/create`)}
           >
             <IconPencilPlus className="h-4 w-4 mr-2" /> 新增
@@ -43,7 +43,7 @@ export default function Page() {
           columns={columns}
           filterColumns={filterColumns}
           request={(searchParams) => {
-            const { pageIndex, ...rest } = searchParams;
+            const { pageIndex = 0, ...rest } = searchParams;
 
             return request.get<PrismaModels["User"][]>("/api/users", {
               params: {

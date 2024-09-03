@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
-const MAX_FILE_SIZE = 500000;
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -21,6 +21,6 @@ export const UploadImageInputSchema = zfd.formData({
     )
     .refine(
       (file) => file && file.size <= MAX_FILE_SIZE,
-      `图片大小不能超过 5MB`
+      `图片大小不能超过 10MB`
     ),
 });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { zfd } from "zod-form-data";
 
 export const ReleaseIdSchema = z.coerce.number();
 
@@ -31,5 +32,27 @@ export const ReleaseInputSchema = z.object({
   desc: z
     .string({ required_error: "更新说明不能为空" })
     .min(1, "更新说明不能为空"),
-  previewUrl: z.string().url("previewUrl 不合法").optional(),
+  attachment: z.string().or(z.literal("")).optional(),
+});
+
+const MAX_FILE_SIZE = 208 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = [
+  "application/zip",
+  "application/vnd.android.package-archive",
+  "application/iphone-package-archive",
+];
+
+export const UploadInputSchema = zfd.formData({
+  file: z
+    .unknown()
+    .transform((value) => value as File | null | undefined)
+    .refine((file) => file && file.size > 0, "文件不能为空")
+    .refine(
+      (file) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
+      "文件只支持 .zip/.apk/.ipa 格式"
+    )
+    .refine(
+      (file) => file && file.size <= MAX_FILE_SIZE,
+      `文件大小不能超过 208MB`
+    ),
 });

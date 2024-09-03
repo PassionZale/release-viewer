@@ -3,6 +3,7 @@ import React from "react";
 import { cn } from "@/libs/utils";
 import {
   IconApps,
+  IconBook,
   IconBrandAlipay,
   IconBrandWechat,
   IconChevronLeft,
@@ -14,6 +15,8 @@ import {
 import useSidebarStore from "@/stores/sidebar";
 import Link from "next/link";
 import { Navbar } from "./Navbar";
+import useUserStore from "@/stores/user";
+import { Role } from "@/types/enum";
 
 type SidebarProps = {
   className?: string;
@@ -27,10 +30,17 @@ export const NavItems = [
     icon: <IconHomeHand />,
   },
   {
+    label: "字典",
+    value: "dict",
+    href: "/admin/dict",
+    icon: <IconBook />,
+  },
+  {
     label: "用户",
     value: "user",
     href: "/admin/user",
     icon: <IconUsers />,
+    role: Role.ADMIN,
   },
   {
     label: "应用",
@@ -50,6 +60,7 @@ export const NavItems = [
     href: "/admin/release",
     icon: <IconZeppelin />,
   },
+
   {
     label: "钉钉机器人",
     value: "dingding",
@@ -65,6 +76,7 @@ export const NavItems = [
 ];
 
 export default function Sidebar({ className }: SidebarProps) {
+  const { user } = useUserStore();
   const { isMinimized, toggle } = useSidebarStore();
 
   const handleToggle = () => {
@@ -80,22 +92,11 @@ export default function Sidebar({ className }: SidebarProps) {
       )}
     >
       <div className="hidden p-5 pt-10 lg:block">
-        <Link
-          href={"https://github.com/PassionZale/release-viewer"}
-          target="_blank"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mr-2 h-6 w-6"
-          >
-            <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-          </svg>
+        <Link href={"/"} className="flex font-bold tracking-tight">
+          <IconGhost2 className="mr-2 h-6 w-6" />
+          <div className={cn(isMinimized ? "hidden" : "block")}>
+            Release Viewer
+          </div>
         </Link>
       </div>
       <IconChevronLeft

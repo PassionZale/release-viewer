@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -28,7 +29,7 @@ import request from "@/libs/request";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
-import { FileUpload } from "@/components/FileUpload";
+import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
 
 interface UserFormProps {
   initialData?: PrismaModels["User"];
@@ -79,17 +80,22 @@ export default function UserForm({ initialData }: UserFormProps) {
 
   useEffect(() => {
     if (initialData) {
-      const { id, nickname, username, role, status } = initialData;
+      const { id, nickname, avatar, username, role, status } = initialData;
 
       form.reset({
         id,
         nickname,
+        avatar: avatar || "",
         username,
         role,
         status,
       });
     }
   }, [initialData, form]);
+
+  const onUploadError: ImageUploadProps["onError"] = (error) => {
+    form.setError("avatar", { type: "custom", message: error.message });
+  };
 
   const onSubmit = async (data: FormValue) => {
     try {
@@ -151,13 +157,15 @@ export default function UserForm({ initialData }: UserFormProps) {
           name="avatar"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>头像</FormLabel>
+              <FormLabel>头像（可选）</FormLabel>
               <FormControl>
-                <FileUpload
-                  onChange={field.onChange}
-                  value={[`${field.value}`]}
+                <ImageUpload
+                  onChange={(value) => field.onChange(value?.[0])}
+                  onError={onUploadError}
+                  value={field.value ? [`${field.value}`] : []}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -171,6 +179,7 @@ export default function UserForm({ initialData }: UserFormProps) {
               <FormControl>
                 <Input {...field} disabled={readOnly} />
               </FormControl>
+							<FormDescription>用户名一旦创建，则无法更改。</FormDescription>
               <FormMessage />
             </FormItem>
           )}

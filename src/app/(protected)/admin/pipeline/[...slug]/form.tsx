@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,8 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Textarea } from "@/components/ui/textarea";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -30,6 +29,7 @@ import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { Pipeline } from "../columns";
 import { PrismaModels } from "@/types/interface";
+import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
 
 interface PipelineFormProps {
   initialData?: Pipeline;
@@ -110,10 +110,12 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
 
       const _request = initialData?.id
         ? () =>
-            request.put(`/api/pipelines/${initialData.id}`, { params: data })
-        : () => request.post(`/api/pipelines`, { params: data });
+            request.put<Pipeline>(`/api/pipelines/${initialData.id}`, { params: data })
+        : () => request.post<Pipeline>(`/api/pipelines`, { params: data });
 
       const { message } = await _request();
+
+			console.log(1111)
 
       setLoading(false);
 
@@ -130,6 +132,10 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
     }
   };
 
+  const onUploadError: ImageUploadProps["onError"] = (error) => {
+    form.setError("previewImgUrl", { type: "custom", message: error.message });
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -138,20 +144,6 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
           name="id"
           render={({ field }) => (
             <FormItem hidden>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>流水线名称</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -187,13 +179,29 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
 
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>流水线名称</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+							<FormDescription>用来标识环境，例如填写：开发环境、测试环境等。</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="previewWebUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>访问地址</FormLabel>
+              <FormLabel>访问地址（可选）</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Input {...field} />
               </FormControl>
+							<FormDescription>提供任意的网址让用户可以访问 WEB 应用或下载文件。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -204,10 +212,15 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
           name="previewImgUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>图片地址</FormLabel>
+              <FormLabel>图片地址（可选）</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <ImageUpload
+                  onChange={(value) => field.onChange(value?.[0])}
+                  onError={onUploadError}
+                  value={field.value ? [`${field.value}`] : []}
+                />
               </FormControl>
+							<FormDescription>提供二维码或太阳码让用户可以进行扫码下载 APP 或 Miniprogram。</FormDescription>
               <FormMessage />
             </FormItem>
           )}

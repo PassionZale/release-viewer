@@ -1,30 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  IconBug,
-  IconMenu2,
-  IconRocket,
-  IconBrandGithub,
-  IconMessageChatbot,
-  IconDashboard,
-} from "@tabler/icons-react";
+import { IconMenu2, IconDashboard, IconGhost2 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import ActiveLink from "@/components/ActiveLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import Profile from "../Profile";
 
 const NavSkeleton = () => (
   <div className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -49,8 +33,8 @@ const Navbar = ({ items = [] }: NavbarProps) => {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base h-6 w-6"
         >
-          <Image src="/next.svg" width={24} height={24} alt="next" priority />
-          <span className="sr-only">Omost</span>
+          <IconGhost2 className="w-6 h-6" />
+          <span className="sr-only">Release Viewer</span>
         </Link>
 
         {items?.length ? (
@@ -76,7 +60,7 @@ const Navbar = ({ items = [] }: NavbarProps) => {
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">
             <IconMenu2 className="h-5 w-5" />
-            <span className="sr-only">Toggle navigation menu</span>
+            <span className="sr-only">展开菜单</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
@@ -85,14 +69,8 @@ const Navbar = ({ items = [] }: NavbarProps) => {
               href="/"
               className="flex items-center gap-2 text-lg font-semiboldh-6 w-6"
             >
-              <Image
-                src="/vercel.svg"
-                width={24}
-                height={24}
-                alt="vercel"
-                priority
-              />
-              <span className="sr-only">Omost</span>
+              <IconGhost2 className="w-6 h-6" />
+              <span className="sr-only">Release Viewer</span>
             </Link>
 
             {items.map((item) => (
@@ -121,47 +99,7 @@ const Navbar = ({ items = [] }: NavbarProps) => {
           <IconDashboard />
         </Button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src="/images/lei-zhang.jpg" alt="Lei Zhang" />
-                <AvatarFallback>Lei</AvatarFallback>
-              </Avatar>
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Lei Zhang</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconRocket className="mr-2 h-5 w-5" />
-              <Link href={"/admin/release/create"} target="_blank">
-                发布应用
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <IconBug className="mr-2 h-5 w-5" />
-              <Link href="https://github.com/PassionZale/release-viewer/issues/new">
-                报告问题
-              </Link>
-            </DropdownMenuItem>
-
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconMessageChatbot className="mr-2 h-5 w-5" />
-              <Link href="https://www.lovchun.com" target="_blank">
-                👋 Hello!
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <IconBrandGithub className="mr-2 h-5 w-5" />
-              <Link href="https://github.com/PassionZale" target="_blank">
-                PassionZale
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Profile />
       </div>
     </header>
   );

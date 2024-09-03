@@ -8,13 +8,14 @@ import request from "@/libs/request";
 import { PrismaModels } from "@/types/interface";
 import { useEffect } from "react";
 import useUserStore, { User } from "@/stores/user";
+import { IconGhost2 } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
 };
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
-  const { init: initUserStore } = useUserStore();
+  const { init: initUserStore, user } = useUserStore();
   const { init: initDictStore } = useDicStore();
 
   useEffect(() => {
@@ -49,9 +50,18 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
   return (
     <div className="flex">
       <Sidebar />
-      <main className="w-full flex-1 overflow-hidden">
-        <Header />
-        {children}
+      <main className="w-full flex-1 overflow-hidden relative">
+        {user ? (
+          <>
+            <Header />
+            {children}
+          </>
+        ) : (
+          <div className="absolute flex items-center gap-x-2 top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 leading-none ">
+            <IconGhost2 className={"h-6 w-6 animate-spin mx-auto"} />
+            <span>waiting...</span>
+          </div>
+        )}
       </main>
     </div>
   );

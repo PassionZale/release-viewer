@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import fse from "fs-extra";
-import dayjs from "dayjs";
+import dayjs from "@/libs/dayjs";
 import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import { withAuthGuard } from "@/libs/guards";
@@ -28,11 +28,8 @@ export const POST = withAuthGuard(
 
         const isDeployeOnVercel = process.env.DEPLOYE_PLATFORM === "vercel";
 
-        const UPLOAD_ROOT_FOLDER_PATH = isDeployeOnVercel
-          ? "/tmp"
-          : process.env.UPLOAD_ROOT_FOLDER_PATH || "/public";
-        const UPLOAD_BASE_FOLDER_PATH =
-          process.env.UPLOAD_BASE_FOLDER_PATH || "/uploads";
+        const UPLOAD_ROOT_FOLDER_PATH = isDeployeOnVercel ? "/tmp" : "/public";
+        const UPLOAD_BASE_FOLDER_PATH = "/uploads";
         const UPLOAD_FILE_FOLDER_PATH = `/${dayjs().format("YYYY-MM")}`;
 
         const uploadFinalPath = path.join(

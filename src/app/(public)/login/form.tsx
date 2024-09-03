@@ -27,7 +27,6 @@ type LoginFormValue = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
   const { toast } = useToast();
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
