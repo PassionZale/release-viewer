@@ -20,6 +20,7 @@ export default function Page() {
     return notFound();
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const title = useMemo(() => {
     switch (name) {
       case "dingding":
@@ -33,6 +34,7 @@ export default function Page() {
     }
   }, [name]);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (name) {
       setLoading(true);

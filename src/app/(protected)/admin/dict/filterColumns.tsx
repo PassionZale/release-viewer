@@ -1,5 +1,5 @@
 import { DataTableProps } from "@/components/DataTable";
-import { Dict } from "./columns";
+import { Dict } from "./[...slug]/page";
 
 export const filterColumns: DataTableProps<Dict>["filterColumns"] = [
   {
