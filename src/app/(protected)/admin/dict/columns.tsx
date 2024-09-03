@@ -19,7 +19,7 @@ export const systemColumns: ColumnDef<PrismaModels["System"]>[] = [
     id: "actions",
     cell: ({ row }) => (
       <DataTableRowActions
-        editPagePath={`/admin/dict/edit/system/${row.original.id}`}
+        editPagePath={`/admin/dict/edit/systems/${row.original.id}`}
         deleteApiPath={`/api/systems/${row.original.id}`}
       />
     ),
@@ -43,7 +43,7 @@ export const platformColumns: ColumnDef<PrismaModels["Platform"]>[] = [
     id: "actions",
     cell: ({ row }) => (
       <DataTableRowActions
-        editPagePath={`/admin/dict/edit/platform/${row.original.id}`}
+        editPagePath={`/admin/dict/edit/platforms/${row.original.id}`}
         deleteApiPath={`/api/platforms/${row.original.id}`}
       />
     ),
