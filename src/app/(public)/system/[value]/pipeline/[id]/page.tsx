@@ -122,7 +122,7 @@ export default function Page() {
         .catch()
         .finally(() => setLoading(false));
     }
-  }, [id]);
+  }, [id, router]);
 
   const latestRelease = useMemo(() => {
     if (pipeline && pipeline.releases?.length) {
