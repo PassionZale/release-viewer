@@ -2,7 +2,7 @@
 import { Navbar } from "./Navbar";
 import { NavItems } from "./Sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { IconGhost2, IconMenu } from "@tabler/icons-react";
+import { IconMenu } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function MobileSidebar() {

@@ -10,6 +10,7 @@ import {
   IconBrandGithub,
   IconMessageChatbot,
   IconDashboard,
+	IconGhost2,
 } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -49,8 +50,8 @@ const Navbar = ({ items = [] }: NavbarProps) => {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base h-6 w-6"
         >
-          <Image src="/ghost.svg" width={24} height={24} alt="next" priority />
-          <span className="sr-only">Omost</span>
+					<IconGhost2 className="w-6 h-6"/>
+          <span className="sr-only">Release Viewer</span>
         </Link>
 
         {items?.length ? (
@@ -85,14 +86,8 @@ const Navbar = ({ items = [] }: NavbarProps) => {
               href="/"
               className="flex items-center gap-2 text-lg font-semiboldh-6 w-6"
             >
-              <Image
-                src="/ghost.svg"
-                width={24}
-                height={24}
-                alt="release viewer"
-                priority
-              />
-              <span className="sr-only">release viewer</span>
+							<IconGhost2 className="w-6 h-6"/>
+              <span className="sr-only">Release Viewer</span>
             </Link>
 
             {items.map((item) => (
