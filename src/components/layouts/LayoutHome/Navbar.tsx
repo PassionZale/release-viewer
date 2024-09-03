@@ -49,7 +49,7 @@ const Navbar = ({ items = [] }: NavbarProps) => {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base h-6 w-6"
         >
-          <Image src="/next.svg" width={24} height={24} alt="next" priority />
+          <Image src="/ghost.svg" width={24} height={24} alt="next" priority />
           <span className="sr-only">Omost</span>
         </Link>
 
@@ -86,13 +86,13 @@ const Navbar = ({ items = [] }: NavbarProps) => {
               className="flex items-center gap-2 text-lg font-semiboldh-6 w-6"
             >
               <Image
-                src="/vercel.svg"
+                src="/ghost.svg"
                 width={24}
                 height={24}
-                alt="vercel"
+                alt="release viewer"
                 priority
               />
-              <span className="sr-only">Omost</span>
+              <span className="sr-only">release viewer</span>
             </Link>
 
             {items.map((item) => (
