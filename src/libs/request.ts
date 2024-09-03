@@ -87,9 +87,10 @@ export class Request {
             break;
 
           case ApiCode.JWT_INVALID:
+					case ApiCode.ACCOUNT_DISABLED:
             reject(result);
             if (typeof window !== "undefined") {
-              window.location.replace("/login");
+              window.location.replace("/api/auth/signout");
             }
             break;
 
