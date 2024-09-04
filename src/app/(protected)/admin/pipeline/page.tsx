@@ -54,7 +54,7 @@ export default function Page() {
         <Breadcrumbs items={breadcrumbs} />
 
         <div className="flex items-center justify-between">
-          <Heading title={`流水线`} description="流水线列表" />
+          <Heading title={`流水线`} />
 
           <Button
             size={"sm"}

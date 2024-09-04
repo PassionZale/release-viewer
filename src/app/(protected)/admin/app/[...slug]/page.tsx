@@ -19,7 +19,7 @@ export default function Page() {
 
   const [initialData, setInitialData] = useState<App>();
   const [loading, setLoading] = useState(true);
-  const { denied, reason } = usePermissionDenied(Role.DEVELOPER);
+  const { reason } = usePermissionDenied(Role.DEVELOPER);
 
   const [action, id] = slug;
 

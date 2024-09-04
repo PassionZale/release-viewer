@@ -21,6 +21,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import { usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
 
 interface DictFormProps {
   initialData?: Dict;
@@ -42,6 +44,7 @@ export default function DictForm({ initialData, dictType }: DictFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const readOnly = Boolean(initialData?.id);
 
@@ -173,7 +176,12 @@ export default function DictForm({ initialData, dictType }: DictFormProps) {
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>

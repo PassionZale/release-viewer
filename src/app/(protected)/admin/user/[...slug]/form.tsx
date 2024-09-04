@@ -30,6 +30,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { useRouter } from "next/navigation";
 import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
+import { usePermissionDenied } from "@/libs/hooks";
 
 interface UserFormProps {
   initialData?: PrismaModels["User"];
@@ -61,8 +62,8 @@ export default function UserForm({ initialData }: UserFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { denied } = usePermissionDenied(Role.ADMIN);
 
-  // TODO 权限
   const readOnly = Boolean(initialData?.id);
 
   const form = useForm<FormValue>({
@@ -179,7 +180,7 @@ export default function UserForm({ initialData }: UserFormProps) {
               <FormControl>
                 <Input {...field} disabled={readOnly} />
               </FormControl>
-							<FormDescription>用户名一旦创建，则无法更改。</FormDescription>
+              <FormDescription>用户名一旦创建，则无法更改。</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -250,7 +251,12 @@ export default function UserForm({ initialData }: UserFormProps) {
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>

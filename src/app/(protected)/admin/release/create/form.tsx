@@ -33,6 +33,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { ApiException } from "@/libs/utils";
 import { PrismaModels } from "@/types/interface";
 import { ToastAction } from "@/components/ui/toast";
+import { usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
 
 const count = 200;
 const defaults = {
@@ -73,10 +75,6 @@ function triggerConfetti() {
 }
 
 type App = PrismaModels["App"] & { pipelines?: PrismaModels["Pipeline"][] };
-
-const regUrl = new RegExp(
-  "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"
-);
 
 const formSchema = z.object({
   appPipeline: z.coerce.string({ required_error: "必填" }),
@@ -125,6 +123,7 @@ export default function ReleaseForm() {
   const [loading, setLoading] = useState(false);
   const [apps, setApps] = useState<App[]>([]);
   const [appPipelineName, setAppPipelineName] = useState<string>();
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const { toast } = useToast();
 
@@ -361,7 +360,12 @@ export default function ReleaseForm() {
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>

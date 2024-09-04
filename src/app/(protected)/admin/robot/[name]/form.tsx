@@ -9,8 +9,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { usePermissionDenied } from "@/libs/hooks";
 import request from "@/libs/request";
 import { ApiException } from "@/libs/utils";
+import { Role } from "@/types/enum";
 import { PrismaModels } from "@/types/interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -28,7 +30,7 @@ interface RobotFormProps {
 }
 
 const formSchema = z.object({
-  webhook: z.string().url('webhook 不合法'),
+  webhook: z.string().url("webhook 不合法"),
   secret: z.string().optional(),
 });
 
@@ -37,6 +39,7 @@ type FormValue = z.infer<typeof formSchema>;
 export default function RobotForm({ name, initialData }: RobotFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const form = useForm<FormValue>({
     resolver: zodResolver(formSchema),
@@ -109,7 +112,12 @@ export default function RobotForm({ name, initialData }: RobotFormProps) {
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>
