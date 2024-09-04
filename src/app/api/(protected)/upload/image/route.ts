@@ -64,5 +64,5 @@ export const POST = withAuthGuard(
 
     return NextResponse.json(new ApiException(issues));
   },
-  { role: Role.ADMIN }
+  { role: Role.VISITOR }
 );

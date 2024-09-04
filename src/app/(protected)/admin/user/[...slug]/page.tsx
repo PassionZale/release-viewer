@@ -3,7 +3,7 @@
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import PageContainer from "@/components/layouts/LayoutAdmin/PageContainer";
 import request from "@/libs/request";
-import { Actions } from "@/types/enum";
+import { Actions, Role } from "@/types/enum";
 import { DetailPageSlug, PrismaModels } from "@/types/interface";
 import { useParams, notFound } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,10 +11,11 @@ import { breadcrumbs } from "./breadcrumbs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import UserForm from "./form";
+import { usePermissionDenied } from "@/libs/hooks";
 
 export default function Page() {
   const { slug } = useParams<{ slug: DetailPageSlug }>();
-
+	const { reason } = usePermissionDenied(Role.ADMIN)
   const [initialData, setInitialData] = useState<PrismaModels["User"]>();
   const [loading, setLoading] = useState(true);
 
@@ -46,7 +47,7 @@ export default function Page() {
         <Breadcrumbs items={breadcrumbs} />
 
         <div className="flex items-center justify-between">
-          <Heading title={title} />
+          <Heading title={title} description={reason} />
         </div>
 
         <Separator />

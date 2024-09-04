@@ -50,7 +50,7 @@ export default function Page() {
         <Breadcrumbs items={breadcrumbs} />
 
         <div className="flex items-center justify-between">
-          <Heading title={`发布记录`} description="发布记录列表" />
+          <Heading title={`发布记录`} />
 
           <Button
             size={"sm"}

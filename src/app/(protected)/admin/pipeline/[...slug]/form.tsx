@@ -30,6 +30,8 @@ import { useRouter } from "next/navigation";
 import { Pipeline } from "../columns";
 import { PrismaModels } from "@/types/interface";
 import { ImageUpload, ImageUploadProps } from "@/components/ImageUpload";
+import { usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
 
 interface PipelineFormProps {
   initialData?: Pipeline;
@@ -59,6 +61,7 @@ type FormValue = z.infer<typeof formSchema>;
 export default function PipelineForm({ initialData }: PipelineFormProps) {
   const [loading, setLoading] = useState(false);
   const [apps, setApps] = useState<PrismaModels["App"][]>([]);
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -110,12 +113,14 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
 
       const _request = initialData?.id
         ? () =>
-            request.put<Pipeline>(`/api/pipelines/${initialData.id}`, { params: data })
+            request.put<Pipeline>(`/api/pipelines/${initialData.id}`, {
+              params: data,
+            })
         : () => request.post<Pipeline>(`/api/pipelines`, { params: data });
 
       const { message } = await _request();
 
-			console.log(1111)
+      console.log(1111);
 
       setLoading(false);
 
@@ -186,7 +191,9 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-							<FormDescription>用来标识环境，例如填写：开发环境、测试环境等。</FormDescription>
+              <FormDescription>
+                用来标识环境，例如填写：开发环境、测试环境等。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -201,7 +208,9 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
               <FormControl>
                 <Input {...field} />
               </FormControl>
-							<FormDescription>提供任意的网址让用户可以访问 WEB 应用或下载文件。</FormDescription>
+              <FormDescription>
+                提供任意的网址让用户可以访问 WEB 应用或下载文件。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -220,13 +229,20 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
                   value={field.value ? [`${field.value}`] : []}
                 />
               </FormControl>
-							<FormDescription>提供二维码或太阳码让用户可以进行扫码下载 APP 或 Miniprogram。</FormDescription>
+              <FormDescription>
+                提供二维码或太阳码让用户可以进行扫码下载 APP 或 Miniprogram。
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>

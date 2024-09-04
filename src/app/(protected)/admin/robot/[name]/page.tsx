@@ -9,10 +9,12 @@ import request from "@/libs/request";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import RobotForm, { Robot } from "./form";
+import { usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
 
 export default function Page() {
   const { name } = useParams<{ name: string }>();
-
+  const { reason } = usePermissionDenied(Role.DEVELOPER);
   const [loading, setLoading] = useState(false);
   const [initialData, setInitialData] = useState<Robot>();
 
@@ -54,7 +56,7 @@ export default function Page() {
         <Breadcrumbs items={breadcrumbs[name]} />
 
         <div className="flex items-center justify-between">
-          <Heading title={title} />
+          <Heading title={title} description={reason} />
         </div>
 
         <Separator />
