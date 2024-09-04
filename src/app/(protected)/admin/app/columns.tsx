@@ -35,10 +35,16 @@ export const columns: ColumnDef<App>[] = [
   {
     accessorKey: "desc",
     header: "应用描述",
+		cell: ({ row }) => (
+      <div className="line-clamp-1 max-w-[200px]">{row.original.desc}</div>
+    ),
   },
   {
     accessorKey: "subscribers",
     header: "订阅者",
+		cell: ({ row }) => (
+      <div className="line-clamp-1 max-w-[200px]">{row.original.subscribers}</div>
+    ),
   },
   {
     accessorKey: "robotDingDingStatus",

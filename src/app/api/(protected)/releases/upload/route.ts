@@ -47,12 +47,14 @@ export const POST = withAuthGuard(
 
         // TODO .ipa auto generate .plist and response .plist path
 
-        const finalPath =
+        const responseFinalPath =
           UPLOAD_BASE_FOLDER_PATH + UPLOAD_FILE_FOLDER_PATH + `/${fileName}`;
 
         return NextResponse.json(
           new ApiResponse(
-            isDeployeOnVercel ? UPLOAD_ROOT_FOLDER_PATH + finalPath : finalPath
+            isDeployeOnVercel
+              ? UPLOAD_ROOT_FOLDER_PATH + responseFinalPath
+              : responseFinalPath
           )
         );
       } catch (error) {

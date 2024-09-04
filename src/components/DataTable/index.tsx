@@ -209,20 +209,18 @@ export function DataTable<TData>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    暂无数据
-                  </TableCell>
-                </TableRow>
-              )}
-
-              {loading && (
-                <TableRow className="absolute hover:bg-inherit! top-24 left-0 right-0">
-                  <TableCell colSpan={columns.length} className="block">
-                    <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
+                    {loading ? "加载中..." : "暂无数据"}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
+
+          {loading && (
+            <div className="absolute hover:bg-inherit! top-48 left-0 right-0">
+              <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
+            </div>
+          )}
 
           <ScrollBar orientation="horizontal" />
         </ScrollArea>

@@ -15,7 +15,7 @@ export interface ImageUploadProps extends Omit<UploadProps, "onChange"> {
 }
 
 const UploadButton = ({ loading }: { loading?: boolean }) => {
-  return <div>{loading ? <IconLoader2 /> : <IconPlus />}</div>;
+  return <div>{loading ? <IconLoader2 className="animate-spin" /> : <IconPlus />}</div>;
 };
 
 const UploadFile = (props: {
