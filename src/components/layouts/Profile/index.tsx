@@ -15,6 +15,7 @@ import {
   IconArrowBackUp,
   IconBug,
   IconDashboard,
+  IconEdit,
   IconLogin2,
   IconLogout2,
   IconRocket,
@@ -81,6 +82,13 @@ const Profile = ({ isAdmin }: { isAdmin?: boolean }) => {
           </DropdownMenuItem>
         )}
 
+        {user && (
+          <DropdownMenuItem>
+            <IconEdit className="mr-2 h-5 w-5" />
+            <Link href={"/admin/profile"}>个人资料</Link>
+          </DropdownMenuItem>
+        )}
+
         <DropdownMenuSeparator />
 
         <DropdownMenuItem>
@@ -113,9 +121,7 @@ const Profile = ({ isAdmin }: { isAdmin?: boolean }) => {
         ) : (
           <DropdownMenuItem>
             <IconLogin2 className="mr-2 h-5 w-5" />
-            <Link href={"/login"} replace>
-              登录
-            </Link>
+            <Link href={"/login"}>登录</Link>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
