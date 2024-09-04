@@ -62,7 +62,7 @@ const UploadFile = (props: {
         </>
       ) : null}
 
-      <Image fill src={props.url} priority alt={fileName} />
+			<img className="w-full h-full" src={props.url} alt={fileName} />
     </div>
   );
 };

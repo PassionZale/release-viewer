@@ -4,12 +4,32 @@ import { ApiException, ApiResponse } from "@/libs/utils";
 import { Role } from "@/types/enum";
 import { NextResponse } from "next/server";
 import { SystemInputSchema } from "./schemas";
+import { Prisma } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
 export const GET = withAuthGuard(
-  async () => {
-    const systems = await prisma.system.findMany();
+  async (request) => {
+    const searchParams = request.nextUrl.searchParams;
+
+    const where: Prisma.SystemWhereInput = {};
+
+    const keyword = searchParams.get("label");
+
+    if (keyword) {
+      where.OR = [
+        {
+          label: { contains: keyword },
+        },
+        {
+          value: { contains: keyword },
+        },
+      ];
+    }
+
+    const systems = await prisma.system.findMany({
+      where,
+    });
 
     return NextResponse.json(new ApiResponse(systems));
   },
