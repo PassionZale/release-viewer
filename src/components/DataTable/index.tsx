@@ -224,9 +224,11 @@ export function DataTable<TData>({
               )}
 
               {loading && (
-                <div className="absolute h-24 top-24 left-0 right-0 text-center">
-                  <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
-                </div>
+                <TableRow className="absolute hover:bg-inherit! top-24 left-0 right-0">
+                  <TableCell colSpan={columns.length} className="block">
+                    <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>
