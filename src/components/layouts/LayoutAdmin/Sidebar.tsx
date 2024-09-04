@@ -9,6 +9,7 @@ import {
   IconChevronLeft,
   IconGhost2,
   IconHomeHand,
+  IconRocket,
   IconUsers,
   IconZeppelin,
 } from "@tabler/icons-react";
@@ -52,13 +53,13 @@ export const NavItems = [
     label: "流水线",
     value: "pipeline",
     href: "/admin/pipeline",
-    icon: <IconGhost2 />,
+    icon: <IconZeppelin />,
   },
   {
     label: "发布记录",
     value: "release",
     href: "/admin/release",
-    icon: <IconZeppelin />,
+    icon: <IconRocket />,
   },
 
   {
