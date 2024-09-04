@@ -81,8 +81,6 @@ export function DataTable<TData>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadData = useCallback(
     debounce({ delay: 200 }, (searchParams) => {
-      let isCancelled = false;
-
       setLoading(true);
 
       request(searchParams)
@@ -92,20 +90,13 @@ export function DataTable<TData>({
           setLoading(false);
         })
         .catch((error) => {
-          if (!isCancelled) {
-            toast({
-              variant: "destructive",
-              title: "Uh oh! Something went wrong.",
-              description: (error as ApiException).message,
-            });
-            setLoading(false);
-          }
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: (error as ApiException).message,
+          });
+          setLoading(false);
         });
-
-      return () => {
-        isCancelled = true;
-        setLoading(false);
-      };
     }),
     [request]
   );
