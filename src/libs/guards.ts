@@ -30,28 +30,33 @@ export function withAuthGuard<P extends Params = Params>(
       where: { id: userId },
     });
 
-    // 用户存在 & 非禁用
-    if (user && user.status !== Status.OFF) {
-      // 角色正确
-      // 若定义了所需角色，通过 RBAC0，简单处理下权限
-      // 用户权限值 大于 所需权限值，则无权访问
-      if (options?.role !== undefined && user.role > options.role) {
-        return NextResponse.json(
-          new ApiException("权限不足", ApiCode.PERMISSION_DENIED)
-        );
-      }
-
-      const { hashedPassword, ...contextUser } = user;
-
-      req.auth = {
-        user: contextUser,
-      };
-
-      return handler(req, res);
-    } else {
+    if (!user) {
       return NextResponse.json(
-        new ApiException("账号禁用", ApiCode.ACCOUNT_DISABLED)
+        new ApiException("账号不存在", ApiCode.JWT_INVALID)
       );
     }
+
+    if (user.status === Status.OFF) {
+      return NextResponse.json(
+        new ApiException("账号被禁用", ApiCode.ACCOUNT_DISABLED)
+      );
+    }
+
+    // 角色正确
+    // 若定义了所需角色，通过 RBAC0，简单处理下权限
+    // 用户权限值 大于 所需权限值，则无权访问
+    if (options?.role !== undefined && user.role > options.role) {
+      return NextResponse.json(
+        new ApiException("权限不足", ApiCode.PERMISSION_DENIED)
+      );
+    }
+
+    const { hashedPassword, ...contextUser } = user;
+
+    req.auth = {
+      user: contextUser,
+    };
+
+    return handler(req, res);
   };
 }

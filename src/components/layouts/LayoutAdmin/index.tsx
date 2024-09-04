@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 import request from "@/libs/request";
 import { PrismaModels } from "@/types/interface";
 import { useEffect } from "react";
-import useUserStore, { User } from "@/stores/user";
+import useUserStore from "@/stores/user";
 import { IconGhost2 } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
@@ -15,14 +15,10 @@ export const metadata: Metadata = {
 };
 
 const AdminLayout = ({ children }: React.PropsWithChildren) => {
-  const { init: initUserStore, user } = useUserStore();
+  const { user } = useUserStore();
   const { init: initDictStore } = useDicStore();
 
   useEffect(() => {
-    request
-      .get<User>("/api/users/profile")
-      .then(({ data }) => initUserStore(data));
-
     let platforms: PrismaModels["Platform"][] = [];
     let systems: PrismaModels["System"][] = [];
 
@@ -45,17 +41,15 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
 
       initDictStore({ platforms, systems });
     });
-  }, [initUserStore, initDictStore]);
+  }, [initDictStore]);
 
   return (
     <div className="flex">
       <Sidebar />
       <main className="w-full flex-1 overflow-hidden relative">
+        <Header />
         {user ? (
-          <>
-            <Header />
-            {children}
-          </>
+          children
         ) : (
           <div className="absolute flex items-center gap-x-2 top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 z-20 leading-none ">
             <IconGhost2 className={"h-6 w-6 animate-spin mx-auto"} />

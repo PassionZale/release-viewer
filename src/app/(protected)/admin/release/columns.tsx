@@ -33,7 +33,7 @@ export const columns: ColumnDef<Release>[] = [
     accessorKey: "version",
     header: "版本号",
     cell: ({ row }) => {
-      const buildId = row.original.buildId ? `(${row.original.buildId})` : null;
+      const buildId = row.original.buildId ? `(${row.original.buildId})` : '';
 
       return `${row.original.version}${buildId}`;
     },
