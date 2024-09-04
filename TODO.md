@@ -5,6 +5,8 @@
 - [x] 用户头像/上传 ?? random-avatar
 - [x] 退出登录等操作后 reset store?
 - [x] 删除后 外键查询列表出问题？
+- [ ] 重置密码
+- [ ] edit profile
 - [ ] 应用选择按照 system group
 - [ ] 权限
 - [ ] 发布令牌
