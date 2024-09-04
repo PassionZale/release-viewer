@@ -1,9 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ApiCode, Role, Status } from "@/types/enum";
 import { ContextRequest, ContextResponse, Params } from "@/types/interface";
 import { parseJwtPayload } from "./jwt";
 import { ApiException } from "./utils";
 import prisma from "./prisma";
+import { headers } from "next/headers";
+import dayjs from "@/libs/dayjs";
 
 type AuthGuardOptions = {
   role?: Role;
@@ -56,6 +58,48 @@ export function withAuthGuard<P extends Params = Params>(
     req.auth = {
       user: contextUser,
     };
+
+    return handler(req, res);
+  };
+}
+
+// 守卫逻辑：accessKey 存在 -> 未过期 -> 更新 lastUsedAt
+export function withTokenGuard(
+  handler: (req: NextRequest, res: NextResponse) => Promise<Response>
+) {
+  return async (req: NextRequest, res: NextResponse) => {
+    const authorization = headers().get("authorization");
+
+    const accessKey = authorization ? authorization.split(" ")[1] : null;
+
+    if (!accessKey) {
+      return NextResponse.json(new ApiException("令牌不合法"), {
+        status: 403,
+      });
+    }
+
+    const token = await prisma.token.findFirst({
+      where: { accessKey },
+    });
+
+    if (!token) {
+      return NextResponse.json(new ApiException("令牌不合法"), {
+        status: 403,
+      });
+    }
+
+    if (token.expiresAt && dayjs().isAfter(dayjs(token.expiresAt))) {
+      return NextResponse.json(new ApiException("令牌已过期"), {
+        status: 403,
+      });
+    }
+
+    await prisma.token.update({
+      where: { id: token.id },
+      data: {
+        lastUsedAt: dayjs().toISOString(),
+      },
+    });
 
     return handler(req, res);
   };

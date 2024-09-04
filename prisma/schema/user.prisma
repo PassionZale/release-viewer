@@ -4,19 +4,21 @@ model User {
   updatedAt DateTime @updatedAt @ignore
 
   /// 昵称
-  nickname String
+  nickname       String
   /// 头像
-  avatar   String?
+  avatar         String?
   /// 用户名
-  username String    @unique
+  username       String    @unique
   /// 密码
   hashedPassword String
   /// 角色
-  role     Int       @default(3)
+  role           Int       @default(3)
   /// 状态
-  status   Int       @default(2)
+  status         Int       @default(2)
   /// 发布记录
-  releases Release[]
+  releases       Release[]
+  /// 创建令牌
+  Token          Token[]
 
   @@index([username])
 }
