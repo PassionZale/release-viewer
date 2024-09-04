@@ -22,7 +22,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import { z } from "zod";
-import { Status } from "@/types/enum";
+import { Role, Status } from "@/types/enum";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { App } from "../columns";
 import useDicStore from "@/stores/dict";
 import Link from "next/link";
+import { usePermissionDenied } from "@/libs/hooks";
 
 interface AppFormProps {
   initialData?: App;
@@ -59,11 +60,9 @@ export default function AppForm({ initialData }: AppFormProps) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const { systems, platforms } = useDicStore();
-
-  // TODO 权限
-  const readOnly = Boolean(initialData?.id);
 
   const form = useForm<FormValue>({
     resolver: zodResolver(formSchema),
@@ -177,7 +176,6 @@ export default function AppForm({ initialData }: AppFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>所属平台</FormLabel>
-              {/* TODO 编辑是否只读？ */}
               <Select onValueChange={field.onChange} value={`${field.value}`}>
                 <FormControl>
                   <SelectTrigger>
@@ -268,7 +266,8 @@ export default function AppForm({ initialData }: AppFormProps) {
                 </SelectContent>
               </Select>
               <FormDescription>
-                开启机器人前，请确定<Link href="/admin/robot/dingding">钉钉机器人</Link>已配置。
+                开启机器人前，请确定
+                <Link href="/admin/robot/dingding">钉钉机器人</Link>已配置。
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -295,15 +294,21 @@ export default function AppForm({ initialData }: AppFormProps) {
                   <SelectItem value={`${Status.OFF}`}>禁用</SelectItem>
                 </SelectContent>
               </Select>
-							<FormDescription>
-                开启机器人前，请确定<Link href="/admin/robot/workweixin">企微机器人</Link>已配置。
+              <FormDescription>
+                开启机器人前，请确定
+                <Link href="/admin/robot/workweixin">企微机器人</Link>已配置。
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           保存
         </Button>
       </form>

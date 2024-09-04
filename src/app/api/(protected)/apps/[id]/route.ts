@@ -64,7 +64,7 @@ export const PUT = withAuthGuard<{ id: string }>(
     }
   },
   {
-    role: Role.ADMIN,
+    role: Role.DEVELOPER,
   }
 );
 
@@ -89,6 +89,6 @@ export const DELETE = withAuthGuard<{ id: string }>(
     }
   },
   {
-    role: Role.ADMIN,
+    role: Role.DEVELOPER,
   }
 );
