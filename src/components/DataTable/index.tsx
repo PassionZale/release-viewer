@@ -195,7 +195,7 @@ export function DataTable<TData>({
                 </TableRow>
               ))}
             </TableHeader>
-            <TableBody>
+            <TableBody className="relative">
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow
@@ -218,13 +218,15 @@ export function DataTable<TData>({
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    {loading ? (
-                      <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
-                    ) : (
-                      "暂无数据"
-                    )}
+                    暂无数据
                   </TableCell>
                 </TableRow>
+              )}
+
+              {loading && (
+                <div className="absolute h-24 top-24 left-0 right-0 text-center">
+                  <IconLoader2 className={"h-6 w-6 animate-spin mx-auto"} />
+                </div>
               )}
             </TableBody>
           </Table>
