@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { DataTableRowActions } from "@/components/DataTable/DataTableRowActions";
 
 export type Token = PrismaModels["Token"] & {
   user: PrismaModels["User"];
@@ -40,9 +41,7 @@ export const columns: ColumnDef<Token>[] = [
         dayjs().isSameOrAfter(dayjs(row.original.expiresAt)) ? (
           <Badge variant={"destructive"}>已过期</Badge>
         ) : (
-          <Badge>
-            {dayjs(row.original.expiresAt).format("YYYY-MM-DD")}
-          </Badge>
+          <Badge>{dayjs(row.original.expiresAt).format("YYYY-MM-DD")}</Badge>
         )
       ) : (
         <Badge>永久有效</Badge>
@@ -73,6 +72,12 @@ export const columns: ColumnDef<Token>[] = [
           <p>{row.original.user.nickname}</p>
         )}
       </div>
+    ),
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <DataTableRowActions deleteApiPath={`/api/tokens/${row.original.id}`} />
     ),
   },
 ];

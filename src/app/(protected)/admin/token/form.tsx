@@ -28,7 +28,8 @@ import { Label } from "@/components/ui/label";
 import { useMemo, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import request from "@/libs/request";
-import { useCopyToClipboard } from "@/libs/hooks";
+import { useCopyToClipboard, usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
 
 const formSchema = z.object({
   name: z.string({ required_error: "名称不能为空" }).min(1, "名称不能为空"),
@@ -39,10 +40,12 @@ const formSchema = z.object({
 
 type FormValue = z.infer<typeof formSchema>;
 
-export default function TokenForm() {
+export default function TokenForm(props: { onSuccess?: () => void }) {
   const { toast } = useToast();
 
   const [copy] = useCopyToClipboard();
+
+  const { denied } = usePermissionDenied(Role.DEVELOPER);
 
   const form = useForm<FormValue>({
     resolver: zodResolver(formSchema),
@@ -76,6 +79,7 @@ export default function TokenForm() {
       setLoading(false);
       setAccessKey(accessKey);
       form.reset();
+      props.onSuccess?.();
     } catch (error) {
       setLoading(false);
       toast({
@@ -181,7 +185,12 @@ export default function TokenForm() {
           )}
         />
 
-        <Button className="ml-auto w-full" type="submit" loading={loading}>
+        <Button
+          className="ml-auto w-full"
+          type="submit"
+          loading={loading}
+          disabled={denied}
+        >
           创建访问令牌
         </Button>
       </form>

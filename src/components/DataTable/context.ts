@@ -19,7 +19,7 @@ type DebounceFunction<TArgs extends any[]> = {
 import { createContext } from "react";
 import { SearchParams } from ".";
 
-interface ContextValue {
+export interface ContextValue {
   getSearchParams?: () => SearchParams;
   loadData?: DebounceFunction<[searchParams: any]>;
 }

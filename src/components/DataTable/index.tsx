@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -48,6 +48,7 @@ export interface DataTableProps<TData> {
   columns: ColumnDef<TData>[];
   filterColumns?: DataTableToolbarProps<TData>["filterColumns"];
   request: (searchParams: SearchParams) => Promise<BaseResponse<TData[]>>;
+  tableRef?: any;
 }
 
 export function DataTable<TData>({
@@ -57,6 +58,7 @@ export function DataTable<TData>({
   columns,
   filterColumns,
   request,
+  tableRef,
 }: DataTableProps<TData>) {
   const { toast } = useToast();
   const [sourceData, setSourceData] = useState<TData[]>([]);
@@ -133,6 +135,12 @@ export function DataTable<TData>({
     loadData(searchParams);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination]);
+
+  useImperativeHandle(tableRef, () => ({
+    table: table,
+    loadData: loadData,
+    getSearchParams: getSearchParams,
+  }));
 
   return (
     <DataTableContext.Provider value={{ loadData, getSearchParams }}>

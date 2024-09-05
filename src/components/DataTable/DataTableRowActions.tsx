@@ -58,7 +58,6 @@ export function DataTableRowActions({
         title: "Uh oh! Something went wrong.",
         description: (error as ApiException).message,
       });
-
     }
   };
 
@@ -82,10 +81,13 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={onEdit}>
-            <IconEdit className="mr-2 h-4 w-4" />
-            <span>编辑</span>
-          </DropdownMenuItem>
+          {editPagePath && (
+            <DropdownMenuItem onClick={onEdit}>
+              <IconEdit className="mr-2 h-4 w-4" />
+              <span>编辑</span>
+            </DropdownMenuItem>
+          )}
+
           <DropdownMenuItem onClick={() => deleteApiPath && setOpen(true)}>
             <IconTrash className="mr-2 h-4 w-4" />
             <span>删除</span>

@@ -9,8 +9,14 @@ import TokenForm from "./form";
 import { columns, Token } from "./columns";
 import request from "@/libs/request";
 import { DataTable } from "@/components/DataTable";
+import { usePermissionDenied } from "@/libs/hooks";
+import { Role } from "@/types/enum";
+import { useRef } from "react";
 
 export default function Page() {
+	const tableRef = useRef<any>(null)
+  const { reason } = usePermissionDenied(Role.DEVELOPER);
+
   return (
     <PageContainer>
       <div className="space-y-4">
@@ -19,13 +25,15 @@ export default function Page() {
         <div className="flex items-center justify-between">
           <Heading
             title={`访问令牌`}
-            description="为需要访问 openapi 的第三方应用生成访问令牌。"
+            description={`为需要访问 openapi 的第三方应用生成访问令牌。${
+              reason ? "(" + reason + ")" : ""
+            }`}
           />
         </div>
 
         <Separator />
 
-        <TokenForm />
+        <TokenForm onSuccess={() => tableRef.current?.loadData(tableRef.current?.getSearchParams())}/>
 
         <Separator />
 
@@ -34,14 +42,13 @@ export default function Page() {
         </h4>
 
         <DataTable<Token>
+					tableRef={tableRef}
           columns={columns}
           withScrollArea={false}
           withToolbar={false}
           paginated={false}
-          request={(searchParams) => {
-            return request.get<Token[]>("/api/tokens", {
-              params: searchParams,
-            });
+          request={() => {
+            return request.get<Token[]>("/api/tokens");
           }}
         />
       </div>

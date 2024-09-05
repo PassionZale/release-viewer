@@ -7,9 +7,9 @@
 - [x] 删除后 外键查询列表出问题？
 - [x] edit profile
 - [x] 权限
-- [ ] 发布令牌 删除 desc 字段 单行省略
+- [x] 发布令牌 删除 desc 字段 单行省略
 - [ ] 管理员注册
-- [ ] orderBy createdAt DESC
+- [x] release & token page list orderBy createdAt DESC
 - [ ] 文档示例
 - [ ] 钉钉/企微机器人对接
 - [ ] Dockerization
