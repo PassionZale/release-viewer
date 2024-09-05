@@ -8,6 +8,7 @@
 - [x] edit profile
 - [x] 权限
 - [ ] 发布令牌
+- [ ] 管理员注册
 - [ ] orderBy createdAt DESC
 - [ ] 文档示例
 - [ ] 钉钉/企微机器人对接
