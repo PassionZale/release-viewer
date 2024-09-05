@@ -6,8 +6,10 @@
 - [x] 退出登录等操作后 reset store?
 - [x] 删除后 外键查询列表出问题？
 - [x] edit profile
-- [ ] 权限
-- [ ] 发布令牌
+- [x] 权限
+- [x] 发布令牌 删除 desc 字段 单行省略
+- [ ] 管理员注册
+- [x] release & token page list orderBy createdAt DESC
 - [ ] 文档示例
 - [ ] 钉钉/企微机器人对接
 - [ ] Dockerization

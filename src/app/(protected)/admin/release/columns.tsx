@@ -3,6 +3,14 @@ import { PrismaModels } from "@/types/interface";
 import { ColumnDef } from "@tanstack/react-table";
 import dayjs from "@/libs/dayjs";
 import Link from "next/link";
+import { IconApi } from "@tabler/icons-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export type Release = PrismaModels["Release"] & {
   app?: PrismaModels["App"];
@@ -33,7 +41,7 @@ export const columns: ColumnDef<Release>[] = [
     accessorKey: "version",
     header: "版本号",
     cell: ({ row }) => {
-      const buildId = row.original.buildId ? `(${row.original.buildId})` : '';
+      const buildId = row.original.buildId ? `(${row.original.buildId})` : "";
 
       return `${row.original.version}${buildId}`;
     },
@@ -58,7 +66,32 @@ export const columns: ColumnDef<Release>[] = [
   {
     accessorKey: "user",
     header: "创建人",
-    cell: ({ row }) => row.original.user?.nickname,
+    cell: ({ row }) =>
+      row.original.user ? (
+        <div className="flex items-center space-x-2 text-sm">
+          {row.original.user.avatar ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage
+                      src={row.original.user.avatar}
+                      alt={row.original.user.nickname}
+                    />
+                  </Avatar>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{row.original.user.nickname}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <p>{row.original.user.nickname}</p>
+          )}
+        </div>
+      ) : (
+        <IconApi />
+      ),
   },
   {
     accessorKey: "createdAt",

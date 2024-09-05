@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useImperativeHandle, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,23 +36,29 @@ import { BaseResponse } from "@/types/interface";
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import { DataTablePaginator } from "./DataTablePaginator";
 import DataTableContext from "./context";
-import { ApiException } from "@/libs/utils";
+import { ApiException, cn } from "@/libs/utils";
 import { IconLoader2 } from "@tabler/icons-react";
 
 export type SearchParams = Partial<PaginationState> & Record<string, any>;
 
 export interface DataTableProps<TData> {
+  withScrollArea?: boolean;
+  withToolbar?: boolean;
   paginated?: boolean;
   columns: ColumnDef<TData>[];
   filterColumns?: DataTableToolbarProps<TData>["filterColumns"];
   request: (searchParams: SearchParams) => Promise<BaseResponse<TData[]>>;
+  tableRef?: any;
 }
 
 export function DataTable<TData>({
+  withScrollArea = true,
+  withToolbar = true,
   paginated = true,
   columns,
   filterColumns,
   request,
+  tableRef,
 }: DataTableProps<TData>) {
   const { toast } = useToast();
   const [sourceData, setSourceData] = useState<TData[]>([]);
@@ -130,10 +136,18 @@ export function DataTable<TData>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination]);
 
+  useImperativeHandle(tableRef, () => ({
+    table: table,
+    loadData: loadData,
+    getSearchParams: getSearchParams,
+  }));
+
   return (
     <DataTableContext.Provider value={{ loadData, getSearchParams }}>
       <div className="space-y-4">
-        <DataTableToolbar table={table} filterColumns={filterColumns} />
+        {withToolbar && (
+          <DataTableToolbar table={table} filterColumns={filterColumns} />
+        )}
 
         {paginated && (
           <div className="flex text-sm items-center justify-between">
@@ -162,7 +176,12 @@ export function DataTable<TData>({
           </div>
         )}
 
-        <ScrollArea className="relative h-[calc(80vh-220px)] rounded-md border">
+        <ScrollArea
+          className={cn(
+            "relative rounded-md border",
+            withScrollArea && "h-[calc(80vh-220px)]"
+          )}
+        >
           <Table className="relative">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

@@ -24,6 +24,9 @@ export const GET = withAuthGuard(
     const releases = await paginate(prisma.release, {
       searchParams,
 			where,
+			orderBy: {
+				createdAt: 'desc'
+			},
       include: {
         app: {
           select: {
@@ -40,6 +43,7 @@ export const GET = withAuthGuard(
         user: {
           select: {
             id: true,
+						avatar: true,
             nickname: true,
           },
         },

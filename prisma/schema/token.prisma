@@ -1,0 +1,18 @@
+model Token {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  /// 名称
+  name       String
+  /// 令牌 key
+  accessKey  String
+  /// 最近使用
+  lastUsedAt DateTime?
+  /// 过期时间
+  expiresAt  DateTime?
+  /// 创建人
+  user       User?     @relation(fields: [userId], references: [id])
+  userId     Int?
+
+  @@index([accessKey])
+}
