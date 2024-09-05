@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { withTokenGuard } from "@/libs/guards";
 import { ApiException, ApiResponse } from "@/libs/utils";
 import { UploadInputSchema } from "../schemas";
+import { ApiCode } from "@/types/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -56,11 +57,18 @@ export const POST = withTokenGuard(async (request) => {
         )
       );
     } catch (error) {
-      return NextResponse.json(new ApiException((error as Error).message));
+      return NextResponse.json(
+        new ApiException(
+          (error as Error).message,
+          ApiCode.FILE_MIMETYPE_INVALID
+        )
+      );
     }
   }
 
   const { issues } = error;
 
-  return NextResponse.json(new ApiException(issues));
+  return NextResponse.json(
+    new ApiException(issues, ApiCode.FILE_MIMETYPE_INVALID)
+  );
 });

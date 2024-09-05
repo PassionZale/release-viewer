@@ -5,7 +5,7 @@ import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import { withAuthGuard } from "@/libs/guards";
 import { ApiException, ApiResponse } from "@/libs/utils";
-import { Role } from "@/types/enum";
+import { ApiCode, Role } from "@/types/enum";
 import { UploadInputSchema } from "../schemas";
 
 export const dynamic = "force-dynamic";
@@ -58,13 +58,20 @@ export const POST = withAuthGuard(
           )
         );
       } catch (error) {
-        return NextResponse.json(new ApiException((error as Error).message));
+        return NextResponse.json(
+          new ApiException(
+            (error as Error).message,
+            ApiCode.FILE_MIMETYPE_INVALID
+          )
+        );
       }
     }
 
     const { issues } = error;
 
-    return NextResponse.json(new ApiException(issues));
+    return NextResponse.json(
+      new ApiException(issues, ApiCode.FILE_MIMETYPE_INVALID)
+    );
   },
   { role: Role.DEVELOPER }
 );
