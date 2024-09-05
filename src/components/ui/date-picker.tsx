@@ -4,7 +4,7 @@ import * as React from "react";
 import { addDays, format } from "date-fns";
 import { IconCalendar } from "@tabler/icons-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
