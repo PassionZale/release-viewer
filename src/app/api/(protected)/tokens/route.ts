@@ -10,7 +10,6 @@ import { encrypt } from "@/libs/bcrypt";
 
 const TokenInputSchema = z.object({
   name: z.string({ required_error: "名称不能为空" }).min(1, "名称不能为空"),
-  desc: z.coerce.string().optional(),
   expiresAt: z.coerce
     .date({ required_error: "过期日期格式必须为 YYYY-MM-DD" })
     .optional(),
@@ -23,6 +22,18 @@ export const GET = withAuthGuard(
     const tokens = await prisma.token.findMany({
       omit: {
         accessKey: true,
+      },
+			include: {
+				user: {
+					select: {
+						id: true,
+						avatar: true,
+						nickname: true,
+					}
+				}
+			},
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
@@ -40,7 +51,7 @@ export const POST = withAuthGuard(
     const { success, error, data } = TokenInputSchema.safeParse(schema);
 
     if (success) {
-      const { name, desc, expiresAt } = data;
+      const { name, expiresAt } = data;
 
       const suffix = expiresAt ? dayjs(expiresAt).unix() : dayjs().unix();
 
@@ -49,7 +60,6 @@ export const POST = withAuthGuard(
       await prisma.token.create({
         data: {
           name,
-          desc,
           accessKey,
           expiresAt: expiresAt ? dayjs(expiresAt).toISOString() : null,
           userId: request.auth?.user?.id,

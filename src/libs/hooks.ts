@@ -1,8 +1,9 @@
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "@@/tailwind.config";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useUserStore from "@/stores/user";
 import { Role } from "@/types/enum";
+import { useToast } from "@/components/ui/use-toast";
 
 const fullConfig = resolveConfig(tailwindConfig);
 const {
@@ -54,4 +55,43 @@ export function usePermissionDenied(role?: Role): {
   }
 
   return { denied: false };
+}
+
+type CopyFn = (text: string) => Promise<boolean>;
+
+type CopiedValue = string | null;
+
+export function useCopyToClipboard(): [CopyFn, CopiedValue] {
+  const [copiedText, setCopiedText] = useState<CopiedValue>(null);
+  const { toast } = useToast();
+
+  const copy: CopyFn = useCallback(async (text) => {
+    if (!navigator?.clipboard) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "浏览器不支持 Clipboard",
+      });
+      return false;
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(text);
+      toast({
+        description: "复制成功",
+      });
+      return true;
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as Error).message,
+      });
+      setCopiedText(null);
+      return false;
+    }
+  }, []);
+
+  return [copy, copiedText];
 }

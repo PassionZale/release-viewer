@@ -7,7 +7,7 @@
 - [x] 删除后 外键查询列表出问题？
 - [x] edit profile
 - [x] 权限
-- [ ] 发布令牌
+- [ ] 发布令牌 删除 desc 字段 单行省略
 - [ ] 管理员注册
 - [ ] orderBy createdAt DESC
 - [ ] 文档示例

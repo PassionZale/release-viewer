@@ -4,8 +4,6 @@ model Token {
   updatedAt  DateTime  @updatedAt
   /// 名称
   name       String
-  /// 描述
-  desc       String?
   /// 令牌 key
   accessKey  String
   /// 最近使用

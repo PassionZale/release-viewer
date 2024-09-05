@@ -9,6 +9,7 @@ import {
   IconChevronLeft,
   IconGhost2,
   IconHomeHand,
+  IconKey,
   IconRocket,
   IconUsers,
   IconZeppelin,
@@ -61,7 +62,12 @@ export const NavItems = [
     href: "/admin/release",
     icon: <IconRocket />,
   },
-
+	{
+		label: "访问令牌",
+		value: "token",
+		href: "/admin/token",
+		icon: <IconKey />
+	},
   {
     label: "钉钉机器人",
     value: "dingding",
@@ -77,7 +83,6 @@ export const NavItems = [
 ];
 
 export default function Sidebar({ className }: SidebarProps) {
-  const { user } = useUserStore();
   const { isMinimized, toggle } = useSidebarStore();
 
   const handleToggle = () => {

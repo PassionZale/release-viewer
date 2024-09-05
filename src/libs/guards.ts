@@ -88,7 +88,7 @@ export function withTokenGuard(
       });
     }
 
-    if (token.expiresAt && dayjs().isAfter(dayjs(token.expiresAt))) {
+    if (token.expiresAt && dayjs().isSameOrAfter(dayjs(token.expiresAt))) {
       return NextResponse.json(new ApiException("令牌已过期"), {
         status: 403,
       });

@@ -36,12 +36,14 @@ import { BaseResponse } from "@/types/interface";
 import { DataTableToolbar, DataTableToolbarProps } from "./DataTableToolbar";
 import { DataTablePaginator } from "./DataTablePaginator";
 import DataTableContext from "./context";
-import { ApiException } from "@/libs/utils";
+import { ApiException, cn } from "@/libs/utils";
 import { IconLoader2 } from "@tabler/icons-react";
 
 export type SearchParams = Partial<PaginationState> & Record<string, any>;
 
 export interface DataTableProps<TData> {
+  withScrollArea?: boolean;
+  withToolbar?: boolean;
   paginated?: boolean;
   columns: ColumnDef<TData>[];
   filterColumns?: DataTableToolbarProps<TData>["filterColumns"];
@@ -49,6 +51,8 @@ export interface DataTableProps<TData> {
 }
 
 export function DataTable<TData>({
+  withScrollArea = true,
+  withToolbar = true,
   paginated = true,
   columns,
   filterColumns,
@@ -133,7 +137,9 @@ export function DataTable<TData>({
   return (
     <DataTableContext.Provider value={{ loadData, getSearchParams }}>
       <div className="space-y-4">
-        <DataTableToolbar table={table} filterColumns={filterColumns} />
+        {withToolbar && (
+          <DataTableToolbar table={table} filterColumns={filterColumns} />
+        )}
 
         {paginated && (
           <div className="flex text-sm items-center justify-between">
@@ -162,7 +168,12 @@ export function DataTable<TData>({
           </div>
         )}
 
-        <ScrollArea className="relative h-[calc(80vh-220px)] rounded-md border">
+        <ScrollArea
+          className={cn(
+            "relative rounded-md border",
+            withScrollArea && "h-[calc(80vh-220px)]"
+          )}
+        >
           <Table className="relative">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

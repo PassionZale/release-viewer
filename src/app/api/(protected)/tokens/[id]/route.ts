@@ -16,11 +16,14 @@ export const DELETE = withAuthGuard<{ id: string }>(
     try {
       const token = await prisma.token.findUnique({
         where: { id: data },
+        omit: { accessKey: true },
       });
 
       if (!token) return NextResponse.json(new ApiException("资源不存在"));
 
-      await prisma.token.delete({ where: { id: data } });
+      await prisma.token.delete({
+        where: { id: data },
+      });
 
       return NextResponse.json(new ApiResponse(token));
     } catch (error) {
