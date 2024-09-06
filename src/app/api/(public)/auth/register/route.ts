@@ -23,7 +23,11 @@ const RegisterInputSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const count = await prisma.user.count();
+    const count = await prisma.user.count({
+      where: {
+        role: Role.ADMIN,
+      },
+    });
 
     if (count) {
       return NextResponse.json(new ApiException("管理员已存在"));
