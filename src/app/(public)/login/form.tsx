@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import request from "@/libs/request";
@@ -40,6 +40,16 @@ export default function LoginForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    request
+      .get<{ isInitialized: boolean }>("/api/server-config")
+      .then(({ data: { isInitialized } }) => {
+        if (!isInitialized) {
+          router.push("/register");
+        }
+      });
+  }, []);
 
   const onSubmit = async (data: LoginFormValue) => {
     try {

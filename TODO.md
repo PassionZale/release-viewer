@@ -11,5 +11,5 @@
 - [x] 管理员注册
 - [x] release & token page list orderBy createdAt DESC
 - [ ] 文档示例
-- [ ] 钉钉/企微机器人对接
+- [ ] 钉钉/企微机器人对接 [dingtalk-robot](https://github.com/x-cold/dingtalk-robot)
 - [ ] Dockerization
