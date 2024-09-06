@@ -111,7 +111,7 @@ export default function TokenForm(props: { onSuccess?: () => void }) {
           <IconCopy className="ml-auto block h-4 w-4 opacity-50" />
         </Button>
         <p className="text-sm text-muted-foreground">
-          请确保妥善保存它，你无法再次访问它的内容。
+          复制访问令牌后，请确保妥善保存它，你无法再次访问它的内容。
         </p>
       </div>
 
