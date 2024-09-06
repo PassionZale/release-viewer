@@ -17,7 +17,6 @@ import {
 import useSidebarStore from "@/stores/sidebar";
 import Link from "next/link";
 import { Navbar } from "./Navbar";
-import useUserStore from "@/stores/user";
 import { Role } from "@/types/enum";
 
 type SidebarProps = {
