@@ -74,7 +74,7 @@ export default function UserForm({ initialData }: UserFormProps) {
       avatar: "",
       username: "",
       password: "",
-      role: Role.VISITOR,
+      role: Role.DEVELOPER,
       status: Status.ON,
     },
   });

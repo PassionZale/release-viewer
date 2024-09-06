@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { COOKIE_JWT_KEY } from "@/types/constant";
 import { parseJwtPayload } from "./libs/jwt";
 
-const AUTH_PAGES = ["/login"];
+const AUTH_PAGES = ["/login", "/register"];
 
 const isAuthPages = (url: string) =>
   AUTH_PAGES.some((path) => path.startsWith(url));
@@ -41,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/admin/:path*"],
+  matcher: ["/login", "/register", "/admin/:path*"],
 };

@@ -91,7 +91,7 @@ export function useCopyToClipboard(): [CopyFn, CopiedValue] {
       setCopiedText(null);
       return false;
     }
-  }, []);
+  }, [toast]);
 
   return [copy, copiedText];
 }

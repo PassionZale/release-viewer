@@ -1,10 +1,10 @@
 import { Metadata } from "next";
-import LoginForm from "./form";
+import RegisterForm from "./form";
 import { Suspense } from "react";
 import { IconGhost2 } from "@tabler/icons-react";
 
 export const metadata: Metadata = {
-  title: "登录",
+  title: "注册管理员",
 };
 
 export default function Page() {
@@ -16,6 +16,7 @@ export default function Page() {
           <IconGhost2 className="mr-2 h-6 w-6" />
           Release Viewer
         </div>
+        {/* https://ui.aceternity.com/components/card-spotlight */}
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
@@ -29,18 +30,21 @@ export default function Page() {
       <div className="flex h-full items-center p-4 lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">登录</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              注册管理员
+            </h1>
+
             <p className="text-sm text-muted-foreground">
-              输入用户名和密码登录至管理后台
+              注册成功后会自动登录至管理后台
             </p>
           </div>
 
           <Suspense>
-            <LoginForm />
+            <RegisterForm />
           </Suspense>
 
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            为了便于演示，自动使用访客账号（只读）填充了用户名和密码，你可以直接使用它登录。
+          <p className="text-sm text-muted-foreground">
+            由于你是系统上的第一位用户，你将被指定为管理员，其他用户需要被管理员所创建。
           </p>
         </div>
       </div>

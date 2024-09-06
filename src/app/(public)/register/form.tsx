@@ -12,50 +12,44 @@ import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import request from "@/libs/request";
 import { ApiException } from "@/libs/utils";
+import {
+  IconApps,
+  IconBook,
+  IconHomeHand,
+  IconKey,
+  IconRocket,
+  IconUsers,
+  IconZeppelin,
+} from "@tabler/icons-react";
 
 const formSchema = z.object({
+  nickname: z.string({ required_error: "必填" }).min(1, "必填"),
   username: z.string({ required_error: "必填" }).min(1, "必填"),
-  password: z.string({ required_error: "必填" }).min(1, "必填"),
+  password: z.string({ required_error: "必填" }).min(6, "密码至少6个字符"),
 });
 
-type LoginFormValue = z.infer<typeof formSchema>;
+type RegisterFormValue = z.infer<typeof formSchema>;
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
 
-  const defaultValues = {
-    username: "visitor",
-    password: "visitor",
-  };
-
-  const form = useForm<LoginFormValue>({
+  const form = useForm<RegisterFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues,
   });
 
-  useEffect(() => {
-    request
-      .get<{ isInitialized: boolean }>("/api/server-config")
-      .then(({ data: { isInitialized } }) => {
-        if (!isInitialized) {
-          router.push("/register");
-        }
-      });
-  }, []);
-
-  const onSubmit = async (data: LoginFormValue) => {
+  const onSubmit = async (data: RegisterFormValue) => {
     try {
       setLoading(true);
 
-      await request.post("/api/auth/signin", {
+      await request.post("/api/auth/register", {
         params: data,
       });
 
@@ -79,8 +73,22 @@ export default function LoginForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-2"
+          className="w-full space-y-4"
         >
+          <FormField
+            control={form.control}
+            name="nickname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>昵称</FormLabel>
+                <FormControl>
+                  <Input {...field} autoComplete="false" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="username"
@@ -102,7 +110,11 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>密码</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input
+                    type="password"
+                    autoComplete="new-password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -110,7 +122,7 @@ export default function LoginForm() {
           />
 
           <Button loading={loading} className="ml-auto w-full" type="submit">
-            登录
+            注册
           </Button>
         </form>
       </Form>
@@ -119,8 +131,14 @@ export default function LoginForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            或使用访客账号
+          <span className="bg-background px-2 text-muted-foreground flex items-center gap-x-2">
+            <IconHomeHand />
+            <IconBook />
+            <IconUsers />
+            <IconApps />
+            <IconZeppelin />
+            <IconRocket />
+            <IconKey />
           </span>
         </div>
       </div>
