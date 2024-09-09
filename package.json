@@ -28,6 +28,7 @@
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@react-three/fiber": "^8.17.7",
     "@tabler/icons-react": "^3.12.0",
     "@tanstack/react-table": "^8.20.1",
     "bcryptjs": "^2.4.3",
@@ -53,6 +54,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-line-clamp": "^1.0.5",
+    "three": "^0.168.0",
     "uuid": "^10.0.0",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2",
@@ -67,6 +69,7 @@
     "@types/qs": "^6.9.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/three": "^0.168.0",
     "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
@@ -77,6 +80,6 @@
     "typescript": "^5"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed-prod.ts"
   }
 }
