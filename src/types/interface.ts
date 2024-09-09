@@ -4,8 +4,6 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import { Actions, ApiCode } from "./enum";
 
 export type ModelNames = Prisma.ModelName; // "User" | "App" | etc...
-// export type ModelNames =
-//   (typeof Prisma.ModelName)[keyof typeof Prisma.ModelName];
 
 export type PrismaModels = {
   [M in ModelNames]: Exclude<

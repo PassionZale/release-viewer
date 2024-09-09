@@ -1,8 +1,9 @@
 {
   "git": {
     "deploymentEnabled": {
+      "main": false,
       "dev": false
     }
   },
-	"installCommand": "npm install"
+  "installCommand": "npm install"
 }
