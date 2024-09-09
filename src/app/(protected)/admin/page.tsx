@@ -4,18 +4,12 @@ import PageContainer from "@/components/layouts/LayoutAdmin/PageContainer";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { cn } from "@/libs/utils";
 import {
-  IconBoxAlignRightFilled,
   IconBrandGithub,
   IconBrandNextjs,
   IconBrandTailwind,
   IconBrandVercel,
   IconBrandVue,
-  IconClipboardCopy,
-  IconFileBroken,
   IconMoodXd,
-  IconSignature,
-  IconTableColumn,
-  IconUnlink,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -186,7 +180,7 @@ const SkeletonFour = () => {
           className="rounded-full h-10 w-10"
         />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
-          我的个人博客，基于 `Astro`
+          我的博客，基于 `Astro`
         </p>
         <Link
           href="https://www.lovchun.com"
@@ -221,7 +215,7 @@ const SkeletonFour = () => {
           className="rounded-full h-10 w-10"
         />
         <p className="sm:text-sm text-xs text-center font-semibold text-neutral-500 mt-4">
-          我的 Typescript 类型体操
+          我的 TS 类型体操
         </p>
         <Link
           href="https://tsch.lovchun.com"
@@ -317,7 +311,7 @@ const items = [
     title: "Next.js",
     description: (
       <span className="text-sm">
-        Relase Viewer 基于 Next.js 所构建的全栈应用。
+        Release Viewer 是基于 Next.js 所构建的全栈应用。
       </span>
     ),
     header: <SkeletonThree />,
