@@ -32,8 +32,8 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   const defaultValues = {
-    username: "visitor",
-    password: "visitor",
+    username: "",
+    password: "",
   };
 
   const form = useForm<LoginFormValue>({
@@ -49,6 +49,7 @@ export default function LoginForm() {
           router.push("/register");
         }
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = async (data: LoginFormValue) => {
@@ -120,7 +121,7 @@ export default function LoginForm() {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            或使用访客账号
+            基于 RBAC0 实现了简易的权限
           </span>
         </div>
       </div>
