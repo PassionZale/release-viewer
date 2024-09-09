@@ -7,7 +7,7 @@ export type JwtPayload = {
 };
 
 export function getJwtSecretKey() {
-  const secret = process.env.DASHBOARD_JWT_SECRET;
+  const secret = process.env.JWT_SECRET;
 
   if (!secret) {
     throw new Error("JWT Secret key is not matched");
