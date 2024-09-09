@@ -32,8 +32,8 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   const defaultValues = {
-    username: "",
-    password: "",
+    username: "visitor",
+    password: "visitor",
   };
 
   const form = useForm<LoginFormValue>({
@@ -121,7 +121,7 @@ export default function LoginForm() {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            基于 RBAC0 实现了简易的权限
+            或使用访客账号
           </span>
         </div>
       </div>
