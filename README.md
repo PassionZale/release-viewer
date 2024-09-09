@@ -2,6 +2,38 @@
 
 micro platform to preview all release logs.
 
+## Screenshots
+
+#### Light
+
+![home](./screenshots/light/home.png)
+
+<details>
+<summary>Click to see more...</summary>
+
+![home](./screenshots/light/system.png)
+![home](./screenshots/light/pipeline.png)
+![home](./screenshots/light/register.png)
+![home](./screenshots/light/admin.png)
+![home](./screenshots/light/app.png)
+
+</details>
+
+#### Dark
+
+![home](./screenshots/dark/home.png)
+
+<details>
+<summary>Click to see more...</summary>
+
+![home](./screenshots/dark/system.png)
+![home](./screenshots/dark/pipeline.png)
+![home](./screenshots/dark/register.png)
+![home](./screenshots/dark/admin.png)
+![home](./screenshots/dark/app.png)
+
+</details>
+
 ## Deps
 
 #### Server
@@ -24,12 +56,6 @@ micro platform to preview all release logs.
 | [@tabler/icons-react](https://github.com/tabler/tabler-icons) | Icons                                |
 | [dayjs](https://github.com/iamkun/dayjs)                      | Datetime humanize                    |
 | [zod](https://github.com/colinhacks/zod)                      | schema validation form Form onSubmit |
-
-## Next API Configs
-
-[`dynamic = 'force-dynamic'`](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic)
-
-- [segment-config-options](https://nextjs.org/docs/app/building-your-application/routing/route-handlers#segment-config-options)
 
 ## Quick Start
 

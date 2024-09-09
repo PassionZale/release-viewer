@@ -123,7 +123,6 @@ export default function Page() {
           <p className="px-8 text-center text-sm text-muted-foreground">
             为了便于演示，自动使用访客账号（只读）填充了用户名和密码，你可以直接使用它登录。
           </p>
-          <ThemeToggle />
         </div>
       </div>
     </div>
