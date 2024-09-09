@@ -59,8 +59,6 @@ micro platform to preview all release logs.
 
 ## Quick Start
 
-> Recommand to use `openssl rand -base64 32` to generate secret key!
-
 ```shell
 git clone https://github.com/PassionZale/release-viewer.git
 
@@ -74,3 +72,7 @@ yarn prisma:setup
 
 yarn dev
 ```
+
+## TODOS
+
+- [ ] dingding/workweixin Robot
