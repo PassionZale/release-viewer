@@ -24,6 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -124,6 +125,7 @@ export default function ReleaseForm() {
   const [apps, setApps] = useState<App[]>([]);
   const [appPipelineName, setAppPipelineName] = useState<string>();
   const { denied } = usePermissionDenied(Role.DEVELOPER);
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -169,6 +171,16 @@ export default function ReleaseForm() {
     }
   }, [apps, appPipelineValue]);
 
+  const onView = (release: PrismaModels["Release"]) => {
+    const { appId, pipelineId } = release;
+
+    const app = apps.find((app) => app.id === appId);
+
+    if (app?.systemValue && pipelineId) {
+      router.push(`/system/${app.systemValue}/pipeline/${pipelineId}`);
+    }
+  };
+
   const onChange = (appPipelineValue: string) => {
     if (appPipelineValue) {
       const [appId, pipelineId] = appPipelineValue.split("-");
@@ -209,14 +221,17 @@ export default function ReleaseForm() {
         uploadPath = data;
       }
 
-      await request.post(`/api/releases`, {
-        params: {
-          appId,
-          pipelineId,
-          attachment: uploadPath,
-          ...rest,
-        },
-      });
+      const { data: release } = await request.post<PrismaModels["Release"]>(
+        `/api/releases`,
+        {
+          params: {
+            appId,
+            pipelineId,
+            attachment: uploadPath,
+            ...rest,
+          },
+        }
+      );
 
       setLoading(false);
 
@@ -226,11 +241,7 @@ export default function ReleaseForm() {
         title: "发布成功！",
         description: "应用版本已更新。",
         action: (
-          <ToastAction
-            altText="查看"
-            // TODO 前往查看
-            // onClick={() => window.open(defaultDownloadPath, "_blank")}
-          >
+          <ToastAction altText="查看" onClick={() => onView(release)}>
             查看
           </ToastAction>
         ),
