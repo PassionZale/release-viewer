@@ -66,9 +66,6 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  // TODO 权限
-  const readOnly = Boolean(initialData?.id);
-
   useEffect(() => {
     request
       .get<PrismaModels["App"][]>("/api/apps", {
@@ -119,8 +116,6 @@ export default function PipelineForm({ initialData }: PipelineFormProps) {
         : () => request.post<Pipeline>(`/api/pipelines`, { params: data });
 
       const { message } = await _request();
-
-      console.log(1111);
 
       setLoading(false);
 
