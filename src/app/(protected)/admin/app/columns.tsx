@@ -66,7 +66,7 @@ export const columns: ColumnDef<App>[] = [
     accessorKey: "robotWorkWeixinStatus",
     header: "企微机器人",
     cell: ({ row }) => {
-      switch (row.original.robotDingDingStatus) {
+      switch (row.original.robotWorkWeixinStatus) {
         case Status.OFF:
           return "禁用";
 
