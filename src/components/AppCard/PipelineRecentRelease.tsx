@@ -32,10 +32,12 @@ export const PipelineRecentRelease = ({
 
               {pipeline?.releases?.[0] && (
                 <div className="text-sm text-muted-foreground">
-                  {pipeline.releases[0].user?.nickname && (
+                  {pipeline.releases[0].user?.nickname ? (
                     <span className="text-foreground">
                       @{pipeline.releases[0].user.nickname}&nbsp;
                     </span>
+                  ) : (
+                    <span className="text-foreground">@api&nbsp;</span>
                   )}
 
                   {dayjs(pipeline.releases[0].createdAt).fromNow()}

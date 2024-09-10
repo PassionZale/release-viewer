@@ -4,6 +4,16 @@ micro platform to preview all release logs.
 
 ## Screenshots
 
+#### Robot Push
+
+- 钉钉机器人（支持 markdown @手机号)
+
+![dingding](./screenshots/robot/dingding.png)
+
+- 企微机器人（**仅支持** text @手机号)
+
+![workweixin](./screenshots/robot/workweixin.png)
+
 #### Light
 
 ![home](./screenshots/light/home.png)
@@ -72,7 +82,3 @@ yarn prisma:setup
 
 yarn dev
 ```
-
-## TODOS
-
-- [ ] dingding/workweixin Robot

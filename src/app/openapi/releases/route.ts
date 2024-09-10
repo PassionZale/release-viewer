@@ -3,6 +3,10 @@ import prisma from "@/libs/prisma";
 import { ApiException, ApiResponse } from "@/libs/utils";
 import { NextResponse } from "next/server";
 import { ReleaseInputSchema } from "./schemas";
+import {
+  triggerDingdingRobotPush,
+  triggerWorkweixinRobotPush,
+} from "@/libs/robots";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +43,17 @@ export const POST = withTokenGuard(async (request) => {
 
     const release = await prisma.release.create({
       data: { ...data },
+      include: {
+        user: {
+          select: {
+            nickname: true,
+          },
+        },
+      },
     });
+
+    triggerDingdingRobotPush(app, pipeline, release);
+    triggerWorkweixinRobotPush(app, pipeline, release);
 
     return NextResponse.json(new ApiResponse(release));
   }
