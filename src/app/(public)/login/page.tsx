@@ -119,8 +119,10 @@ export default function Page() {
             <LoginForm />
           </Suspense>
 
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            为了便于演示，自动使用访客账号（只读）填充了用户名和密码，你可以直接使用它登录。
+          <p className="px-8 text-left text-sm text-muted-foreground">
+            - 管理员可操作全部资源；<br />
+						- 开发者可操作全部资源（除了用户）；<br />
+						- 访客对资源只有只读权限；<br />
           </p>
         </div>
       </div>

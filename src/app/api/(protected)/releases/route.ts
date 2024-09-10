@@ -6,6 +6,10 @@ import { NextResponse } from "next/server";
 import { ReleaseInputSchema } from "./schemas";
 import paginate from "@/libs/paginate";
 import { Prisma } from "@prisma/client";
+import {
+  triggerDingdingRobotPush,
+  triggerWorkweixinRobotPush,
+} from "@/libs/robots";
 
 export const dynamic = "force-dynamic";
 
@@ -23,10 +27,10 @@ export const GET = withAuthGuard(
 
     const releases = await paginate(prisma.release, {
       searchParams,
-			where,
-			orderBy: {
-				createdAt: 'desc'
-			},
+      where,
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         app: {
           select: {
@@ -43,7 +47,7 @@ export const GET = withAuthGuard(
         user: {
           select: {
             id: true,
-						avatar: true,
+            avatar: true,
             nickname: true,
           },
         },
@@ -91,7 +95,17 @@ export const POST = withAuthGuard(
 
       const release = await prisma.release.create({
         data: { ...data, userId: request.auth?.user?.id },
+        include: {
+          user: {
+            select: {
+              nickname: true,
+            },
+          },
+        },
       });
+
+      triggerDingdingRobotPush(app, pipeline, release);
+      triggerWorkweixinRobotPush(app, pipeline, release);
 
       return NextResponse.json(new ApiResponse(release));
     }
