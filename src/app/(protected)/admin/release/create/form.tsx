@@ -195,16 +195,19 @@ export default function ReleaseForm() {
 
       const [appId, pipelineId] = appPipeline.split("-");
 
-      const formData = new FormData();
+      let uploadPath: string | undefined = undefined;
 
-      formData.append("file", attachment as File);
+      if (attachment) {
+        const formData = new FormData();
 
-      const { data: uploadPath } = await request.post<string>(
-        `/api/releases/upload`,
-        {
+        formData.append("file", attachment);
+
+        const { data } = await request.post<string>(`/api/releases/upload`, {
           params: formData,
-        }
-      );
+        });
+
+        uploadPath = data;
+      }
 
       await request.post(`/api/releases`, {
         params: {
