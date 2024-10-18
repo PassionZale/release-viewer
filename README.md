@@ -44,7 +44,7 @@ micro platform to preview all release logs.
 | [bcryptjs](https://github.com/dcodeIO/bcrypt.js) | Password Hashed, Verify                 |
 | [zod](https://github.com/colinhacks/zod)         | schema validation for API Request Input |
 
-#### Clinet
+#### Client
 
 | repo                                                          | remark                               |
 | ------------------------------------------------------------- | ------------------------------------ |
