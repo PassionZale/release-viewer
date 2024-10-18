@@ -17,32 +17,21 @@ micro platform to preview all release logs.
 #### Light
 
 ![home](./screenshots/light/home.png)
-
-<details>
-<summary>Click to see more...</summary>
-
 ![home](./screenshots/light/system.png)
 ![home](./screenshots/light/pipeline.png)
 ![home](./screenshots/light/register.png)
 ![home](./screenshots/light/admin.png)
 ![home](./screenshots/light/app.png)
 
-</details>
-
 #### Dark
 
 ![home](./screenshots/dark/home.png)
-
-<details>
-<summary>Click to see more...</summary>
 
 ![home](./screenshots/dark/system.png)
 ![home](./screenshots/dark/pipeline.png)
 ![home](./screenshots/dark/register.png)
 ![home](./screenshots/dark/admin.png)
 ![home](./screenshots/dark/app.png)
-
-</details>
 
 ## Deps
 
